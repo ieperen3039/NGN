@@ -5,15 +5,11 @@ import NG.DataStructures.Generic.Color4f;
 import NG.Tools.Directory;
 
 /**
- * A class that collects a number of settings. It is the only class whose fields are always initialized upon creation.
+ * A class that collects a number of settings.
  * @author Geert van Ieperen. Created on 13-9-2018.
  */
 public class Settings {
-    public static final String TITLE = "NG Fruit Visualiser";
-    
-    // for MachineSimulator specific
-    public Path scriptPath = Directory.scripts.getPath();
-    public Path configJson = null;
+    public static final String TITLE = "Untitled";
 
     // video settings
     public int TARGET_FPS = 60;
