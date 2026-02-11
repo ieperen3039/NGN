@@ -32,7 +32,7 @@ public enum GenericShapes implements Mesh, Shape {
     private final Shape shape;
 
     GenericShapes(String... relative) {
-        Asset<MeshFile> pars = MeshFile.createAsset(Resource.Path.get("models").resolve(relative));
+        Asset<MeshFile> pars = MeshFile.createAsset(Resource.Path.get("ngn/models").resolve(relative));
         shape = pars.get().getShape();
         mesh = new GeneratorAsset<>(() -> pars.get().getMesh(), Mesh::dispose);
         pars.drop();

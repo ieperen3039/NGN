@@ -12,7 +12,7 @@ import org.lwjgl.BufferUtils;
  * @author Geert van Ieperen. Created on 23-8-2018.
  */
 public enum NGFonts {
-    LUCIDA_CONSOLE("fonts","LucidaConsole", "lucon.ttf");
+    LUCIDA_CONSOLE("LucidaConsole/lucon.ttf");
 
     public final String name;
     private ByteBuffer byteFormat;
@@ -23,11 +23,10 @@ public enum NGFonts {
     }
 
     NGFonts(String... path) {
-        Resource.Path directory = Resource.Path.get(path);
+        Resource.Path directory = Resource.Path.get("ngn/fonts").resolve(path);
         this.name = toString().toLowerCase().replace("_", " ");
 
-        try {
-            InputStream fontStream = directory.asStream();
+        try (InputStream fontStream = directory.asStream()) {
             byte[] bytes = fontStream.readAllBytes();
             byteFormat = BufferUtils.createByteBuffer(bytes.length + 1);
             byteFormat.put(bytes);

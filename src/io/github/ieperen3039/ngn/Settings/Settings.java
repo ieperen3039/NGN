@@ -7,7 +7,7 @@ import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
  * @author Geert van Ieperen. Created on 13-9-2018.
  */
 public class Settings {
-    public static final String TITLE = "Untitled";
+    public static String TITLE = "Untitled";
 
     // video settings
     public int TARGET_FPS = 60;

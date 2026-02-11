@@ -12,9 +12,7 @@ import java.awt.image.BufferedImage;
  * @author Geert van Ieperen created on 4-5-2019.
  */
 public class Splash extends Frame implements Runnable {
-    private static final Resource.Path path = Resource.Path.get("images", "SplashImage.png");
-
-    public Splash() {
+    public Splash(Resource.Path path) {
         setTitle("Loading " + Settings.TITLE);
 
         try {

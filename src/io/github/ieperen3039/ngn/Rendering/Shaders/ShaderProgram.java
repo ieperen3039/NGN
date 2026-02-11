@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL20.*;
  * @author Geert van Ieperen created on 7-1-2018.
  */
 public interface ShaderProgram {
-    Resource.Path SHADER_DIRECTORY = Resource.Path.get("shaders");
+    Resource.Path SHADER_DIRECTORY = Resource.Path.get("ngn/shaders");
 
     /** shaders and meshes must use these shader locations */
     int VERTEX_LOCATION = 0;
