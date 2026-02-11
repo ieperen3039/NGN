@@ -1,9 +1,9 @@
 package io.github.ieperen3039.ngn.Rendering.MeshLoading;
 
-import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
-import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 import io.github.ieperen3039.ngn.AssetHandling.Asset;
 import io.github.ieperen3039.ngn.AssetHandling.GeneratorAsset;
+import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
+import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -207,7 +207,7 @@ public class FlatMesh extends AbstractMesh {
 
         int vectorIndex = faceNumber * 3;
         for (int i = 0; i < 3; i++) {
-            readVector(vectorIndex + i, posList, posArr, face.vert[i]);
+            readVector(vectorIndex + i, posList, posArr, face.vert()[i]);
         }
     }
 
@@ -218,7 +218,7 @@ public class FlatMesh extends AbstractMesh {
 
         int vectorIndex = faceNumber * 3;
         for (int i = 0; i < 3; i++) {
-            readVector(vectorIndex + i, normList, normArr, face.norm[i]);
+            readVector(vectorIndex + i, normList, normArr, face.norm()[i]);
         }
     }
 
@@ -227,7 +227,7 @@ public class FlatMesh extends AbstractMesh {
 
         int vectorIndex = faceNumber * 3;
         for (int i = 0; i < 3; i++) {
-            Color4f color = colorList.get(face.col[i]);
+            Color4f color = colorList.get(face.col()[i]);
             int offset = (vectorIndex + i) * 4;
 
             colorArr[offset] = color.red;

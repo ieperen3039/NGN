@@ -12,7 +12,6 @@ public final class SerializationTools {
     /**
      * Writes this object to a file, which can be recovered with {@link #readFromFile(File)}
      * @param file   the file to write to, existing or not.
-     * @param object
      */
     public static void writeToFile(File file, Serializable object) {
         try (OutputStream fileStream = new FileOutputStream(file)) {

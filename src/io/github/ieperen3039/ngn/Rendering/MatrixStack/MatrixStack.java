@@ -76,7 +76,6 @@ public interface MatrixStack {
     }
 
     /**
-     * @param rotation
      * @see #rotate(Vector3fc, float)
      */
     void rotate(Quaternionfc rotation);

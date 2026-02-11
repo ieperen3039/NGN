@@ -1,6 +1,7 @@
 package io.github.ieperen3039.ngn.Scene;
 
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
+import io.github.ieperen3039.ngn.Tools.TickTime;
 
 import java.io.Serializable;
 
@@ -11,16 +12,14 @@ import java.io.Serializable;
  */
 public interface Entity extends Serializable {
     /**
-     * Updates the state of the entity. The frequency this method is called depend on the return value of {@link
-     * #getUpdateFrequency()}. Use {@link GameTimer#getGameTimeDifference()} for speed calculations and {@link
-     * GameTimer#getGameTime()} for position calculations
+     * Updates the state of the entity. Use {@link TickTime#getDeltaTimeSeconds()} for time calculations
      */
     void update();
 
     /**
      * Draws this entity using the provided SGL object. This method may only be called from the rendering loop, and
      * should not change the internal representation of this object. Possible animations should be based on {@link
-     * GameTimer#getRenderTime()}. Material must be set using {@link SGL#getShader()}.
+     * TickTime#getTime()}. Material must be set using {@link SGL#getShader()}.
      * @param gl the graphics object to be used for rendering. It is initialized at world's origin. (no translation or
      *           scaling has been applied)
      */

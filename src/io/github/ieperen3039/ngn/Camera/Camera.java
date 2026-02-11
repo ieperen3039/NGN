@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.Camera;
 
-import io.github.ieperen3039.ngn.Main;
-import io.github.ieperen3039.ngn.ToolElement;
+import io.github.ieperen3039.ngn.Core.Main;
+import io.github.ieperen3039.ngn.Core.ToolElement;
 import io.github.ieperen3039.ngn.InputHandling.MouseListener;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import org.joml.Matrix4f;
@@ -85,6 +85,4 @@ public interface Camera extends ToolElement, MouseListener {
 
         return new Vector2f(xPix, yPix);
     }
-
-    ;
 }

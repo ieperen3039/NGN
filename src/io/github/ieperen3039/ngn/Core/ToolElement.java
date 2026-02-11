@@ -1,4 +1,4 @@
-package io.github.ieperen3039.ngn;
+package io.github.ieperen3039.ngn.Core;
 
 /**
  * A class of which a simulation usually only needs one of. The constructor of these methods should not accept any other

@@ -257,7 +257,6 @@ public abstract class SComponent {
     }
 
     /**
-     * @param other
      * @return the vector from the furthest corner of other inside this object, or null if these do not overlap
      */
     public Vector2i getOverlapWith(SComponent other) {

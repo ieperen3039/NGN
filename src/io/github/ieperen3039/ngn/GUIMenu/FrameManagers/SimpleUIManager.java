@@ -1,21 +1,16 @@
 package io.github.ieperen3039.ngn.GUIMenu.FrameManagers;
 
-import java.util.Optional;
-
-import org.joml.Vector2i;
-
-import io.github.ieperen3039.ngn.RenderManager;
+import io.github.ieperen3039.ngn.Core.RenderManager;
 import io.github.ieperen3039.ngn.GUIMenu.Components.SComponent;
 import io.github.ieperen3039.ngn.GUIMenu.Components.SFiller;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.BaseLF;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.NVGOverlay;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
-import io.github.ieperen3039.ngn.InputHandling.KeyTypeListener;
-import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
-import io.github.ieperen3039.ngn.InputHandling.MouseDragListener;
-import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;
-import io.github.ieperen3039.ngn.InputHandling.MouseScrollListener;
+import io.github.ieperen3039.ngn.InputHandling.*;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
+import org.joml.Vector2i;
+
+import java.util.Optional;
 
 public class SimpleUIManager implements UIManager {
     protected GLFWWindow window;
@@ -92,8 +87,7 @@ public class SimpleUIManager implements UIManager {
         // click listener
         SComponent target = component;
         do {
-            if (target instanceof MouseClickListener) {
-                MouseClickListener cl = (MouseClickListener) target;
+            if (target instanceof MouseClickListener cl) {
                 // by def. of MouseRelativeClickListener, give relative coordinates
                 Vector2i pos = component.getScreenPosition();
                 cl.onClick(button, xSc - pos.x, ySc - pos.y);
@@ -168,8 +162,7 @@ public class SimpleUIManager implements UIManager {
     public void onScroll(float value) {
         SComponent target = hoveredComponent;
         while (target != null) {
-            if (target instanceof MouseScrollListener) {
-                MouseScrollListener listener = (MouseScrollListener) target;
+            if (target instanceof MouseScrollListener listener) {
                 listener.onScroll(value);
                 break;
             }

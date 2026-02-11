@@ -36,7 +36,6 @@ public class SExclusiveButtonRow extends SComposite {
      * of the contents of elements. If {@code elements} contains null elements, those buttons will have no text.
      * @param horizontal       if true, buttons are positioned in a row. if false, buttons are stacked in a column
      * @param elements         the names of the buttons. There will be as much buttons as names.
-     * @param buttonProperties
      */
     public SExclusiveButtonRow(boolean horizontal, SComponentProperties buttonProperties, String... elements) {
         super(new SContainer.GhostContainer(
@@ -51,25 +50,29 @@ public class SExclusiveButtonRow extends SComposite {
         Vector2ic delta = horizontal ? new Vector2i(1, 0) : new Vector2i(0, 1);
 
         for (int i = 0; i < elements.length; i++) {
-            String label = elements[i] == null ? "" : elements[i];
-            SToggleButton button = new SToggleButton(label, buttonProperties) {
-                @Override // override to ignore deselection by click
-                public void onClick(int button, int xSc, int ySc) {
-                    if (!isActive()) super.onClick(button, xSc, ySc);
-                }
-
-                @Override // override to ignore deselection by click
-                public void onRelease(int button) {
-                    if (!isActive()) super.onRelease(button);
-                }
-            };
-            int index = i;
-
-            button.addStateChangeListener((s) -> select(s, button, index));
+            SToggleButton button = getToggleButton(buttonProperties, elements, i);
 
             add(button, pos);
             pos.add(delta);
         }
+    }
+
+    private SToggleButton getToggleButton(SComponentProperties buttonProperties, String[] elements, int index) {
+        String label = elements[index] == null ? "" : elements[index];
+        SToggleButton button = new SToggleButton(label, buttonProperties) {
+            @Override // override to ignore deselection by click
+            public void onClick(int button, int xSc, int ySc) {
+                if (!isActive()) super.onClick(button, xSc, ySc);
+            }
+
+            @Override // override to ignore deselection by click
+            public void onRelease(int button) {
+                if (!isActive()) super.onRelease(button);
+            }
+        };
+
+        button.addStateChangeListener((s) -> select(s, button, index));
+        return button;
     }
 
     /**

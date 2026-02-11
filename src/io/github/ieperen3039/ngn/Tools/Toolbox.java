@@ -138,26 +138,17 @@ public final class Toolbox {
     }
 
     private static String getMessage(int error) {
-        switch (error) {
-            case GL_INVALID_ENUM:
-                return "Invalid Enum";
-            case GL_INVALID_VALUE:
-                return "Invalid Value";
-            case GL_INVALID_OPERATION:
-                return "Invalid Operation";
-            case GL_STACK_OVERFLOW:
-                return "Stack Overflow";
-            case GL_STACK_UNDERFLOW:
-                return "Stack Underflow";
-            case GL_OUT_OF_MEMORY:
-                return "Out of Memory";
-            case GL_INVALID_FRAMEBUFFER_OPERATION:
-                return "Invalid Framebuffer Operation";
-            case GL_CONTEXT_LOST:
-                return "Context Lost";
-
-        }
-        return "Unknown Error";
+        return switch (error) {
+            case GL_INVALID_ENUM -> "Invalid Enum";
+            case GL_INVALID_VALUE -> "Invalid Value";
+            case GL_INVALID_OPERATION -> "Invalid Operation";
+            case GL_STACK_OVERFLOW -> "Stack Overflow";
+            case GL_STACK_UNDERFLOW -> "Stack Underflow";
+            case GL_OUT_OF_MEMORY -> "Out of Memory";
+            case GL_INVALID_FRAMEBUFFER_OPERATION -> "Invalid Framebuffer Operation";
+            case GL_CONTEXT_LOST -> "Context Lost";
+            default -> "Unknown Error";
+        };
     }
 
     public static String asHex(int decimal) {
@@ -461,7 +452,7 @@ public final class Toolbox {
 
             @Override
             public Iterator<T> iterator() {
-                return new Iterator<T>() {
+                return new Iterator<>() {
                     final Iterator<T> aItr = aList.iterator();
                     final Iterator<T> bItr = bList.iterator();
 
@@ -481,9 +472,9 @@ public final class Toolbox {
 
     /** @return f such that interpolate(a, b, f) = target */
     public static float getFraction(float a, float b, float target) {
-//        target = ((b - a) * f) + a;
-//        target - a = (b - a) * f;
-//        (target - a) / (b - a) = f;
+        //| target = ((b - a) * f) + a;
+        //| target - a = (b - a) * f;
+        //| (target - a) / (b - a) = f;
         return (target - a) / (b - a);
     }
 

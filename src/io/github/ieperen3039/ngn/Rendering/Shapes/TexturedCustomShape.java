@@ -4,7 +4,6 @@ import io.github.ieperen3039.ngn.Rendering.MeshLoading.Face;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.SmoothMesh;
 import io.github.ieperen3039.ngn.Tools.Vectors;
-
 import org.joml.Vector2fc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -12,7 +11,8 @@ import org.joml.Vector3fc;
 import java.util.*;
 
 public class TexturedCustomShape {
-    public record Vertex(Vector3fc position, Vector3fc normal, Vector2fc textureCoord){};
+    public record Vertex(Vector3fc position, Vector3fc normal, Vector2fc textureCoord) {
+    }
 
     private Map<Vertex, Integer> vertices;
     private List<Face> faces;
@@ -33,7 +33,6 @@ public class TexturedCustomShape {
      * @param B      (0, 1)
      * @param C      (1, 1)
      * @param D      (1, 0)
-     * @param normal the direction of the normal of this plane
      * @throws NullPointerException if any of the vectors is null
      */
     public void addQuad(Vertex A, Vertex B, Vertex C, Vertex D) {
@@ -73,7 +72,6 @@ public class TexturedCustomShape {
 
     /**
      * stores a vertex in the collection, and returns its resulting position
-     * @param vertex
      * @return index of the vertex
      */
     private int addVertex(Vertex vertex) {
@@ -83,8 +81,7 @@ public class TexturedCustomShape {
 
     /**
      * adds a strip as separate quad objects
-     * @param quads an array of 2n+4 vertices defining quads as {@link #addQuad(Vector3fc, Vector3fc, Vector3fc,
-     *              Vector3fc)} for every natural number n.
+     * @param quads an array of 2n+4 vertices defining quads as {@link #addQuad(Vertex, Vertex, Vertex, Vertex)} for every natural number n.
      */
     public void addStrip(Vertex... quads) {
         final int inputSize = quads.length;
@@ -101,7 +98,6 @@ public class TexturedCustomShape {
     
     /**
      * Adds an arbitrary polygon to the object. For correct rendering, the plane should be flat
-     * @param normal the direction of the normal of this plane. When null, it is calculated using the middle
      * @param edges  the edges of this plane
      */
     public void addPlane(Vertex... edges) {

@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.InputHandling.MouseTools;
 
 import io.github.ieperen3039.ngn.Camera.Camera;
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.GUIMenu.FrameManagers.UIManager;
 import io.github.ieperen3039.ngn.InputHandling.MouseListener;
 import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;

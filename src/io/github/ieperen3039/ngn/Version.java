@@ -39,10 +39,11 @@ public class Version implements Comparable<Version>, Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Version)) return false;
-        Version other = (Version) obj;
+        if (obj instanceof Version other) {
+            return major == other.major && minor == other.minor;
+        }
+        return false;
 
-        return major == other.major && minor == other.minor;
     }
 
     /**

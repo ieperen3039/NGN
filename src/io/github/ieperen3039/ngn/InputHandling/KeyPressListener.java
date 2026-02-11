@@ -7,7 +7,6 @@ package io.github.ieperen3039.ngn.InputHandling;
 public interface KeyPressListener {
     /**
      * is called when a key is pressed
-     * @param keyCode
      */
     void keyPressed(int keyCode);
 }

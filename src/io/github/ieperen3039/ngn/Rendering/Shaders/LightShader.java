@@ -17,7 +17,9 @@ public interface LightShader {
 
     /**
      * pass an infinitely far away light to the shader
-     * @param light a light with parameters
+     * @param direction the direction in model-space (worldspace)
+     * @param color     the color of the light, with alpha as intensity
+     * @param intensity the light intensity of the light
      */
     void setDirectionalLight(Vector3fc direction, Color4f color, float intensity);
 

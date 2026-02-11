@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.Rendering.MatrixStack;
 
 import io.github.ieperen3039.ngn.Camera.Camera;
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
 import io.github.ieperen3039.ngn.Rendering.Shaders.SceneShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
@@ -19,7 +19,6 @@ public class SceneShaderGL extends AbstractSGL {
     /**
      * @param shader    the shader to use for rendering
      * @param viewpoint the camera that defines eye position, focus and up vector
-     * @param window
      */
     public SceneShaderGL(SceneShader shader, Camera viewpoint, Main.ViewPort window) {
         super();

@@ -33,7 +33,6 @@ public class AveragingQueue implements Serializable {
 
     /**
      * Fills the queue with the given entry
-     * @param entry
      */
     public void fill(float entry) {
         Arrays.fill(entries, entry);

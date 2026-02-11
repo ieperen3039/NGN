@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.InputHandling.MouseTools;
 
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.Core.Main;
 
 /**
  * A mouse tool that implements the standard behaviour of the pointer user input.

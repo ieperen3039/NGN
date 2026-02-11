@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.Camera;
 
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Vectors;
@@ -35,7 +35,6 @@ public class MovableCamera implements Camera {
      * a camera that always has the same angle to the ground. The angle can be set by the ratio between eyeOffset and
      * eyeHeight.
      * @param initialFocus the position of the camera focus
-     * @param dist
      */
     public MovableCamera(Vector3fc initialFocus, float dist) {
         this.eyeOffset = new Vector3f(dist, dist, dist);

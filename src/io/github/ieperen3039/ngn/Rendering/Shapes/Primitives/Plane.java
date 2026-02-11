@@ -108,10 +108,10 @@ public abstract class Plane {
      */
     public static Plane faceToPlane(Face face, List<Vector3fc> vertices, List<Vector3fc> normals) {
         final Vector3fc[] border = new Vector3fc[face.size()];
-        Arrays.setAll(border, i -> vertices.get(face.vert[i]));
+        Arrays.setAll(border, i -> vertices.get(face.vert()[i]));
         // take average normal as normal of plane, or use default method if none are registered
         Vector3f normal = new Vector3f();
-        for (int index : face.norm) {
+        for (int index : face.norm()) {
             if (index >= 0) normal.add(normals.get(index));
         }
 

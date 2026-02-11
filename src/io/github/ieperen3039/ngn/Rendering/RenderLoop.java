@@ -1,9 +1,9 @@
 package io.github.ieperen3039.ngn.Rendering;
 
-import io.github.ieperen3039.ngn.GenericThreadLoop;
-import io.github.ieperen3039.ngn.Main;
-import io.github.ieperen3039.ngn.Main.ViewPort;
-import io.github.ieperen3039.ngn.ToolElement;
+import io.github.ieperen3039.ngn.Core.GenericThreadLoop;
+import io.github.ieperen3039.ngn.Core.Main;
+import io.github.ieperen3039.ngn.Core.Main.ViewPort;
+import io.github.ieperen3039.ngn.Core.ToolElement;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.NVGOverlay;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;

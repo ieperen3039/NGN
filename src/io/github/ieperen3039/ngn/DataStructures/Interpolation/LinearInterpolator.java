@@ -68,7 +68,6 @@ public abstract class LinearInterpolator<T> extends BlockingTimedArrayQueue<T> {
     protected abstract T interpolate(T firstElt, T secondElt, float fraction);
 
     /**
-     * @param timeStamp
      * @return the derivative of the value returned by getInterpolated(time)
      */
     public T getDerivative(double timeStamp) {

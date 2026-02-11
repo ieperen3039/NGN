@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.Camera;
 
 
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.Core.Main;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 

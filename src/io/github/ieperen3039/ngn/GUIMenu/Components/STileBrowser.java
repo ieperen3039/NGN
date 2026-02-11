@@ -3,13 +3,12 @@ package io.github.ieperen3039.ngn.GUIMenu.Components;
 import io.github.ieperen3039.ngn.GUIMenu.LayoutManagers.LimitedVisibilityLayout;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-
-import org.joml.Vector2i;
-import org.joml.Vector2ic;
 
 /**
  * @author Geert van Ieperen created on 13-5-2019.
@@ -95,7 +94,7 @@ public class STileBrowser extends SContainer {
     public void doValidateLayout() {
         super.doValidateLayout();
 
-        assert children().size() > 0;
+        assert !children().isEmpty();
 
         // use original layout border for side buttons instead
         ComponentBorder border = layoutBorder;

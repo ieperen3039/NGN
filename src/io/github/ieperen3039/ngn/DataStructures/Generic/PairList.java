@@ -64,7 +64,7 @@ public class PairList<L, R> extends AbstractList<Pair<L, R>> {
 
     /** adds the given pair to the end of the list */
     public boolean add(Pair<L, R> p) {
-        return add(p.left, p.right);
+        return add(p.left(), p.right());
     }
 
     /** adds a pair to the end of the list */
@@ -76,7 +76,7 @@ public class PairList<L, R> extends AbstractList<Pair<L, R>> {
 
     @Override
     public void add(int index, Pair<L, R> element) {
-        add(index, element.left, element.right);
+        add(index, element.left(), element.right());
     }
 
     public void add(int index, L left, R right) {
@@ -104,7 +104,7 @@ public class PairList<L, R> extends AbstractList<Pair<L, R>> {
     /** sets the element of the given position to the given pair */
     public Pair<L, R> set(int index, Pair<L, R> p) {
         Pair<L, R> old = get(index);
-        set(index, p.left, p.right);
+        set(index, p.left(), p.right());
         return old;
     }
 
@@ -124,26 +124,23 @@ public class PairList<L, R> extends AbstractList<Pair<L, R>> {
 
     @Override
     public int indexOf(Object o) {
-        if (o == null) {
-            return -1;
-        } else {
-            if (o instanceof Pair) {
-                Pair<?, ?> pair = (Pair<?, ?>) o;
-                try {
-                    Iterator<L> lit = leftList.iterator();
-                    Iterator<R> rit = rightList.iterator();
-                    for (int i = 0; i < size(); i++) {
-                        if ((lit.next() == pair.left) && (rit.next() == pair.right)) {
-                            return i;
-                        }
-                    }
-                } catch (ArrayIndexOutOfBoundsException | NoSuchElementException ex) {
-                    throw new ConcurrentModificationException();
-                }
-            }
+        if (o == null) return -1;
 
-            return -1;
+        if (o instanceof Pair<?, ?> pair) {
+            try {
+                Iterator<L> lit = leftList.iterator();
+                Iterator<R> rit = rightList.iterator();
+                for (int i = 0; i < size(); i++) {
+                    if ((lit.next() == pair.left()) && (rit.next() == pair.right())) {
+                        return i;
+                    }
+                }
+            } catch (ArrayIndexOutOfBoundsException | NoSuchElementException ex) {
+                throw new ConcurrentModificationException();
+            }
         }
+
+        return -1;
     }
 
     /**
@@ -324,8 +321,8 @@ public class PairList<L, R> extends AbstractList<Pair<L, R>> {
 
         @Override
         public void set(Pair<L, R> pair) {
-            leftList.set(nextIndex - 1, pair.left);
-            rightList.set(nextIndex - 1, pair.right);
+            leftList.set(nextIndex - 1, pair.left());
+            rightList.set(nextIndex - 1, pair.right());
         }
 
         @Override

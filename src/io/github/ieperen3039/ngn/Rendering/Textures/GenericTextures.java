@@ -4,8 +4,8 @@ package io.github.ieperen3039.ngn.Rendering.Textures;
  * @author Geert van Ieperen created on 1-2-2019.
  */
 public enum GenericTextures implements Texture {
-    CHECKER("images", "check.png"),
-    GRADIENT("images", "Gradient.png"),
+    CHECKER("images/check.png"),
+    GRADIENT("images/Gradient.png"),
     ;
 
     private final Texture tex;

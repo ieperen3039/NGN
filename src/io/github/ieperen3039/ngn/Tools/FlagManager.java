@@ -1,4 +1,4 @@
-package io.github.ieperen3039.ngn;
+package io.github.ieperen3039.ngn.Tools;
 
 import java.util.*;
 
@@ -138,7 +138,7 @@ public class FlagManager {
             }
         }
 
-        throw new IllegalArgumentException("Flag " + arg + " is mutually exclusive with " + acc.toString());
+        throw new IllegalArgumentException("Flag " + arg + " is mutually exclusive with " + acc);
     }
 
     public interface RunnableThr {

@@ -1,11 +1,11 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.AssetHandling.Resource;
+import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.Lights.DirectionalLight;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.AbstractSGL;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
-import io.github.ieperen3039.ngn.AssetHandling.Resource;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector3fc;
@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram.createShader;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
 import static org.lwjgl.opengl.GL30.glBindFramebuffer;

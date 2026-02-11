@@ -13,7 +13,7 @@ public interface SGL extends MatrixStack {
     /**
      * instructs the graphical card to render the specified mesh
      * @param object       A Mesh that has not been disposed.
-     * @param sourceEntity the entity that is currently drawn
+     * @param index the identifier of what is currently drawn
      */
     void render(Mesh object, int index);
 

@@ -5,25 +5,16 @@ import java.util.Arrays;
 /**
  * a record class to describe a plane by indices. This object is not robust, thus one may not assume it is
  * immutable.
+ *
+ * @param vert indices of the vertices of this face
+ * @param norm indices of the normals of this face
+ * @param tex  indices of the texture coordinates of this face
+ * @param col  indices of the colors of this face
  */
- public class Face {
-    /** indices of the vertices of this face */
-    public final int[] vert;
-    /** indices of the normals of this face */
-    public final int[] norm;
-    /** indices of the texture coordinates of this face */
-    public final int[] tex;
-    /** indices of the colors of this face */
-    public final int[] col;
-
-    public Face(int[] vertexIndices, int[] normalIndices, int[] textureIndices, int[] colors) {
-        int size = vertexIndices.length;
-        assert (normalIndices.length == size && textureIndices.length == size);
-
-        this.vert = vertexIndices;
-        this.norm = normalIndices;
-        this.tex = textureIndices;
-        this.col = colors;
+public record Face(int[] vert, int[] norm, int[] tex, int[] col) {
+    public Face {
+        int size = vert.length;
+        assert (norm.length == size && tex.length == size);
     }
 
     /**
@@ -31,13 +22,7 @@ import java.util.Arrays;
      * list of vertices and normals that belong to a list of faces where this face is part of.
      */
     public Face(int[] vertices, int[] normals) {
-        int size = vertices.length;
-        assert (normals.length == size);
-
-        this.vert = vertices;
-        this.norm = normals;
-        this.tex = null;
-        this.col = null;
+        this(vertices, normals, null, null);
     }
 
     /**
@@ -55,6 +40,7 @@ import java.util.Arrays;
 
     /**
      * parses a face object from a given line of an OBJ formatted file
+     *
      * @param tokens a line of a face, split on whitespaces, with 'f' on position 0.
      */
     public static Face parseOBJ(String[] tokens) {
@@ -78,6 +64,7 @@ import java.util.Arrays;
 
     /**
      * parses a face object from a given line of an PLY formatted file
+     *
      * @param tokens a line describing the index of a face
      */
     public static Face parsePLY(String[] tokens) {

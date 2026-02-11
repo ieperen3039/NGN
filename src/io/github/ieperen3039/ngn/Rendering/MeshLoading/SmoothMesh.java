@@ -45,9 +45,9 @@ public class SmoothMesh extends AbstractMesh {
             assert face.size() == 3;
 
             for (int i = 0; i < 3; i++) {
-                int posInd = face.vert[i];
-                int texInd = face.tex[i];
-                int normInd = face.norm[i];
+                int posInd = face.vert()[i];
+                int texInd = face.tex()[i];
+                int normInd = face.norm()[i];
 
                 Vector3fc vertex = vertices.get(posInd);
                 Vector3fc normal = normals.get(normInd);

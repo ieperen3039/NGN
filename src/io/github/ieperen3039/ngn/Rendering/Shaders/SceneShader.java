@@ -1,13 +1,16 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
-import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
+import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
-import org.joml.*;
+import org.joml.Matrix3fc;
+import org.joml.Matrix4fc;
+import org.joml.Vector3fc;
+
 import java.io.IOException;
+
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
 
 /**

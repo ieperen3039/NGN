@@ -26,14 +26,8 @@ public class Settings {
     public float MAX_CAMERA_DIST = Z_FAR * 0.75f;
     public float MIN_CAMERA_DIST = Z_NEAR * 2f;
 
-    // UI settings
-    public static final float CLICK_BOX_WIDTH = 1.5f;
-    public static final float CLICK_BOX_HEIGHT = 0.1f;
-    public static final float CLICK_BOX_RESOLUTION = 1f;
-
     // other
     public boolean PRINT_ROLL = false;
     public boolean ACCURATE_RENDER_TIMING = false;
     public boolean DEBUG = true;
-
 }

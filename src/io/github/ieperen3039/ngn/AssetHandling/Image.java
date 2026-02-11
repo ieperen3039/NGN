@@ -1,12 +1,12 @@
 package io.github.ieperen3039.ngn.AssetHandling;
 
-import java.nio.ByteBuffer;
-
-import static org.lwjgl.opengl.GL11.*;
-
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.Textures.Texture;
 import io.github.ieperen3039.ngn.Rendering.Textures.TextureFromBlob;
+
+import java.nio.ByteBuffer;
+
+import static org.lwjgl.opengl.GL11.GL_RGBA;
 
 public class Image {
     private int imageWidth;
@@ -100,9 +100,7 @@ public class Image {
 
         // collect the bytes of one pixel
         byte[] result = new byte[bytesPerPixel];
-        for (int i = 0; i < bytesPerPixel; i++) {
-            result[i] = imageBytes[startByte + i];
-        }
+        System.arraycopy(imageBytes, startByte, result, 0, bytesPerPixel);
 
         return result;
     }
@@ -122,7 +120,9 @@ public class Image {
         return imageBytes[startByte + idx];
     }
 
-    /** returns this image as an RGBA bytebuffer of size {@link getWidth()} * {@link getHeight()} * 4 */
+    /**
+     * returns this image as an RGBA bytebuffer of size {@link #getWidth()} * {@link #getHeight()} * 4
+     */
     public ByteBuffer toByteBufferRGBA() {
         if (imageWidth == imageWidthStep && bytesPerPixel == 4) {
             return ByteBuffer.wrap(imageBytes);

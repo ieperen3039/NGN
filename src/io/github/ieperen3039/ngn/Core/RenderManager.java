@@ -1,10 +1,10 @@
-package io.github.ieperen3039.ngn;
+package io.github.ieperen3039.ngn.Core;
+
+import io.github.ieperen3039.ngn.Tools.Logger;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
-
-import io.github.ieperen3039.ngn.Tools.Logger;
 
 public interface RenderManager {
 

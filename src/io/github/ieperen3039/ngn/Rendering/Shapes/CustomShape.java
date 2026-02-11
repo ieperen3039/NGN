@@ -1,10 +1,6 @@
 package io.github.ieperen3039.ngn.Rendering.Shapes;
 
-import io.github.ieperen3039.ngn.Rendering.MeshLoading.Face;
-import io.github.ieperen3039.ngn.Rendering.MeshLoading.FlatMesh;
-import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
-import io.github.ieperen3039.ngn.Rendering.MeshLoading.MeshFile;
-import io.github.ieperen3039.ngn.Rendering.MeshLoading.SmoothMesh;
+import io.github.ieperen3039.ngn.Rendering.MeshLoading.*;
 import io.github.ieperen3039.ngn.Tools.Vectors;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -165,7 +161,6 @@ public class CustomShape {
 
     /**
      * stores a vector in the collection, and returns its resulting position
-     * @param vector
      * @return index of the vector
      */
     private int addVertex(Vector3fc vector) {

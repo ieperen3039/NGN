@@ -1,4 +1,4 @@
-package io.github.ieperen3039.ngn;
+package io.github.ieperen3039.ngn.Core;
 
 import io.github.ieperen3039.ngn.DataStructures.Generic.AveragingQueue;
 import io.github.ieperen3039.ngn.Tools.Logger;
@@ -30,7 +30,7 @@ public abstract class GenericThreadLoop extends Thread {
     /**
      * creates a new, unstarted simulation loop
      * @param name      the name as displayed in {@link #toString()}
-     * @param targetTps the target number of executions of {@link #update(float)} per second
+     * @param targetTps the target number of executions of {@link #update(TickTime)} per second
      */
     public GenericThreadLoop(String name, int targetTps) {
         super(name);

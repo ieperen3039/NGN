@@ -88,7 +88,6 @@ public class SDropDown extends SComponent implements MouseClickListener {
      * @param gui       a reference to the gui in which this is displayed
      * @param initial   the initial selected item, such that {@code values[initial]} is shown
      * @param values    a list of possible values for this dropdown menu
-     * @param stringExtractor
      */
     public <T> SDropDown(
             UIManager gui, SComponentProperties properties, int initial, List<? extends T> values,

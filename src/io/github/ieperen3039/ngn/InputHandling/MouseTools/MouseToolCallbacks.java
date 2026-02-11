@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.InputHandling.MouseTools;
 
-import io.github.ieperen3039.ngn.Main;
-import io.github.ieperen3039.ngn.ToolElement;
+import io.github.ieperen3039.ngn.Core.Main;
+import io.github.ieperen3039.ngn.Core.ToolElement;
 import io.github.ieperen3039.ngn.InputHandling.KeyControl;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Tools.Logger;

@@ -1,12 +1,11 @@
 package io.github.ieperen3039.ngn.GUIMenu.Rendering;
 
-import io.github.ieperen3039.ngn.RenderManager;
-import io.github.ieperen3039.ngn.Version;
+import io.github.ieperen3039.ngn.Core.RenderManager;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
+import io.github.ieperen3039.ngn.Version;
+import org.joml.Vector2ic;
 
 import java.nio.ByteBuffer;
-
-import org.joml.Vector2ic;
 
 /**
  * a stateless mapping from abstract descriptions to drawings in NanoVG
@@ -54,7 +53,6 @@ public interface SFrameLookAndFeel {
      * @param type  the type of element
      * @param pos   the position of the upper left corner of this element in pixels
      * @param dim   the (width, height) of the button in pixels
-     * @param color
      */
     void draw(UIComponent type, Vector2ic pos, Vector2ic dim, Color4f color);
 
@@ -63,13 +61,13 @@ public interface SFrameLookAndFeel {
     );
 
     /**
-     * creates an image, and returns an id to reference the image later in {@link SFrameLookAndFeel.drawImage}
+     * creates an image, and returns an id to reference the image later in {@link SFrameLookAndFeel#drawImage}
      * @return an image id
      */
     int createImage(ByteBuffer buffer, int width, int height);
 
     /**
-     * draws an image previously created using {@link SFrameLookAndFeel.createImage}.
+     * draws an image previously created using {@link SFrameLookAndFeel#createImage}.
      * the given imagewidth and imageheight must be the size of the original image
      */
     void drawImage(Vector2ic pos, int imageWidth, int imageHeight, int imageId);

@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -40,7 +42,6 @@ public final class NVGOverlay {
     }
 
     /**
-     * @param antialiasLevel
      * @throws IOException If an error occurs during the setup of the Hud.
      */
     public void init(int antialiasLevel) throws IOException {
@@ -331,7 +332,6 @@ public final class NVGOverlay {
          *                  </tr></table>
          * @param color     the color of the text
          * @param text      the text to write
-         * @param maxWidth
          */
         public void text(
                 int x, int y, float size, NGFonts font, EnumSet<Alignment> alignment, Color4f color, String text,
@@ -422,7 +422,6 @@ public final class NVGOverlay {
          * draws a previously created nvg image
          * @param imageID the id of the image to draw, obtained from either createImage or createImageFromTexture
          * @param angle   the rotation angle in radians
-         * @param scale
          */
         public void drawImage(int imageID, int x, int y, int width, int height, float angle, float scale) {
             // note: the magic in this function is rather fragile

@@ -11,9 +11,9 @@ import java.nio.file.Paths;
  * @author Geert van Ieperen. Created on 13-9-2018.
  */
 public enum Directory {
-    scripts(false, "scripts"),
-    shapes(false, "shapes"),
-    out(false, "out");
+    scripts("scripts"),
+    shapes("shapes"),
+    out("out");
 
     private final Path directory; // relative path
     private static Path workingDirectory = null;
@@ -22,16 +22,13 @@ public enum Directory {
         this.directory = directory;
     }
 
-    Directory(boolean isResource, String first, String... other) {
+    Directory(String first, String... other) {
         directory = Paths.get(first, other);
 
         File file = workDirectory().resolve(directory).toFile();
-        if (isResource && !file.exists()) {
-            throw new RuntimeException("Directory " + directory + " is missing. Searched for " + file);
-        }
-
-        if (!isResource) {
-            file.mkdirs();
+        boolean success = file.mkdirs();
+        if (!success) {
+            Logger.ERROR.print("Could not create directories", file);
         }
     }
 

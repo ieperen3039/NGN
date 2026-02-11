@@ -1,8 +1,8 @@
 package io.github.ieperen3039.ngn.GUIMenu.Rendering;
 
-import io.github.ieperen3039.ngn.RenderManager;
-import io.github.ieperen3039.ngn.Version;
+import io.github.ieperen3039.ngn.Core.RenderManager;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
+import io.github.ieperen3039.ngn.Version;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
@@ -17,7 +17,7 @@ import static io.github.ieperen3039.ngn.GUIMenu.Rendering.NVGOverlay.Alignment.*
  * @author Geert van Ieperen. Created on 21-9-2018.
  */
 public class BaseLF implements SFrameLookAndFeel {
-    private static final int INDENT = 1;
+    private static final int DEFAULT_INDENT = 1;
     private static final int BUTTON_INDENT = 2;
     private static final int STROKE_WIDTH = 1;
     private static final int TEXT_SIZE_REGULAR = 12;
@@ -77,28 +77,28 @@ public class BaseLF implements SFrameLookAndFeel {
             case BUTTON_INACTIVE:
             case SCROLL_BAR_DRAG_ELEMENT:
                 Color4f thisColor = color == null ? BUTTON_COLOR : color;
-                drawButtonRectangle(x, y, width, height, thisColor);
+                drawRectangle(x, y, width, height, BUTTON_INDENT, thisColor);
                 break;
 
             case BUTTON_HOVERED:
                 Color4f thisColor1 = color == null ? SELECTION_COLOR.intensify(0.1f) : color;
-                drawButtonRectangle(x, y, width, height, thisColor1);
+                drawRectangle(x, y, width, height, BUTTON_INDENT, thisColor1);
                 break;
 
             case BUTTON_PRESSED:
                 Color4f thisColor2 = color == null ? BUTTON_COLOR.darken(0.5f) : color;
-                drawButtonRectangle(x, y, width, height, thisColor2);
+                drawRectangle(x, y, width, height, BUTTON_INDENT, thisColor2);
                 break;
 
             case INPUT_FIELD:
                 Color4f thisColor3 = color == null ? INPUT_FIELD_COLOR : color;
-                drawButtonRectangle(x, y, width, height, thisColor3);
+                drawRectangle(x, y, width, height, BUTTON_INDENT, thisColor3);
                 break;
 
             case SELECTION:
                 hud.setStroke(STROKE_COLOR, 0);
                 Color4f thisColor4 = color == null ? SELECTION_COLOR : color;
-                drawButtonRectangle(x, y, width, height, thisColor4);
+                drawRectangle(x, y, width, height, BUTTON_INDENT, thisColor4);
                 break;
 
             case DROP_DOWN_HEAD_CLOSED:
@@ -107,39 +107,23 @@ public class BaseLF implements SFrameLookAndFeel {
             case PANEL:
             case FRAME_HEADER:
             default:
-                drawRoundedRectangle(x, y, width, height, color == null ? Color4f.WHITE : color);
+                drawRectangle(x, y, width, height, DEFAULT_INDENT, color == null ? Color4f.WHITE : color);
         }
     }
 
-    private void drawButtonRectangle(int x, int y, int width, int height, Color4f color) {
-        int xMax2 = x + width;
-        int yMax2 = y + height;
-
-        hud.polygon(color, STROKE_COLOR, STROKE_WIDTH,
-                new Vector2i(x + BUTTON_INDENT, y),
-                new Vector2i(xMax2 - BUTTON_INDENT, y),
-                new Vector2i(xMax2, y + BUTTON_INDENT),
-                new Vector2i(xMax2, yMax2 - BUTTON_INDENT),
-                new Vector2i(xMax2 - BUTTON_INDENT, yMax2),
-                new Vector2i(x + BUTTON_INDENT, yMax2),
-                new Vector2i(x, yMax2 - BUTTON_INDENT),
-                new Vector2i(x, y + BUTTON_INDENT)
-        );
-    }
-
-    private void drawRoundedRectangle(int x, int y, int width, int height, Color4f color) {
+    private void drawRectangle(int x, int y, int width, int height, int indent, Color4f color) {
         int xMax = x + width;
         int yMax = y + height;
 
         hud.polygon(color, STROKE_COLOR, STROKE_WIDTH,
-                new Vector2i(x + INDENT, y),
-                new Vector2i(xMax - INDENT, y),
-                new Vector2i(xMax, y + INDENT),
-                new Vector2i(xMax, yMax - INDENT),
-                new Vector2i(xMax - INDENT, yMax),
-                new Vector2i(x + INDENT, yMax),
-                new Vector2i(x, yMax - INDENT),
-                new Vector2i(x, y + INDENT)
+                new Vector2i(x + indent, y),
+                new Vector2i(xMax - indent, y),
+                new Vector2i(xMax, y + indent),
+                new Vector2i(xMax, yMax - indent),
+                new Vector2i(xMax - indent, yMax),
+                new Vector2i(x + indent, yMax),
+                new Vector2i(x, yMax - indent),
+                new Vector2i(x, y + indent)
         );
     }
 

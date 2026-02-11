@@ -5,7 +5,11 @@ import io.github.ieperen3039.ngn.GUIMenu.Components.SFrame;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Tools.Logger;
-import java.util.*;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * 
@@ -32,15 +36,12 @@ public class FrameManagerImpl extends SimpleUIManager {
             final SFrame f = itr.next();
 
             if (f.isVisible()) {
-                f.validateLayout();
-                f.draw(lookAndFeel, f.getPosition());
-
                 // if anything caused invalidation of the layout (e.g. text size information)
                 // then redraw this frame
-                while (!f.layoutIsValid()) {
+                do {
                     f.validateLayout();
                     f.draw(lookAndFeel, f.getPosition());
-                }
+                } while (!f.layoutIsValid());
             }
         }
 

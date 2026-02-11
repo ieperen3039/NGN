@@ -1,11 +1,11 @@
 package io.github.ieperen3039.ngn.Rendering.MeshLoading;
 
-import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
-import io.github.ieperen3039.ngn.Rendering.Shapes.BasicShape;
-import io.github.ieperen3039.ngn.Rendering.Shapes.Shape;
 import io.github.ieperen3039.ngn.AssetHandling.Asset;
 import io.github.ieperen3039.ngn.AssetHandling.ExternalAsset;
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
+import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
+import io.github.ieperen3039.ngn.Rendering.Shapes.BasicShape;
+import io.github.ieperen3039.ngn.Rendering.Shapes.Shape;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.Vectors;
 import org.joml.Vector2fc;
@@ -131,7 +131,6 @@ public class MeshFile {
 
     /**
      * writes an object to the given filename
-     * @param targetFile
      * @throws IOException if any problem occurs while creating the file
      */
     public void writeOBJFile(File targetFile) throws IOException {
@@ -143,7 +142,6 @@ public class MeshFile {
 
     /**
      * writes an object to the given print writer
-     * @param writer
      */
     public void writeOBJFile(PrintWriter writer) {
         writer.println("# created using a simple obj writer by Geert van Ieperen");
@@ -167,10 +165,10 @@ public class MeshFile {
 
         if (isTextured()) {
             for (Face face : faces) {
-                assert face.tex != null;
+                assert face.tex() != null;
                 writer.print("f ");
                 for (int i = 0; i < face.size(); i++) {
-                    writer.print(" " + String.format("%d/%d/%d", face.vert[i] + 1, face.tex[i] + 1, face.norm[i] + 1));
+                    writer.print(" " + String.format("%d/%d/%d", face.vert()[i] + 1, face.tex()[i] + 1, face.norm()[i] + 1));
                 }
                 writer.println();
             }
@@ -179,7 +177,7 @@ public class MeshFile {
             for (Face face : faces) {
                 writer.print("f ");
                 for (int i = 0; i < face.size(); i++) {
-                    writer.print(" " + String.format("%d//%d", face.vert[i] + 1, face.norm[i] + 1));
+                    writer.print(" " + String.format("%d//%d", face.vert()[i] + 1, face.norm()[i] + 1));
                 }
                 writer.println();
             }

@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
 import org.joml.Vector2i;
@@ -10,8 +10,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.GL_DEPTH_COMPONENT16;
 import static org.lwjgl.opengl.GL30.*;
 
 /**
@@ -97,7 +95,6 @@ public class ClickShader {
         int r = Byte.toUnsignedInt(buffer.get(0));
         int g = Byte.toUnsignedInt(buffer.get(1));
         int b = Byte.toUnsignedInt(buffer.get(2));
-        assert !(r < 0 || g < 0 || b < 0) : String.format("got (%d, %d, %d)", r, g, b);
         buffer.clear();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

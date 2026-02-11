@@ -9,6 +9,7 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.Callback;
 
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
@@ -32,6 +33,8 @@ public class GLFWWindow {
     private final DoubleBuffer mousePosX;
     private final DoubleBuffer mousePosY;
     private final Settings settings;
+    private Callback debugMessagesCallbackPtr = null;
+    private Callback framebufferSizeCallback = null;
 
     private long primaryMonitor;
     private long window;
@@ -93,7 +96,7 @@ public class GLFWWindow {
         // debug message callbacks
         if (settings.debugMode && settings.glDebugMessages) {
             glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-            GLUtil.setupDebugMessageCallback();
+            debugMessagesCallbackPtr = GLUtil.setupDebugMessageCallback();
         }
 
         Toolbox.checkGLError("window");
@@ -117,7 +120,7 @@ public class GLFWWindow {
 
         if (this.resizable) {
             // Setup resize callback
-            glfwSetFramebufferSizeCallback(newWindow, (window, newWidth, newHeight) -> {
+            framebufferSizeCallback = GLFW.glfwSetFramebufferSizeCallback(newWindow, (window, newWidth, newHeight) -> {
                 this.width = newWidth;
                 this.height = newHeight;
                 sizeChangeListeners.forEach(l -> l.onChange(newWidth, newHeight));
@@ -182,7 +185,8 @@ public class GLFWWindow {
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
         glfwTerminate();
-        glfwSetErrorCallback(null).free();
+        if (debugMessagesCallbackPtr != null) debugMessagesCallbackPtr.free();
+        if (framebufferSizeCallback != null) framebufferSizeCallback.free();
     }
 
     /**
@@ -247,7 +251,9 @@ public class GLFWWindow {
 
     public void setFullScreen(Settings settings) {
         GLFWVidMode vidmode = glfwGetVideoMode(primaryMonitor);
-        glfwSetWindowMonitor(window, primaryMonitor, 0, 0, vidmode.width(), vidmode.height(), settings.targetFPS);
+        if (vidmode != null) {
+            glfwSetWindowMonitor(window, primaryMonitor, 0, 0, vidmode.width(), vidmode.height(), settings.targetFPS);
+        }
 
         if (settings.vSync) {
             // Turn on vSync
@@ -261,11 +267,13 @@ public class GLFWWindow {
         // Get primary display resolution
         GLFWVidMode vidmode = glfwGetVideoMode(primaryMonitor);
         // Center window on display
-        glfwSetWindowPos(
-                window,
-                (vidmode.width() - settings.windowWidth) / 2,
-                (vidmode.height() - settings.windowHeight) / 2
-        );
+        if (vidmode != null) {
+            glfwSetWindowPos(
+                    window,
+                    (vidmode.width() - settings.windowWidth) / 2,
+                    (vidmode.height() - settings.windowHeight) / 2
+            );
+        }
         fullScreen = false;
     }
 
@@ -347,6 +355,7 @@ public class GLFWWindow {
             );
         }
     }
+
+    public enum CursorMode {VISIBLE, HIDDEN_FREE, HIDDEN_CAPTURED}
 }
 
-enum CursorMode {VISIBLE, HIDDEN_FREE, HIDDEN_CAPTURED}

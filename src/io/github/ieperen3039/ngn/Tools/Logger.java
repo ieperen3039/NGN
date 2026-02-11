@@ -150,20 +150,15 @@ public enum Logger {
         for (int i = 0; i < x.length; i++) {
             if (x[i] == null) {
                 x[i] = "null";
-            } else if (x[i] instanceof Vector3fc) {
-                Vector3fc v = (Vector3fc) x[i];
+            } else if (x[i] instanceof Vector3fc v) {
                 x[i] = Vectors.toString(v);
-            } else if (x[i] instanceof Vector2fc) {
-                Vector2fc v = (Vector2fc) x[i];
+            } else if (x[i] instanceof Vector2fc v) {
                 x[i] = Vectors.toString(v);
-            } else if (x[i] instanceof Vector2ic) {
-                Vector2ic v = (Vector2ic) x[i];
+            } else if (x[i] instanceof Vector2ic v) {
                 x[i] = Vectors.toString(v);
-            } else if (x[i] instanceof Vector3ic) {
-                Vector3ic v = (Vector3ic) x[i];
+            } else if (x[i] instanceof Vector3ic v) {
                 x[i] = Vectors.toString(v);
-            } else if (x[i] instanceof Vector4fc) {
-                Vector4fc v = (Vector4fc) x[i];
+            } else if (x[i] instanceof Vector4fc v) {
                 x[i] = Vectors.toString(v);
             }
         }

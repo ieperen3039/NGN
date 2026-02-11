@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.Camera;
 
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Vectors;
 import org.joml.Quaternionf;

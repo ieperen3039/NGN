@@ -1,9 +1,9 @@
 package io.github.ieperen3039.ngn.Rendering.Shapes;
 
+import io.github.ieperen3039.ngn.AssetHandling.Asset;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Face;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.MeshFile;
 import io.github.ieperen3039.ngn.Rendering.Shapes.Primitives.Plane;
-import io.github.ieperen3039.ngn.AssetHandling.Asset;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.Vectors;
 import org.joml.AABBf;
@@ -87,7 +87,7 @@ public interface Shape {
             Vector3fc[] edges = new Vector3fc[f.size()];
             Vector3f minimum = new Vector3f(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
             for (int i = 0; i < f.size(); i++) {
-                Vector3fc p = file.getVertices().get(f.vert[i]);
+                Vector3fc p = file.getVertices().get(f.vert()[i]);
                 minimum.min(p);
                 edges[i] = p;
             }
@@ -102,7 +102,7 @@ public interface Shape {
             );
 
             Vector3f normal = new Vector3f();
-            for (int ind : f.norm) {
+            for (int ind : f.norm()) {
                 if (ind < 0) continue;
                 normal.add(file.getNormals().get(ind));
             }

@@ -17,13 +17,11 @@ public interface UIManager
 
     /**
      * sets the given component to cover the entire screen
-     * @param container
      */
     void setMainPanel(SComponent container);
 
     /**
      * draws the elements of this HUD
-     * @param painter
      */
     void draw(NVGOverlay.Painter painter);
 

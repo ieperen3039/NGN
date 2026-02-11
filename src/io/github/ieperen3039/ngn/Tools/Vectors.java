@@ -1,8 +1,8 @@
 package io.github.ieperen3039.ngn.Tools;
 
 import io.github.ieperen3039.ngn.DataStructures.Generic.Pair;
-import org.joml.Math;
 import org.joml.*;
+import org.joml.Math;
 
 import java.util.Locale;
 
@@ -251,8 +251,6 @@ public final class Vectors {
 
     /**
      * swaps the contents of a and b
-     * @param a
-     * @param b
      */
     public static void swap(Vector3f a, Vector3f b) {
         float t;

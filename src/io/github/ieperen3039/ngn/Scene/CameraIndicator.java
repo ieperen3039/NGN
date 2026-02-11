@@ -1,18 +1,14 @@
 package io.github.ieperen3039.ngn.Scene;
 
-import static org.lwjgl.opengl.GL11.glDepthMask;
-
-import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
-import org.joml.Quaternionfc;
-import org.joml.Vector3fc;
-
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.Material;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.MaterialShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 import io.github.ieperen3039.ngn.Rendering.Shapes.GenericShapes;
+import org.joml.*;
+
+import static org.lwjgl.opengl.GL11.glDepthMask;
 
 public class CameraIndicator implements Entity {
     // in meters
@@ -23,18 +19,18 @@ public class CameraIndicator implements Entity {
 
     private Matrix4fc viewProjectionMatrix;
     private Matrix4fc viewProjectionMatrixInv;
-    private Vector3fc postion;
+    private Vector3fc position;
     private Quaternionfc rotation;
 
     private boolean showFrustum = false;
 
     public CameraIndicator(
-        Matrix4fc viewProjectionMatrix, Vector3fc postion, Quaternionfc rotation
+            Matrix4fc viewProjectionMatrix, Vector3fc position, Quaternionfc rotation
     ) {
-        this.viewProjectionMatrix = viewProjectionMatrix;
+        this.viewProjectionMatrix = new Matrix4f(viewProjectionMatrix);
         this.viewProjectionMatrixInv = new Matrix4f(viewProjectionMatrix).invert();
-        this.postion = postion;
-        this.rotation = rotation;
+        this.position = new Vector3f(position);
+        this.rotation = new Quaternionf(rotation);
     }
 
     public void setShowFrustum(boolean setVisible) {
@@ -58,7 +54,7 @@ public class CameraIndicator implements Entity {
         // draw the camera itself
         gl.pushMatrix();
         {
-            gl.translate(postion);
+            gl.translate(position);
             gl.rotate(rotation);
 
             gl.pushMatrix();

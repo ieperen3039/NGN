@@ -1,4 +1,4 @@
-package io.github.ieperen3039.ngn;
+package io.github.ieperen3039.ngn.Core;
 
 import io.github.ieperen3039.ngn.Camera.Camera;
 import io.github.ieperen3039.ngn.GUIMenu.FrameManagers.UIManager;
@@ -7,6 +7,7 @@ import io.github.ieperen3039.ngn.InputHandling.MouseTools.MouseToolCallbacks;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.TickTime;
+import io.github.ieperen3039.ngn.Version;
 
 /**
  * A collection of references to any major element of the simulation.
@@ -33,6 +34,7 @@ public interface Main extends RenderManager {
     default ViewPort getViewPort() {
         return new ViewPort(0, 0, window().getWidth(), window().getHeight());
     }
-    
-    record ViewPort(int x, int y, int width, int height){};
+
+    record ViewPort(int x, int y, int width, int height) {
+    }
 }

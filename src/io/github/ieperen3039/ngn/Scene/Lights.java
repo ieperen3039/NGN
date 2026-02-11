@@ -1,16 +1,15 @@
 package io.github.ieperen3039.ngn.Scene;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.joml.Vector3fc;
-
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.Lights.DirectionalLight;
 import io.github.ieperen3039.ngn.Rendering.Lights.Light;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.LightShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
+import org.joml.Vector3fc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Lights {
     // we don't work with point-lights
@@ -30,9 +29,7 @@ public class Lights {
 
     public void draw(SGL gl) {
         ShaderProgram shader = gl.getShader();
-        if (shader instanceof LightShader) {
-            LightShader lightShader = (LightShader) shader;
-
+        if (shader instanceof LightShader lightShader) {
             synchronized (lights) {
                 for (DirectionalLight light : lights) {
                     lightShader.setDirectionalLight(light.getDirectionToLight(), light.getColor(), light.getIntensity());

@@ -11,8 +11,6 @@ public class QuaternionInterpolator extends LinearInterpolator<Quaternionf> {
 
     /**
      * @param capacity    the initial expected maximum number of entries
-     * @param initialItem
-     * @param initialTime
      */
     public QuaternionInterpolator(int capacity, Quaternionf initialItem, float initialTime) {
         super(capacity, initialItem, initialTime);

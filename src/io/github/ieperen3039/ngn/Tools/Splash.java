@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
  */
 public class Splash extends Frame implements Runnable {
     public Splash(Resource.Path path) {
-        setTitle("Loading " + Settings.TITLE);
+        setTitle("Loading " + Settings.TITLE + "...");
 
         try {
             BufferedImage splashImage = ImageIO.read(path.asStream());

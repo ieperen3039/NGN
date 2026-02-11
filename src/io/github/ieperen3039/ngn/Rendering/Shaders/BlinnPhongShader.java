@@ -1,23 +1,20 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
-import io.github.ieperen3039.ngn.Main;
+import io.github.ieperen3039.ngn.AssetHandling.Resource;
+import io.github.ieperen3039.ngn.Camera.Camera;
+import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SceneShaderGL;
 import io.github.ieperen3039.ngn.Rendering.Textures.GenericTextures;
 import io.github.ieperen3039.ngn.Rendering.Textures.Texture;
-import io.github.ieperen3039.ngn.AssetHandling.Resource;
-import io.github.ieperen3039.ngn.Camera.Camera;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Logger;
-
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.io.IOException;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL13.*;
 
 /**

@@ -58,8 +58,7 @@ public class GridLayoutManager implements SLayoutManager {
     public void add(SComponent comp, Object prop) {
         assert comp != null;
 
-        if (prop instanceof Vector2ic) {
-            Vector2ic pos = (Vector2ic) prop;
+        if (prop instanceof Vector2ic pos) {
             add(comp, pos.x(), pos.y());
 
         } else {
@@ -122,7 +121,7 @@ public class GridLayoutManager implements SLayoutManager {
     @Override
     public Collection<SComponent> getComponents() {
         if (nrOfElements == 0) return Collections.emptySet();
-        return new AbstractCollection<SComponent>() {
+        return new AbstractCollection<>() {
             @Override
             public Iterator<SComponent> iterator() {
                 return new GridIterator();
@@ -211,7 +210,7 @@ public class GridLayoutManager implements SLayoutManager {
      * @param numGrows  the number of trues in the {@code wantGrows} table
      * @param wantGrows for each position, whether at least one element wants to grow
      * @param size      the size of the area where the elements can be placed in
-     * @return a list of pixel positions that places the components according to the layout
+     * @return an array of pixel positions that places the components according to the layout
      */
     static int[] calculateDimensionSizes(int[] minSizes, int numGrows, boolean[] wantGrows, int size) {
         assert numGrows >= 0;

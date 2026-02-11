@@ -1,4 +1,4 @@
-package io.github.ieperen3039.ngn;
+package io.github.ieperen3039.ngn.Core;
 
 import io.github.ieperen3039.ngn.Tools.Logger;
 
@@ -78,8 +78,7 @@ public final class JarReader<T> {
     }
 
     /**
-     * loads all classes in all jars in the given directory, collecting all implementations of {@link T}. For each script
-     * one instance is created. To start them, the {@link T#init()} method must be called.
+     * loads all classes in all jars in the given directory, collecting all implementations of {@link T}.
      * @return a list of all loaded scripts
      */
     public List<T> loadScripts() throws IOException {
@@ -105,7 +104,6 @@ public final class JarReader<T> {
     /**
      * Scans a JAR file for .class-files and load all classes found. Return a list of loaded classes
      * @param file   JAR-file which should be searched for .class-files
-     * @param loader
      * @return Returns all found class-files with their full-name as a List of Strings
      * @throws IOException              If during processing of the Jar-file an error occurred
      * @throws IllegalArgumentException If either the provided file is null, does not exist or is no Jar file

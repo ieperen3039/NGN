@@ -1,8 +1,8 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
-import io.github.ieperen3039.ngn.Main;
-import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
+import io.github.ieperen3039.ngn.Core.Main;
+import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -41,7 +41,6 @@ public interface ShaderProgram {
     /**
      * Create a new shader and return the id of the newly created shader.
      * 
-     * @param programId
      * @param shaderType The type of shader, e.g. GL_VERTEX_SHADER.
      * @param shaderCode The shaderCode as a String.
      * @return The id of the newly created shader.

@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.Tools;
 
-import org.joml.Math;
 import org.joml.*;
+import org.joml.Math;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -503,9 +503,9 @@ public class Vector3fx implements Vector3fxc {
     @Override
     public Vector3fx rotateAxis(float angle, float aX, float aY, float aZ, Vector3fx dest) {
         float hangle = angle * 0.5f;
-        float sinAngle = (float) Math.sin(hangle);
+        float sinAngle = Math.sin(hangle);
         float qx = aX * sinAngle, qy = aY * sinAngle, qz = aZ * sinAngle;
-        float qw = (float) Math.cosFromSin(sinAngle, hangle);
+        float qw = Math.cosFromSin(sinAngle, hangle);
         float w2 = qw * qw, x2 = qx * qx, y2 = qy * qy, z2 = qz * qz, zw = qz * qw;
         float xy = qx * qy, xz = qx * qz, yw = qy * qw, yz = qy * qz, xw = qx * qw;
         int nx = mulX(w2 + x2 - z2 - y2) + mulY(-zw + xy - zw + xy) + mulZ(yw + xz + xz + yw);
@@ -561,7 +561,7 @@ public class Vector3fx implements Vector3fxc {
     public double lengthSquared() {
         long mul = (long) x * x + (long) y * y + (long) z * z;
         if (mul >= 0) { // overflow is at most 2 bits
-            return (double) ((mul >> FRACTIONAL_BITS) * FACTOR_INV);
+            return (mul >> FRACTIONAL_BITS) * FACTOR_INV;
         }
 
         // overflow-safe version
@@ -615,12 +615,12 @@ public class Vector3fx implements Vector3fxc {
 
     @Override
     public float distance(Vector3fxc other) {
-        return (float) Math.sqrt(distanceSquared(other));
+        return Math.sqrt(distanceSquared(other));
     }
 
     @Override
     public float distance(Vector3fc other) {
-        return (float) Math.sqrt(distanceSquared(other));
+        return Math.sqrt(distanceSquared(other));
     }
 
     @Override
