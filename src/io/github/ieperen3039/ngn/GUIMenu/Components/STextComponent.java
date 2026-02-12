@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import org.joml.Vector2ic;
@@ -12,7 +12,7 @@ public abstract class STextComponent extends SComponent {
     public static final int TEXT_MIN_X_BORDER = 5;
     protected final int minHeight;
     protected final int minWidth;
-    protected final NGFonts.TextType textType;
+    protected final NGFont.TextType textType;
     protected final SFrameLookAndFeel.Alignment alignment;
 
     private String text;
@@ -24,7 +24,7 @@ public abstract class STextComponent extends SComponent {
     private int maximumCharacters = -1;
 
     public STextComponent(
-            String text, NGFonts.TextType textType, SFrameLookAndFeel.Alignment alignment, int width, int height
+            String text, NGFont.TextType textType, SFrameLookAndFeel.Alignment alignment, int width, int height
     ) {
         this.text = text;
         this.minWidth = width;

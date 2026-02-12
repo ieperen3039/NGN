@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
@@ -45,7 +45,7 @@ public class SFrame extends SComposite {
         if (manipulable) {
             STextArea text = new STextArea(
                     title, 0, FRAME_TITLE_BAR_SIZE, true,
-                    NGFonts.TextType.TITLE, SFrameLookAndFeel.Alignment.CENTER_MIDDLE
+                    NGFont.TextType.TITLE, SFrameLookAndFeel.Alignment.CENTER_MIDDLE
             );
             titleComponent = text;
 
@@ -56,7 +56,7 @@ public class SFrame extends SComposite {
             );
 
         } else {
-            titleComponent = new STextArea(title, FRAME_TITLE_BAR_SIZE, 0, true, NGFonts.TextType.TITLE, SFrameLookAndFeel.Alignment.CENTER_TOP);
+            titleComponent = new STextArea(title, FRAME_TITLE_BAR_SIZE, 0, true, NGFont.TextType.TITLE, SFrameLookAndFeel.Alignment.CENTER_TOP);
             upperBar = new SPanel(titleComponent);
         }
         bodyComponent = SContainer.singleton(new SFiller());

@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
@@ -22,7 +22,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 public class SButton extends STextComponent implements MouseReleaseListener, MouseClickListener {
     public static final int DEFAULT_MIN_WIDTH = 250;
     public static final int DEFAULT_MIN_HEIGHT = 30;
-    public static final NGFonts.TextType DEFAULT_TEXT_TYPE = NGFonts.TextType.REGULAR;
+    public static final NGFont.TextType DEFAULT_TEXT_TYPE = NGFont.TextType.REGULAR;
 
     private Collection<Runnable> leftClickListeners = new ArrayList<>();
     private Collection<Runnable> rightClickListeners = new ArrayList<>();

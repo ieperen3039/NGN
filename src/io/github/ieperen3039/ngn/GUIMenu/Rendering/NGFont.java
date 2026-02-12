@@ -6,13 +6,18 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.BufferUtils;
 
 /**
  * @author Geert van Ieperen. Created on 23-8-2018.
  */
-public enum NGFonts {
-    LUCIDA_CONSOLE("LucidaConsole/lucon.ttf");
+public class NGFont {
+    // make sure ALL_FONTS is above all default fonts
+    public static List<NGFont> ALL_FONTS = new ArrayList<>();
+    public static NGFont LUCIDA_CONSOLE = new NGFont("ngn/fonts/LucidaConsole/lucon.ttf");
 
     public final String name;
     private ByteBuffer byteFormat;
@@ -22,9 +27,10 @@ public enum NGFonts {
         TITLE, ACCENT, REGULAR, FANCY, TOOLTIP, RED, FLOATING
     }
 
-    NGFonts(String... path) {
-        Resource.Path directory = Resource.Path.get("ngn/fonts").resolve(path);
-        this.name = toString().toLowerCase().replace("_", " ");
+    public NGFont(String... path) {
+        Resource.Path directory = Resource.Path.get(path);
+        String name = path[path.length - 1];
+        this.name = name.substring(name.lastIndexOf('/') + 1);
 
         try (InputStream fontStream = directory.asStream()) {
             byte[] bytes = fontStream.readAllBytes();
@@ -32,6 +38,8 @@ public enum NGFonts {
             byteFormat.put(bytes);
             byteFormat.flip();
             awtFormat = Font.createFont(Font.TRUETYPE_FONT, directory.asStream());
+
+            ALL_FONTS.add(this);
 
         } catch (IOException | FontFormatException e) {
             Logger.ERROR.print("Error loading font " + name + ": " + e);

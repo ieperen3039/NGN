@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
@@ -21,7 +21,7 @@ public class SExtendedTextArea extends STextArea
     }
 
     public SExtendedTextArea(
-            String frameTitle, int minWidth, int minHeight, boolean doGrowInWidth, NGFonts.TextType textType,
+            String frameTitle, int minWidth, int minHeight, boolean doGrowInWidth, NGFont.TextType textType,
             SFrameLookAndFeel.Alignment alignment
     ) {
         super(frameTitle, minHeight, minWidth, doGrowInWidth, textType, alignment);

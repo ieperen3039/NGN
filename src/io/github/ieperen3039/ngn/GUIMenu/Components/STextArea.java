@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 
@@ -14,7 +14,7 @@ public class STextArea extends STextComponent {
     }
 
     public STextArea(
-            String text, int minHeight, int minWidth, boolean doGrowInWidth, NGFonts.TextType textType,
+            String text, int minHeight, int minWidth, boolean doGrowInWidth, NGFont.TextType textType,
             SFrameLookAndFeel.Alignment alignment
     ) {
         super(text, textType, alignment, minWidth, minHeight);
@@ -22,7 +22,7 @@ public class STextArea extends STextComponent {
     }
 
     public STextArea(String text, int minHeight) {
-        this(text, minHeight, 0, true, NGFonts.TextType.REGULAR, SFrameLookAndFeel.Alignment.LEFT_MIDDLE);
+        this(text, minHeight, 0, true, NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.LEFT_MIDDLE);
     }
 
     @Override

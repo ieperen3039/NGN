@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 
 /**
@@ -11,7 +11,7 @@ public class SComponentProperties {
     public int minHeight = 50;
     public boolean wantHzGrow = true;
     public boolean wantVtGrow = true;
-    public NGFonts.TextType textType = NGFonts.TextType.REGULAR;
+    public NGFont.TextType textType = NGFont.TextType.REGULAR;
     public SFrameLookAndFeel.Alignment alignment = SFrameLookAndFeel.Alignment.CENTER_MIDDLE;
 
     public SComponentProperties() {
@@ -31,7 +31,7 @@ public class SComponentProperties {
 
     public SComponentProperties(
             int minWidth, int minHeight, boolean wantHzGrow, boolean wantVtGrow,
-            NGFonts.TextType textType,
+            NGFont.TextType textType,
             SFrameLookAndFeel.Alignment alignment
     ) {
         this.minWidth = minWidth;

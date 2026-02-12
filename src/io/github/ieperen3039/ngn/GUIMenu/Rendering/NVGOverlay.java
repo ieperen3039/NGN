@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -30,7 +31,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
  */
 public final class NVGOverlay {
     @SuppressWarnings("FieldCanBeLocal") /* fontbuffer MUST be a field */
-    private final ByteBuffer[] fontBuffer = new ByteBuffer[NGFonts.values().length];
+    private final List<ByteBuffer> fontBuffer = new ArrayList<>();
     private final Collection<Consumer<Painter>> drawBuffer = new ArrayList<>();
     private final Lock drawBufferLock = new ReentrantLock();
     private long vg;
@@ -55,11 +56,11 @@ public final class NVGOverlay {
             throw new IOException("Could not initialize NanoVG");
         }
 
-        NGFonts[] fonts = NGFonts.values();
-        for (int i = 0; i < fonts.length; i++) {
-            fontBuffer[i] = fonts[i].asByteBuffer();
-            if (nvgCreateFontMem(vg, fonts[i].name, fontBuffer[i], 1) == -1) {
-                Logger.ERROR.print("Could not create font " + fonts[i].name);
+        List<NGFont> fonts = NGFont.ALL_FONTS;
+        for (int i = 0; i < fonts.size(); i++) {
+            fontBuffer.add(fonts.get(i).asByteBuffer());
+            if (nvgCreateFontMem(vg, fonts.get(i).name, fontBuffer.get(i), 1) == -1) {
+                Logger.ERROR.print("Could not create font " + fonts.get(i).name);
             }
         }
 
@@ -334,7 +335,7 @@ public final class NVGOverlay {
          * @param text      the text to write
          */
         public void text(
-                int x, int y, float size, NGFonts font, EnumSet<Alignment> alignment, Color4f color, String text,
+                int x, int y, float size, NGFont font, EnumSet<Alignment> alignment, Color4f color, String text,
                 float maxWidth
         ) {
             int alignFlags = getAlignFlags(alignment);
@@ -374,7 +375,7 @@ public final class NVGOverlay {
         public void printRoll(String text) {
             int y = yPrintRoll + ((printRollSize + 5) * printRollEntry);
 
-            text(xPrintRoll, y, printRollSize, NGFonts.LUCIDA_CONSOLE, EnumSet.of(Alignment.ALIGN_LEFT), textColor, text, windowWidth - xPrintRoll);
+            text(xPrintRoll, y, printRollSize, NGFont.LUCIDA_CONSOLE, EnumSet.of(Alignment.ALIGN_LEFT), textColor, text, windowWidth - xPrintRoll);
             printRollEntry++;
         }
 
@@ -452,7 +453,7 @@ public final class NVGOverlay {
          * @param text any string
          * @return the width of the text displayed in pixels
          */
-        public int getTextWidth(String text, float size, NGFonts font) {
+        public int getTextWidth(String text, float size, NGFont font) {
             nvgFontSize(vg, size);
             nvgFontFace(vg, font.name);
             return (int) nvgTextBounds(vg, 0, 0, text, (FloatBuffer) null);

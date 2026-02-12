@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
@@ -41,7 +41,7 @@ public class SToggleButton extends STextComponent implements MouseClickListener,
      * @param initialState the initial state of the button. If true, the button will be enabled
      */
     public SToggleButton(String text, int minWidth, int minHeight, boolean initialState) {
-        super(text, NGFonts.TextType.REGULAR, SFrameLookAndFeel.Alignment.CENTER_MIDDLE, minWidth, minHeight);
+        super(text, NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.CENTER_MIDDLE, minWidth, minHeight);
         this.state = initialState;
         this.isPressed = initialState;
     }

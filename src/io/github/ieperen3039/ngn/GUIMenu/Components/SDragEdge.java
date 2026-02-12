@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.InputHandling.MouseDragListener;
 import org.joml.Vector2ic;
@@ -36,7 +36,7 @@ public class SDragEdge extends SComponent implements MouseDragListener {
     @Override
     public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
         design.draw(BUTTON_ACTIVE, screenPosition, getSize());
-        design.drawText(screenPosition, getSize(), "+", NGFonts.TextType.REGULAR, SFrameLookAndFeel.Alignment.LEFT_MIDDLE);
+        design.drawText(screenPosition, getSize(), "+", NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.LEFT_MIDDLE);
     }
 
     @Override

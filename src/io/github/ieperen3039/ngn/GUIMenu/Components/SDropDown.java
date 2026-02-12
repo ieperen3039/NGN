@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
 import io.github.ieperen3039.ngn.GUIMenu.FrameManagers.UIManager;
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
@@ -21,7 +21,7 @@ import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UICo
  * @author Geert van Ieperen. Created on 5-10-2018.
  */
 public class SDropDown extends SComponent implements MouseClickListener {
-    public static final NGFonts.TextType TEXT_TYPE = NGFonts.TextType.REGULAR;
+    public static final NGFont.TextType TEXT_TYPE = NGFont.TextType.REGULAR;
     private final String[] values;
     private final DropDownOptions optionPane;
     private final UIManager gui;
@@ -197,7 +197,7 @@ public class SDropDown extends SComponent implements MouseClickListener {
             for (int i = 0; i < values.length; i++) {
                 final int index = i;
                 SExtendedTextArea option = new SExtendedTextArea(
-                        values[index], minWidth, dropOptionHeight, true, NGFonts.TextType.REGULAR, SFrameLookAndFeel.Alignment.LEFT_MIDDLE
+                        values[index], minWidth, dropOptionHeight, true, NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.LEFT_MIDDLE
                 );
 
                 option.setClickListener((b, x, y) -> {

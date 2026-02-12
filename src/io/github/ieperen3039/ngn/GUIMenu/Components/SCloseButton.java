@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
 import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;
@@ -44,7 +44,7 @@ public class SCloseButton extends SComponent implements MouseReleaseListener, Mo
     @Override
     public void draw(SFrameLookAndFeel design, Vector2ic scPos) {
         design.draw(state ? BUTTON_PRESSED : (isHovered ? BUTTON_HOVERED : BUTTON_ACTIVE), scPos, getSize());
-        design.drawText(scPos, getSize(), "X", NGFonts.TextType.ACCENT, SFrameLookAndFeel.Alignment.CENTER_MIDDLE);
+        design.drawText(scPos, getSize(), "X", NGFont.TextType.ACCENT, SFrameLookAndFeel.Alignment.CENTER_MIDDLE);
     }
 
     @Override

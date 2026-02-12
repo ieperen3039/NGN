@@ -57,7 +57,7 @@ public interface SFrameLookAndFeel {
     void draw(UIComponent type, Vector2ic pos, Vector2ic dim, Color4f color);
 
     void drawText(
-            Vector2ic pos, Vector2ic dim, String text, NGFonts.TextType type, Alignment align
+            Vector2ic pos, Vector2ic dim, String text, NGFont.TextType type, Alignment align
     );
 
     /**
@@ -90,7 +90,7 @@ public interface SFrameLookAndFeel {
      * @param textType the type displayed
      * @return the width of the text displayed in pixels
      */
-    int getTextWidth(String text, NGFonts.TextType textType);
+    int getTextWidth(String text, NGFont.TextType textType);
 
     void cleanup();
 

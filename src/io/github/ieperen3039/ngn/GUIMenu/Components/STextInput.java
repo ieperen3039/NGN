@@ -1,6 +1,6 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.InputHandling.KeyPressListener;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
@@ -13,7 +13,7 @@ import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UICo
  */
 public class STextInput extends STextComponent implements KeyPressListener, MouseClickListener {
     public STextInput(
-            String text, int minHeight, int minWidth, boolean doGrowInWidth, NGFonts.TextType textType,
+            String text, int minHeight, int minWidth, boolean doGrowInWidth, NGFont.TextType textType,
             SFrameLookAndFeel.Alignment alignment
     ) {
         super(text, textType, alignment, minWidth, minHeight);

@@ -9,7 +9,7 @@ import org.joml.Vector2ic;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFonts.LUCIDA_CONSOLE;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont.LUCIDA_CONSOLE;
 import static io.github.ieperen3039.ngn.GUIMenu.Rendering.NVGOverlay.Alignment.*;
 
 /**
@@ -23,7 +23,7 @@ public class BaseLF implements SFrameLookAndFeel {
     private static final int TEXT_SIZE_REGULAR = 12;
     private static final int TEXT_SIZE_LARGE = 16;
 
-    private static final NGFonts FONT = LUCIDA_CONSOLE;
+    private static final NGFont FONT = LUCIDA_CONSOLE;
 
     private static final Color4f TEXT_COLOR = Color4f.BLACK;
     private static final Color4f PANEL_COLOR = Color4f.WHITE;
@@ -51,10 +51,10 @@ public class BaseLF implements SFrameLookAndFeel {
     }
 
     @Override
-    public int getTextWidth(String text, NGFonts.TextType textType) {
+    public int getTextWidth(String text, NGFont.TextType textType) {
         int actualSize = TEXT_SIZE_REGULAR;
 
-        if (textType == NGFonts.TextType.TITLE || textType == NGFonts.TextType.ACCENT) {
+        if (textType == NGFont.TextType.TITLE || textType == NGFont.TextType.ACCENT) {
             actualSize = TEXT_SIZE_LARGE;
         }
 
@@ -129,7 +129,7 @@ public class BaseLF implements SFrameLookAndFeel {
 
     @Override
     public void drawText(
-            Vector2ic pos, Vector2ic dim, String text, NGFonts.TextType type, Alignment align
+            Vector2ic pos, Vector2ic dim, String text, NGFont.TextType type, Alignment align
     ) {
         if (text == null || text.isEmpty()) return;
 
@@ -139,7 +139,7 @@ public class BaseLF implements SFrameLookAndFeel {
         int height = dim.y();
         int actualSize = TEXT_SIZE_REGULAR;
         Color4f textColor = TEXT_COLOR;
-        NGFonts font = FONT;
+        NGFont font = FONT;
 
         switch (type) {
             case TITLE:
