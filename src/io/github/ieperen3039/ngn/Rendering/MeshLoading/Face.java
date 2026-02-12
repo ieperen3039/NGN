@@ -14,7 +14,9 @@ import java.util.Arrays;
 public record Face(int[] vert, int[] norm, int[] tex, int[] col) {
     public Face {
         int size = vert.length;
-        assert (norm.length == size && tex.length == size);
+        assert (norm == null || norm.length == size);
+        assert (tex == null || tex.length == size);
+        assert (col == null || col.length == size);
     }
 
     /**
