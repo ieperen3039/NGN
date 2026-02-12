@@ -27,7 +27,7 @@ public enum Directory {
 
         File file = workDirectory().resolve(directory).toFile();
         boolean success = file.mkdirs();
-        if (!success) {
+        if (!success && !file.exists()) {
             Logger.ERROR.print("Could not create directories", file);
         }
     }
