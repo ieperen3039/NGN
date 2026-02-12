@@ -34,10 +34,6 @@ public class Color4f implements Serializable {
     public final float blue;
     public final float alpha;
 
-    public Color4f(java.awt.Color target) {
-        this(target.getRed(), target.getGreen(), target.getBlue(), target.getAlpha());
-    }
-
     /**
      * @param red   the red intensity [0...1]
      * @param green the green intensity [0...1]
@@ -278,6 +274,10 @@ public class Color4f implements Serializable {
      */
     public static Color4f rgb(int ired, int igreen, int iblue) {
         return rgb(ired, igreen, iblue, 1f);
+    }
+
+    public static Color4f hex(int hexCode) {
+        return rgb((hexCode >> 16) & 0xFF, (hexCode >> 8) & 0xFF, hexCode & 0xFF);
     }
 
     public static Color4f randomBetween(Color4f color1, Color4f color2) {
