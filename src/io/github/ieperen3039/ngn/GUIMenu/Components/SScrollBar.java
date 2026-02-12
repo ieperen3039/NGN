@@ -2,6 +2,7 @@ package io.github.ieperen3039.ngn.GUIMenu.Components;
 
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import io.github.ieperen3039.ngn.InputHandling.MouseDragListener;
 import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;
@@ -13,8 +14,8 @@ import org.joml.Vector2ic;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.SCROLL_BAR_BACKGROUND;
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.SCROLL_BAR_DRAG_ELEMENT;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.SCROLL_BAR_BACKGROUND;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.SCROLL_BAR_DRAG_ELEMENT;
 
 /**
  * @author Geert van Ieperen created on 13-5-2019.
@@ -25,8 +26,8 @@ class SScrollBar extends SComponent implements MouseScrollListener {
     private static final int SCROLL_BUTTON_SIZE = 30;
     private static final int DRAG_BAR_MIN_SIZE = 15;
     private static final SComponentProperties SCROLL_BUTTON_PROPS = new SComponentProperties(
-            SCROLL_BAR_WIDTH, SCROLL_BUTTON_SIZE, true, false, NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.CENTER_MIDDLE
-    );
+            SCROLL_BAR_WIDTH, SCROLL_BUTTON_SIZE, true, false, NGFont.TextType.REGULAR,
+            SFrameLookAndFeel.Alignment.CENTER_MIDDLE);
     private final List<SScrollBarListener> listeners = new ArrayList<>();
     private final SComponent[] elements;
 
@@ -43,6 +44,7 @@ class SScrollBar extends SComponent implements MouseScrollListener {
 
     /**
      * generates a vertical scrollbar with two one-step arrows on the sides.
+     * 
      * @param minimum the minimum value this scrollbar can output
      * @param maximum the maximum value this scrollbar can output
      * @param current the output value to start with
@@ -165,7 +167,7 @@ class SScrollBar extends SComponent implements MouseScrollListener {
     public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
         Vector2i pos = new Vector2i(screenPosition).add(0, SCROLL_BUTTON_SIZE);
         Vector2i size = new Vector2i(SCROLL_BAR_WIDTH, getDragBarSpace());
-        design.draw(SCROLL_BAR_BACKGROUND, pos, size);
+        design.draw(SCROLL_BAR_BACKGROUND, UIState.ENABLED, pos, size);
 
         scrollUp.draw(design, new Vector2i(screenPosition).add(scrollUp.getPosition()));
         if (dragBar.isVisible()) {
@@ -191,7 +193,7 @@ class SScrollBar extends SComponent implements MouseScrollListener {
 
     @Override
     public void onScroll(float value) {
-//        setDragbarFraction(dragBarOffsetFraction - value * 0.02f);
+        // setDragbarFraction(dragBarOffsetFraction - value * 0.02f);
 
         cumulativeScroll += value;
         while (cumulativeScroll > 1) {
@@ -255,7 +257,8 @@ class SScrollBar extends SComponent implements MouseScrollListener {
 
         @Override
         public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
-            design.draw(SCROLL_BAR_DRAG_ELEMENT, screenPosition, getSize());
+            design.draw(
+                    SCROLL_BAR_DRAG_ELEMENT, isHovered ? UIState.HOVERED : UIState.ENABLED, screenPosition, getSize());
         }
 
         @Override

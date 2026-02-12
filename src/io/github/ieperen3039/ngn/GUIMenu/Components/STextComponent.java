@@ -2,13 +2,14 @@ package io.github.ieperen3039.ngn.GUIMenu.Components;
 
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import org.joml.Vector2ic;
 
 /**
  * @author Geert van Ieperen created on 28-4-2020.
  */
-public abstract class STextComponent extends SComponent {
+public class STextComponent extends SComponent {
     public static final int TEXT_MIN_X_BORDER = 5;
     protected final int minHeight;
     protected final int minWidth;
@@ -20,6 +21,8 @@ public abstract class STextComponent extends SComponent {
     /** minimum border to the left and right of the text */
     protected int minXBorder = TEXT_MIN_X_BORDER;
     protected int textWidth;
+    protected UIComponentType parentComponentType = UIComponentType.PANEL;
+    
     private boolean textWidthIsValid = false;
     private int maximumCharacters = -1;
 
@@ -85,7 +88,14 @@ public abstract class STextComponent extends SComponent {
             textWidthIsValid = true;
 
         } else {
-            design.drawText(screenPosition, getSize(), text, textType, alignment);
+            design.drawText(parentComponentType, screenPosition, getSize(), text, textType, alignment);
         }
+    }
+
+    @Override
+    public String toString() {
+        String text = getText();
+        String substring = text.length() > 25 ? text.substring(0, 20) + "..." : text;
+        return this.getClass().getSimpleName() + " (" + substring + ")";
     }
 }

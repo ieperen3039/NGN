@@ -7,7 +7,9 @@ import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.PANEL;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.PANEL;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.ACTIVATED;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.ENABLED;
 
 /**
  * @author Geert van Ieperen. Created on 20-9-2018.
@@ -105,7 +107,7 @@ public class SPanel extends SContainer {
         assert getWidth() > 0 && getHeight() > 0 :
                 String.format("Non-positive dimensions of %s: width = %d, height = %d", this, getWidth(), getHeight());
 
-        design.draw(PANEL, screenPosition, getSize());
+        design.draw(PANEL, ENABLED, screenPosition, getSize());
         drawChildren(design, screenPosition);
     }
 }

@@ -2,6 +2,8 @@ package io.github.ieperen3039.ngn.GUIMenu.Components;
 
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState;
+
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
@@ -18,7 +20,7 @@ public class SFrame extends SComposite {
     private Runnable onDisposeAction = null;
 
     private final SContainer bodyComponent;
-    private STextArea titleComponent;
+    private STextComponent titleComponent;
 
     /**
      * Creates a SFrame with the given title, width and height
@@ -43,9 +45,8 @@ public class SFrame extends SComposite {
 
         SComponent upperBar;
         if (manipulable) {
-            STextArea text = new STextArea(
-                    title, 0, FRAME_TITLE_BAR_SIZE, true,
-                    NGFont.TextType.TITLE, SFrameLookAndFeel.Alignment.CENTER_MIDDLE
+            STextComponent text = new STextComponent(
+                    title, NGFont.TextType.TITLE, SFrameLookAndFeel.Alignment.CENTER_MIDDLE, 0, FRAME_TITLE_BAR_SIZE
             );
             titleComponent = text;
 
@@ -56,7 +57,7 @@ public class SFrame extends SComposite {
             );
 
         } else {
-            titleComponent = new STextArea(title, FRAME_TITLE_BAR_SIZE, 0, true, NGFont.TextType.TITLE, SFrameLookAndFeel.Alignment.CENTER_TOP);
+            titleComponent = new STextComponent(title, NGFont.TextType.TITLE, SFrameLookAndFeel.Alignment.CENTER_TOP, 0, FRAME_TITLE_BAR_SIZE);
             upperBar = new SPanel(titleComponent);
         }
         bodyComponent = SContainer.singleton(new SFiller());
@@ -110,7 +111,7 @@ public class SFrame extends SComposite {
     public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
         if (!isVisible()) return;
         validateLayout();
-        design.draw(SFrameLookAndFeel.UIComponent.PANEL, screenPosition, getSize());
+        design.draw(SFrameLookAndFeel.UIComponentType.PANEL, UIState.ENABLED, screenPosition, getSize());
         super.draw(design, screenPosition);
     }
 

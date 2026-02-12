@@ -11,7 +11,9 @@ import org.joml.Vector2ic;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.*;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.*;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.ACTIVATED;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.ENABLED;
 
 /**
  * @author Geert van Ieperen created on 31-5-2020.
@@ -68,14 +70,14 @@ public class SSlider extends SComponent implements MouseDragListener, MouseClick
 
     @Override
     public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
-        design.draw(PANEL, screenPosition, getSize());
-        design.draw(SCROLL_BAR_BACKGROUND, screenPosition, getSize());
+        design.draw(PANEL, ENABLED,  screenPosition, getSize());
+        design.draw(SCROLL_BAR_BACKGROUND, ENABLED, screenPosition, getSize());
 
         int space = getWidth() - dragBarWidth;
         if (space > 0) {
             float shift = getFraction() * space;
             Vector2i dragBarPos = new Vector2i(screenPosition).add((int) shift, 0);
-            design.draw(SCROLL_BAR_DRAG_ELEMENT, dragBarPos, new Vector2i(dragBarWidth, getHeight()));
+            design.draw(SCROLL_BAR_DRAG_ELEMENT, ENABLED, dragBarPos, new Vector2i(dragBarWidth, getHeight()));
         }
     }
 

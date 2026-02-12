@@ -24,7 +24,7 @@ public class NGFont {
     private Font awtFormat;
 
     public enum TextType {
-        TITLE, ACCENT, REGULAR, FANCY, TOOLTIP, RED, FLOATING
+        REGULAR, TITLE, EMPHASIS
     }
 
     public NGFont(String... path) {

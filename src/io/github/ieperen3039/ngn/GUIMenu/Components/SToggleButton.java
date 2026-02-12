@@ -3,6 +3,9 @@ package io.github.ieperen3039.ngn.GUIMenu.Components;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.*;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
 import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.*;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.*;
 
 /**
  * A button with a state that only changes upon clicking the button
@@ -42,6 +45,7 @@ public class SToggleButton extends STextComponent implements MouseClickListener,
      */
     public SToggleButton(String text, int minWidth, int minHeight, boolean initialState) {
         super(text, NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.CENTER_MIDDLE, minWidth, minHeight);
+        parentComponentType = UIComponentType.BUTTON;
         this.state = initialState;
         this.isPressed = initialState;
     }
@@ -52,6 +56,7 @@ public class SToggleButton extends STextComponent implements MouseClickListener,
      */
     public SToggleButton(String text, SComponentProperties properties) {
         super(text, properties);
+        parentComponentType = UIComponentType.BUTTON;
         this.state = false;
         this.isPressed = false;
     }
@@ -75,7 +80,8 @@ public class SToggleButton extends STextComponent implements MouseClickListener,
     @Override
     public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
         if (getWidth() == 0 || getHeight() == 0) return;
-        design.draw(isPressed ? BUTTON_PRESSED : (isHovered ? BUTTON_HOVERED : BUTTON_ACTIVE), screenPosition, getSize(), color);
+        UIState state = isPressed ? ACTIVATED : (isHovered ? HOVERED : ENABLED);
+        design.draw(BUTTON, state, screenPosition, getSize(), color);
         super.draw(design, screenPosition);
     }
 

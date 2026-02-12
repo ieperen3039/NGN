@@ -6,7 +6,8 @@ import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
 import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;
 import org.joml.Vector2ic;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.*;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.*;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.*;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 /**
@@ -15,7 +16,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 public class SCloseButton extends SComponent implements MouseReleaseListener, MouseClickListener {
     private final int frameTitleBarSize;
     private Runnable closeAction;
-    private boolean state = false;
+    private boolean isPressed = false;
 
     public SCloseButton(SFrame frame) {
         this(SFrame.FRAME_TITLE_BAR_SIZE, () -> frame.setVisible(false));
@@ -43,19 +44,19 @@ public class SCloseButton extends SComponent implements MouseReleaseListener, Mo
 
     @Override
     public void draw(SFrameLookAndFeel design, Vector2ic scPos) {
-        design.draw(state ? BUTTON_PRESSED : (isHovered ? BUTTON_HOVERED : BUTTON_ACTIVE), scPos, getSize());
-        design.drawText(scPos, getSize(), "X", NGFont.TextType.ACCENT, SFrameLookAndFeel.Alignment.CENTER_MIDDLE);
+        design.draw(BUTTON, isPressed ? ACTIVATED : (isHovered ? HOVERED : ENABLED), scPos, getSize());
+        design.drawText(BUTTON, scPos, getSize(), "X", NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.CENTER_MIDDLE);
     }
 
     @Override
     public void onClick(int button, int x, int y) {
-        if (button == GLFW_MOUSE_BUTTON_LEFT) state = true;
+        if (button == GLFW_MOUSE_BUTTON_LEFT) isPressed = true;
     }
 
     @Override
     public void onRelease(int button) {
-        if (state && button == GLFW_MOUSE_BUTTON_LEFT) {
-            state = false;
+        if (isPressed && button == GLFW_MOUSE_BUTTON_LEFT) {
+            isPressed = false;
             closeAction.run();
         }
     }

@@ -10,24 +10,25 @@ import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;
 /**
  * @author Geert van Ieperen. Created on 25-9-2018.
  */
-public class SExtendedTextArea extends STextArea
+public class SExtendedTextComponent extends STextComponent
         implements MouseClickListener, MouseReleaseListener, MouseDragListener {
     private MouseDragListener dragListener;
     private MouseClickListener clickListener;
     private MouseReleaseListener releaseListener;
 
-    public SExtendedTextArea(String text, SComponentProperties props) {
+    public SExtendedTextComponent(String text, SComponentProperties props) {
         super(text, props);
     }
 
-    public SExtendedTextArea(
-            String frameTitle, int minWidth, int minHeight, boolean doGrowInWidth, NGFont.TextType textType,
+    public SExtendedTextComponent(
+            String text, int minWidth, int minHeight, boolean doGrowInWidth, NGFont.TextType textType,
             SFrameLookAndFeel.Alignment alignment
     ) {
-        super(frameTitle, minHeight, minWidth, doGrowInWidth, textType, alignment);
+        super(text, textType, alignment, minHeight, minWidth);
+        setGrowthPolicy(doGrowInWidth, false);
     }
 
-    public SExtendedTextArea(STextArea source) {
+    public SExtendedTextComponent(STextComponent source) {
         this(source.getText(), source.minWidth, source.minHeight, source.wantHorizontalGrow(), source.textType, source.alignment);
     }
 
@@ -52,17 +53,17 @@ public class SExtendedTextArea extends STextArea
         }
     }
 
-    public SExtendedTextArea setDragListener(MouseDragListener dragListener) {
+    public SExtendedTextComponent setDragListener(MouseDragListener dragListener) {
         this.dragListener = dragListener;
         return this;
     }
 
-    public SExtendedTextArea setClickListener(MouseClickListener clickListener) {
+    public SExtendedTextComponent setClickListener(MouseClickListener clickListener) {
         this.clickListener = clickListener;
         return this;
     }
 
-    public SExtendedTextArea setReleaseListener(MouseReleaseListener releaseListener) {
+    public SExtendedTextComponent setReleaseListener(MouseReleaseListener releaseListener) {
         this.releaseListener = releaseListener;
         return this;
     }

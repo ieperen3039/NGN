@@ -7,8 +7,11 @@ import org.joml.Vector2ic;
 
 import java.util.function.Supplier;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.PANEL;
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.SELECTION;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.PANEL;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.PROGRESS_BAR;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.PROGRESS_BAR_FILL;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.ACTIVATED;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.ENABLED;
 
 /**
  * @author Geert van Ieperen. Created on 28-9-2018.
@@ -44,12 +47,12 @@ public class SProgressBar extends SComponent {
 
     @Override
     public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
-        design.draw(PANEL, screenPosition, getSize());
+        design.draw(PROGRESS_BAR, ENABLED, screenPosition, getSize());
         Float heath = progress.get();
 
         if (heath > 0) {
             Vector2i bar = new Vector2i((int) (getWidth() * heath), getHeight());
-            design.draw(SELECTION, screenPosition, bar);
+            design.draw(PROGRESS_BAR_FILL, ENABLED, screenPosition, bar);
         }
     }
 }

@@ -1,6 +1,8 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
+import io.github.ieperen3039.ngn.InputHandling.MouseHoverListener;
+
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
@@ -10,7 +12,7 @@ import java.util.Optional;
  * The S stands for Sub-
  * @author Geert van Ieperen. Created on 20-9-2018.
  */
-public abstract class SComponent {
+public abstract class SComponent implements MouseHoverListener {
     private final Vector2i position = new Vector2i();
     private final Vector2i dimensions = new Vector2i();
     protected boolean isHovered = false;

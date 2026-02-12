@@ -2,6 +2,8 @@ package io.github.ieperen3039.ngn.GUIMenu.Components;
 
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
 import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState;
 import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
 import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;
@@ -11,7 +13,8 @@ import org.joml.Vector2ic;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.*;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.*;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
@@ -36,6 +39,7 @@ public class SButton extends STextComponent implements MouseReleaseListener, Mou
      */
     public SButton(String text) {
         super(text, DEFAULT_TEXT_TYPE, SFrameLookAndFeel.Alignment.CENTER_MIDDLE, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
+        parentComponentType = UIComponentType.BUTTON;
     }
 
     /**
@@ -56,6 +60,7 @@ public class SButton extends STextComponent implements MouseReleaseListener, Mou
      */
     public SButton(String text, SComponentProperties props) {
         super(text, props);
+        parentComponentType = UIComponentType.BUTTON;
     }
 
     /**
@@ -91,7 +96,8 @@ public class SButton extends STextComponent implements MouseReleaseListener, Mou
 
     @Override
     public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
-        design.draw(isPressed ? BUTTON_PRESSED : (isHovered ? BUTTON_HOVERED : BUTTON_ACTIVE), screenPosition, getSize());
+        UIState state = isPressed ? ACTIVATED : (isHovered ? HOVERED : ENABLED);
+        design.draw(UIComponentType.BUTTON, state, screenPosition, getSize());
         super.draw(design, screenPosition);
     }
 
@@ -110,8 +116,6 @@ public class SButton extends STextComponent implements MouseReleaseListener, Mou
         } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             rightClickListeners.forEach(Runnable::run);
 
-        } else {
-            Logger.DEBUG.print("button clicked with " + button + " which has no action");
         }
     }
 

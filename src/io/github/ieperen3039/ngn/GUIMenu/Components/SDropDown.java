@@ -1,20 +1,23 @@
 package io.github.ieperen3039.ngn.GUIMenu.Components;
 
-import io.github.ieperen3039.ngn.GUIMenu.FrameManagers.UIManager;
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
-import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
-import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
-import org.joml.Vector2i;
-import org.joml.Vector2ic;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponentType.DROP_DOWN_HEAD;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.ACTIVATED;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.ENABLED;
+import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIState.HOVERED;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.DROP_DOWN_HEAD_CLOSED;
-import static io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel.UIComponent.DROP_DOWN_HEAD_OPEN;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
+
+import io.github.ieperen3039.ngn.GUIMenu.SComponentProperties;
+import io.github.ieperen3039.ngn.GUIMenu.FrameManagers.UIManager;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.NGFont;
+import io.github.ieperen3039.ngn.GUIMenu.Rendering.SFrameLookAndFeel;
+import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
 
 /**
  * A menu item that may assume different options, where the player can choose from using a drop-down selection.
@@ -156,9 +159,9 @@ public class SDropDown extends SComponent implements MouseClickListener {
             invalidateLayout();
         }
 
-        design.draw(isOpened ? DROP_DOWN_HEAD_OPEN : DROP_DOWN_HEAD_CLOSED, screenPosition, getSize());
+        design.draw(DROP_DOWN_HEAD, isOpened ? ACTIVATED : (isHovered ? HOVERED : ENABLED), screenPosition, getSize());
         Vector2i textPosition = new Vector2i(screenPosition).add(4, 0); // 4 is the virtual component border
-        design.drawText(textPosition, getSize(), text, TEXT_TYPE, SFrameLookAndFeel.Alignment.LEFT_MIDDLE);
+        design.drawText(DROP_DOWN_HEAD, textPosition, getSize(), text, TEXT_TYPE, SFrameLookAndFeel.Alignment.LEFT_MIDDLE);
         // modal dialogs are drawn separately
     }
 
@@ -196,7 +199,7 @@ public class SDropDown extends SComponent implements MouseClickListener {
 
             for (int i = 0; i < values.length; i++) {
                 final int index = i;
-                SExtendedTextArea option = new SExtendedTextArea(
+                SExtendedTextComponent option = new SExtendedTextComponent(
                         values[index], minWidth, dropOptionHeight, true, NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.LEFT_MIDDLE
                 );
 
@@ -218,9 +221,9 @@ public class SDropDown extends SComponent implements MouseClickListener {
             }
 
             SComponent target = getComponentAt(xRel, yRel);
-            assert (target instanceof SExtendedTextArea);
+            assert (target instanceof SExtendedTextComponent);
 
-            SExtendedTextArea option = (SExtendedTextArea) target;
+            SExtendedTextComponent option = (SExtendedTextComponent) target;
             option.onClick(button, 0, 0);
         }
     }
