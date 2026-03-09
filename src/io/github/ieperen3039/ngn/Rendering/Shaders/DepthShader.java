@@ -16,19 +16,19 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram.createShader;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
-import static org.lwjgl.opengl.GL30.glBindFramebuffer;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
  * @author Geert van Ieperen created on 7-1-2019.
  */
 @SuppressWarnings("Duplicates")
 public class DepthShader implements ShaderProgram, LightShader {
-    private static final Resource.Path SHADOW_SHADER_PATH = SHADER_DIRECTORY.resolve("Shadow");
-    private static final Resource.Path VERTEX_PATH = SHADOW_SHADER_PATH.resolve("depth_vertex.vert");
-    private static final Resource.Path FRAGMENT_PATH = SHADOW_SHADER_PATH.resolve("depth_fragment.frag");
+    private static final Resource.Path SHADOW_SHADER_PATH = SHADER_DIRECTORY.resolve("Depth");
+    private static final Resource.Path VERTEX_PATH = SHADOW_SHADER_PATH.resolve("vertex.vert");
+    private static final Resource.Path FRAGMENT_PATH = SHADOW_SHADER_PATH.resolve("fragment.frag");
     private final Map<String, Integer> uniforms;
 
     private int programId;
@@ -46,10 +46,10 @@ public class DepthShader implements ShaderProgram, LightShader {
         }
 
         final String vertexCode = VERTEX_PATH.asText();
-        vertexShaderID = createShader(programId, GL_VERTEX_SHADER, vertexCode);
+        vertexShaderID = ShaderProgram.createShader(programId, GL_VERTEX_SHADER, vertexCode);
 
         final String fragmentCode = FRAGMENT_PATH.asText();
-        fragmentShaderID = createShader(programId, GL_FRAGMENT_SHADER, fragmentCode);
+        fragmentShaderID = ShaderProgram.createShader(programId, GL_FRAGMENT_SHADER, fragmentCode);
 
         link();
         createUniform("lightSpaceMatrix");
