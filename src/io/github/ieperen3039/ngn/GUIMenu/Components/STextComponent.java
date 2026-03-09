@@ -36,6 +36,16 @@ public class STextComponent extends SComponent {
         this.alignment = alignment;
     }
 
+    public STextComponent(
+            String text, int height
+    ) {
+        this.text = text;
+        this.minWidth = 0;
+        this.minHeight = height;
+        this.textType = NGFont.TextType.REGULAR;
+        this.alignment = SFrameLookAndFeel.Alignment.RIGHT_MIDDLE;
+    }
+
     public STextComponent(String text, SComponentProperties props) {
         this(text, props.textType, props.alignment, props.minWidth, props.minHeight);
         setGrowthPolicy(props.wantHzGrow, props.wantVtGrow);
