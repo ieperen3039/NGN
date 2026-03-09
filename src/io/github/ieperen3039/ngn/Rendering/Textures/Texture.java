@@ -49,7 +49,7 @@ public interface Texture {
         Toolbox.checkGLError("texture dump");
     }
 
-    static Asset<Texture> createResource(String... path) {
-        return Resource.get(p -> new FileTexture(p.asStream()), Resource.Path.get(path));
+    static Asset<Texture> createAsset(Resource.Path path) {
+        return Resource.get(p -> new FileTexture(p.asStream()), path);
     }
 }

@@ -1,42 +1,48 @@
 package io.github.ieperen3039.ngn.Rendering.Textures;
 
+import io.github.ieperen3039.ngn.AssetHandling.Asset;
+import io.github.ieperen3039.ngn.AssetHandling.Resource;
+import io.github.ieperen3039.ngn.AssetHandling.Resource.Path;
+import io.github.ieperen3039.ngn.Rendering.MeshLoading.MeshFile;
+
 /**
  * @author Geert van Ieperen created on 1-2-2019.
  */
 public enum GenericTextures implements Texture {
-    CHECKER("images/check.png"),
-    GRADIENT("images/Gradient.png"),
+    CHECKER("check.png"),
+    GRADIENT("Gradient.png"),
     ;
 
-    private final Texture tex;
+    private final Asset<Texture> tex;
 
-    GenericTextures(String... path) {
-        tex = Texture.createResource(path).get();
+    GenericTextures(String... relative) {
+        Path path = Resource.Path.get("ngn/images").resolve(relative);
+        tex = Texture.createAsset(path);
     }
 
     @Override
     public void bind(int sampler) {
-        tex.bind(sampler);
+        tex.get().bind(sampler);
     }
 
     @Override
     public void cleanup() {
-        tex.cleanup();
+        tex.drop();
     }
 
     @Override
     public int getWidth() {
-        return tex.getWidth();
+        return tex.get().getWidth();
     }
 
     @Override
     public int getHeight() {
-        return tex.getHeight();
+        return tex.get().getHeight();
     }
 
     @Override
     public int getID() {
-        return tex.getID();
+        return tex.get().getID();
     }
 
     @Override
