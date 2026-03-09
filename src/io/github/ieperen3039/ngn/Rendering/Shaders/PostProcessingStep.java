@@ -20,7 +20,7 @@ import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
 
-public abstract class PostProcessing implements ShaderProgram {
+public abstract class PostProcessingStep {
 
     protected final ShaderUniforms uniforms;
 
@@ -30,8 +30,6 @@ public abstract class PostProcessing implements ShaderProgram {
     private final int fragmentShaderId;
     private final int quadVao;
     private final int quadVbo;
-
-    private ShaderProgram inner;
 
     /**
      * create a PostProcessing shader based on just a framgent shader. The fragment shader accepts one input:
@@ -50,10 +48,8 @@ public abstract class PostProcessing implements ShaderProgram {
      *                         searched for in the shader folder
      *                         itself, and should exclude any first slash)
      */
-    public PostProcessing(Resource.Path fragmentPath, ShaderProgram inner, int windowWidth, int windowHeight)
+    public PostProcessingStep(Resource.Path fragmentPath, int windowWidth, int windowHeight)
             throws ShaderException, IOException {
-        this.inner = inner;
-
         this.programId = glCreateProgram();
         if (this.programId == 0) {
             throw new ShaderException("OpenGL error: Could not create Shader");
@@ -126,21 +122,15 @@ public abstract class PostProcessing implements ShaderProgram {
         glBindVertexArray(0);
     }
 
-    @Override
     public void bind() {
-        inner.bind();
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
     }
 
-    @Override
     public void unbind() {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        inner.unbind();
-        // now apply the post-processing step
-        apply();
     }
 
-    private void apply() {
+    public void execute() {
         glUseProgram(programId);
 
         glActiveTexture(GL_TEXTURE0);
@@ -158,7 +148,6 @@ public abstract class PostProcessing implements ShaderProgram {
 
     protected abstract void preparePostProcessing();
 
-    @Override
     public void cleanup() {
         glDeleteFramebuffers(frameBuffer);
         glDeleteVertexArrays(quadVao);
@@ -168,11 +157,5 @@ public abstract class PostProcessing implements ShaderProgram {
         if (programId != 0) {
             glDeleteProgram(programId);
         }
-        inner.cleanup();
-    }
-
-    @Override
-    public SGL getGL(Main main) {
-        return inner.getGL(main);
     }
 }
