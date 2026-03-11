@@ -21,8 +21,8 @@ public enum GenericTextures implements Texture {
     }
 
     @Override
-    public void bind(int sampler) {
-        tex.get().bind(sampler);
+    public void attach(int sampler) {
+        tex.get().attach(sampler);
     }
 
     @Override
@@ -38,15 +38,5 @@ public enum GenericTextures implements Texture {
     @Override
     public int getHeight() {
         return tex.get().getHeight();
-    }
-
-    @Override
-    public int getID() {
-        return tex.get().getID();
-    }
-
-    @Override
-    public boolean isSingleChannel() {
-        return false;
     }
 }

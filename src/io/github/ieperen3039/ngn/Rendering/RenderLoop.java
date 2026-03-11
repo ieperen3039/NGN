@@ -174,7 +174,6 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
     public class RenderBundle {
         private final ShaderProgram shader;
         private final List<Consumer<SGL>> targets;
-        private Optional<PostProcessingStep> postStep = Optional.empty();
 
         private RenderBundle(ShaderProgram shader) {
             this.shader = shader;
@@ -191,31 +190,13 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
             return this;
         }
 
-        /**
-         * adds the given post processing step to the end of the RenderBundle.
-         * The step is run after all drawables, and also affects drawables added later.
-         * 
-         * @return this
-         */
-        public RenderBundle setPostProcessing(PostProcessingStep step) {
-            this.postStep = Optional.of(step);
-            return this;
-        }
-
         public void draw() {
-            postStep.ifPresent(PostProcessingStep::bind);
-
             shader.bind();
             SGL gl = shader.getGL(root);
             for (Consumer<SGL> tgt : targets) {
                 tgt.accept(gl);
             }
             shader.unbind();
-
-            postStep.ifPresent(step -> {
-                step.unbind();
-                step.execute();
-            });
         }
     }
 }

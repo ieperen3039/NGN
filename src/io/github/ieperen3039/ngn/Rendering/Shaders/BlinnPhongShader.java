@@ -69,9 +69,9 @@ public class BlinnPhongShader extends SceneShader implements TextureShader {
         // Texture for the model
         uniforms.setUniform("texture_sampler", 0);
 
-        GenericTextures.CHECKER.bind(GL_TEXTURE0);
-        GenericTextures.CHECKER.bind(GL_TEXTURE1);
-        GenericTextures.CHECKER.bind(GL_TEXTURE2);
+        GenericTextures.CHECKER.attach(GL_TEXTURE0);
+        GenericTextures.CHECKER.attach(GL_TEXTURE1);
+        GenericTextures.CHECKER.attach(GL_TEXTURE2);
 
         nextPointLightIndex = 0;
         nextDirectionalLightIndex = 0;
@@ -112,7 +112,7 @@ public class BlinnPhongShader extends SceneShader implements TextureShader {
     public void setTexture(Texture tex) {
         if (tex != null) {
             uniforms.setUniform("hasTexture", true);
-            tex.bind(GL_TEXTURE0);
+            tex.attach(GL_TEXTURE0);
 
         } else {
             unsetTexture();

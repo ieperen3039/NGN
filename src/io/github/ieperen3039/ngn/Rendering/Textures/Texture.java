@@ -9,6 +9,7 @@ import io.github.ieperen3039.ngn.Tools.Toolbox;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
 /**
  * @author Geert van Ieperen created on 1-2-2019.
@@ -18,7 +19,7 @@ public interface Texture {
      * activate this texture to be applied on the next model
      * @param sampler the texture slot to bind to
      */
-    void bind(int sampler);
+    void attach(int sampler);
 
     /** destroy the resources claimed by the texture */
     void cleanup();
@@ -27,13 +28,8 @@ public interface Texture {
 
     int getHeight();
 
-    int getID();
-
-    boolean isSingleChannel();
-
     default ByteBuffer toByteBufferRGBA() {
-        int id = getID();
-        glBindTexture(GL_TEXTURE_2D, id);
+        attach(GL_TEXTURE0);
         ByteBuffer buffer = ByteBuffer.allocate(getWidth() * getHeight() * 4);
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         Toolbox.checkGLError("toByteBufferRGBA");

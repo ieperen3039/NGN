@@ -55,7 +55,7 @@ public class FileTexture implements Texture {
     }
 
     @Override
-    public void bind(int sampler) {
+    public void attach(int sampler) {
         glActiveTexture(sampler);
         glBindTexture(GL_TEXTURE_2D, id);
     }
@@ -73,15 +73,5 @@ public class FileTexture implements Texture {
     @Override
     public int getHeight() {
         return height;
-    }
-
-    @Override
-    public int getID() {
-        return id;
-    }
-
-    @Override
-    public boolean isSingleChannel() {
-        return false;
     }
 }

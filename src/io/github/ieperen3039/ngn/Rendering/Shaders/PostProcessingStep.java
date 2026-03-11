@@ -15,18 +15,13 @@ import static org.lwjgl.opengl.GL30.*;
 import java.io.IOException;
 
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
-import io.github.ieperen3039.ngn.Core.Main;
-import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
+import io.github.ieperen3039.ngn.Rendering.Textures.Texture;
 import io.github.ieperen3039.ngn.Tools.Logger;
-import io.github.ieperen3039.ngn.Tools.Toolbox;
 
 public abstract class PostProcessingStep {
-
     protected final ShaderUniforms uniforms;
 
     private final int programId;
-    private final int frameBuffer;
-    private final int colorBuffer;
     private final int fragmentShaderId;
     private final int quadVao;
     private final int quadVbo;
@@ -73,22 +68,6 @@ public abstract class PostProcessingStep {
         uniforms = new ShaderUniforms(programId);
         uniforms.createUniform("texture_sampler");
 
-        // Create FBO, texture, and fullscreen quad
-        frameBuffer = glGenFramebuffers();
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-
-        // Create a new OpenGL texture
-        colorBuffer = glGenTextures();
-        glBindTexture(GL_TEXTURE_2D, colorBuffer);
-        // Tell OpenGL how to unpack the RGBA bytes. Each component is 1 byte size
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, windowWidth, windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
-        glClearColor(1f, 1f, 1f, 1f); // white
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        Toolbox.checkGLError(this.toString());
-
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -122,19 +101,12 @@ public abstract class PostProcessingStep {
         glBindVertexArray(0);
     }
 
-    public void bind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-    }
-
-    public void unbind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
-
-    public void execute() {
+    // draws the given texture, applying this post processing step to it.
+    // make sure to bind a render target before calling this method.
+    public void draw(Texture input) {
         glUseProgram(programId);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, colorBuffer);
+        input.attach(GL_TEXTURE0);
         uniforms.setUniform("texture_sampler", 0);
 
         preparePostProcessing();
@@ -149,10 +121,8 @@ public abstract class PostProcessingStep {
     protected abstract void preparePostProcessing();
 
     public void cleanup() {
-        glDeleteFramebuffers(frameBuffer);
         glDeleteVertexArrays(quadVao);
         glDeleteBuffers(quadVbo);
-        glDeleteTextures(colorBuffer);
 
         if (programId != 0) {
             glDeleteProgram(programId);

@@ -1,9 +1,6 @@
 #version 330
 
 layout(location = 0) out vec4 fragColor;
-layout(location = 1) out float outColorR;
-layout(location = 2) out float outColorG;
-layout(location = 3) out float outColorB;
 
 // normal of the vertex
 in vec3 mVertexNormal;
@@ -53,8 +50,6 @@ uniform float specularPower;
 
 uniform vec3 cameraPosition;
 uniform mat4 viewProjectionMatrix;
-
-uniform bool renderToBuffer;
 
 // global variables
 vec4 diffuse_color;
@@ -137,13 +132,5 @@ void main() {
     diffuseSpecular += calcPointLightComponents(pointLights[0]);
     diffuseSpecular += calcPointLightComponents(pointLights[1]);
 
-    vec4 col = diffuse_color * vec4(ambientLight, 1.0) + vec4(diffuseSpecular, 0.0);
-
-    if (renderToBuffer) {
-        outColorR = col.r;
-        outColorG = col.g;
-        outColorB = col.b;
-    } else {
-        fragColor = col;
-    }
+    fragColor = diffuse_color * vec4(ambientLight, 1.0) + vec4(diffuseSpecular, 0.0);
 }
