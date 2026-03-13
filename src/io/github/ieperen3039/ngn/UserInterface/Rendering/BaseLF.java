@@ -38,8 +38,8 @@ public class BaseLF implements SFrameLookAndFeel {
     private NVGOverlay.Painter painter;
 
     @Override
-    public void init(RenderManager root, NVGOverlay overlay) {
-        overlay.loadFont(NGFont.LUCIDA_CONSOLE);
+    public void init(RenderManager root, NVGOverlay.FontLoader fontLoader) {
+        fontLoader.loadFont(NGFont.LUCIDA_CONSOLE);
     }
 
     @Override

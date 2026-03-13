@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 import static org.lwjgl.nanovg.NanoVG.*;
@@ -33,7 +31,6 @@ public final class NVGOverlay {
     @SuppressWarnings("FieldCanBeLocal") /* fontbuffer MUST be a field */
     private final List<ByteBuffer> fontBuffer = new ArrayList<>();
     private final Collection<Consumer<Painter>> drawBuffer = new ArrayList<>();
-    private final Lock drawBufferLock = new ReentrantLock();
     private long vg;
     private NVGColor nvgColorBuffer;
     private NVGPaint paint;
@@ -60,12 +57,16 @@ public final class NVGOverlay {
         paint = NVGPaint.create();
     }
 
-    public void loadFont(NGFont fonts) {
-        ByteBuffer fontData = fonts.asByteBuffer();
+    public void loadFont(NGFont font) {
+        ByteBuffer fontData = font.asByteBuffer();
         fontBuffer.add(fontData);
-        if (nvgCreateFontMem(vg, fonts.name, fontData, 1) == -1) {
-            Logger.ERROR.print("Could not create font " + fonts.name);
+        if (nvgCreateFontMem(vg, font.name, fontData, 1) == -1) {
+            Logger.ERROR.print("Could not create font " + font.name);
         }
+    }
+
+    public FontLoader getFontLoader() {
+        return this::loadFont;
     }
 
     public void cleanup() {
@@ -459,5 +460,9 @@ public final class NVGOverlay {
             return (int) nvgTextBounds(vg, 0, 0, text, (FloatBuffer) null);
         }
 
+    }
+
+    public interface FontLoader {
+        public void loadFont(NGFont font);
     }
 }

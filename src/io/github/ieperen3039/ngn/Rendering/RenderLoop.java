@@ -166,6 +166,10 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
         overlay.addHudItem(draw);
     }
 
+    public NVGOverlay.FontLoader getFontLoader() {
+        return overlay.getFontLoader();
+    }
+
     @Override
     public void cleanup() {
         overlay.cleanup();

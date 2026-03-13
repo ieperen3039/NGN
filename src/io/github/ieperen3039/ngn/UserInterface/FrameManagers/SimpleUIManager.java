@@ -31,7 +31,7 @@ public class SimpleUIManager implements UIManager {
         mainPanel = new SFiller(0, 0);
     }
 
-    public void init(GLFWWindow window, RenderManager renderer, NVGOverlay overlay) {
+    public void init(GLFWWindow window, RenderManager renderer, NVGOverlay.FontLoader overlay) {
         this.window = window;
 
         lookAndFeel.init(renderer, overlay);

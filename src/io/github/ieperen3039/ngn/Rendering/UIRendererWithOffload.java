@@ -46,7 +46,7 @@ public class UIRendererWithOffload extends GenericThreadLoop {
         mouseHandler.init(window, uiManager);
 
         overlay.init(settings.ANTIALIAS_LEVEL);
-        uiManager.init(window, root, overlay);
+        uiManager.init(window, root, overlay.getFontLoader());
         overlay.addHudItem(uiManager::draw);
         overlay.addHudItem((hud) -> {
             if (settings.PRINT_ROLL) {

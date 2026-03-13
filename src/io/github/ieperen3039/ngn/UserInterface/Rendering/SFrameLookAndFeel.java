@@ -46,7 +46,7 @@ public interface SFrameLookAndFeel {
         SCROLL_BAR_DRAG_ELEMENT,
     }
 
-    void init(RenderManager root, NVGOverlay overlay);
+    void init(RenderManager root, NVGOverlay.FontLoader fontLoader);
 
     /**
      * draw with default color
