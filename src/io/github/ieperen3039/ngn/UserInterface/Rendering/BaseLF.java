@@ -43,11 +43,6 @@ public class BaseLF implements SFrameLookAndFeel {
     }
 
     @Override
-    public NVGOverlay.Painter getPainter() {
-        return painter;
-    }
-
-    @Override
     public void setPainter(NVGOverlay.Painter painter) {
         this.painter = painter;
         painter.setFillColor(BACKGROUND_COLOR);
