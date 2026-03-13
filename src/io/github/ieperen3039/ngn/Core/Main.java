@@ -1,12 +1,12 @@
 package io.github.ieperen3039.ngn.Core;
 
 import io.github.ieperen3039.ngn.Camera.Camera;
-import io.github.ieperen3039.ngn.GUIMenu.FrameManagers.UIManager;
 import io.github.ieperen3039.ngn.InputHandling.KeyControl;
 import io.github.ieperen3039.ngn.InputHandling.MouseTools.MouseToolCallbacks;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.TickTime;
+import io.github.ieperen3039.ngn.UserInterface.FrameManagers.UIManager;
 import io.github.ieperen3039.ngn.Version;
 
 /**

@@ -4,7 +4,6 @@ import io.github.ieperen3039.ngn.Core.GenericThreadLoop;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Core.Main.ViewPort;
 import io.github.ieperen3039.ngn.Core.ToolElement;
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NVGOverlay;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.PostProcessingStep;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
@@ -13,6 +12,7 @@ import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.TickTime;
 import io.github.ieperen3039.ngn.Tools.TimeObserver;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
+import io.github.ieperen3039.ngn.UserInterface.Rendering.NVGOverlay;
 
 import java.io.IOException;
 import java.util.ArrayList;

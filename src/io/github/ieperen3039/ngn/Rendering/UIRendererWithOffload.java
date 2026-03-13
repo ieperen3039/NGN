@@ -3,14 +3,14 @@ package io.github.ieperen3039.ngn.Rendering;
 import io.github.ieperen3039.ngn.Core.GenericThreadLoop;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Core.RenderManager;
-import io.github.ieperen3039.ngn.GUIMenu.FrameManagers.SimpleUIManager;
-import io.github.ieperen3039.ngn.GUIMenu.FrameManagers.UIManager;
-import io.github.ieperen3039.ngn.GUIMenu.Rendering.NVGOverlay;
 import io.github.ieperen3039.ngn.InputHandling.MouseTools.UIInputCallbacks;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.TickTime;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
+import io.github.ieperen3039.ngn.UserInterface.FrameManagers.SimpleUIManager;
+import io.github.ieperen3039.ngn.UserInterface.FrameManagers.UIManager;
+import io.github.ieperen3039.ngn.UserInterface.Rendering.NVGOverlay;
 
 import java.io.IOException;
 import java.util.AbstractQueue;
