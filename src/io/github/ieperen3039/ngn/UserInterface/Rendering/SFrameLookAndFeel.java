@@ -7,6 +7,7 @@ import org.joml.Vector2ic;
 import io.github.ieperen3039.ngn.Version;
 import io.github.ieperen3039.ngn.Core.RenderManager;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
+import io.github.ieperen3039.ngn.UserInterface.FrameManagers.SimpleUIManager;
 
 /**
  * a stateless mapping from abstract descriptions to drawings in NanoVG
@@ -46,7 +47,7 @@ public interface SFrameLookAndFeel {
         SCROLL_BAR_DRAG_ELEMENT,
     }
 
-    void init(RenderManager root);
+    void init(RenderManager root, NVGOverlay overlay);
 
     /**
      * draw with default color

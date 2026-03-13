@@ -40,7 +40,7 @@ public class UIRenderer extends GenericThreadLoop {
 
     public void init(RenderManager root, GLFWWindow window, Settings settings) throws IOException {
         this.window = window;
-        uiManager.init(window, root);
+        uiManager.init(window, root, overlay);
 
         accurateTiming = settings.ACCURATE_RENDER_TIMING;
         overlay.init(settings.ANTIALIAS_LEVEL);

@@ -15,8 +15,6 @@ import org.lwjgl.BufferUtils;
  * @author Geert van Ieperen. Created on 23-8-2018.
  */
 public class NGFont {
-    // make sure ALL_FONTS is above all default fonts
-    public static List<NGFont> ALL_FONTS = new ArrayList<>();
     public static NGFont LUCIDA_CONSOLE = new NGFont("ngn/fonts/LucidaConsole/lucon.ttf");
 
     public final String name;
@@ -38,8 +36,6 @@ public class NGFont {
             byteFormat.put(bytes);
             byteFormat.flip();
             awtFormat = Font.createFont(Font.TRUETYPE_FONT, directory.asStream());
-
-            ALL_FONTS.add(this);
 
         } catch (IOException | FontFormatException e) {
             Logger.ERROR.print("Error loading font " + name + ": " + e);

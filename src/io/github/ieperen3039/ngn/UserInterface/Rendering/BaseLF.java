@@ -35,20 +35,21 @@ public class BaseLF implements SFrameLookAndFeel {
     private static final Color4f SELECTION_COLOR = BUTTON_COLOR.intensify(0.1f);
     private static final Color4f INPUT_FIELD_COLOR = Color4f.LIGHT_GREY;
 
-    private NVGOverlay.Painter hud;
+    private NVGOverlay.Painter painter;
 
     @Override
-    public void init(RenderManager root) {
+    public void init(RenderManager root, NVGOverlay overlay) {
+        overlay.loadFont(NGFont.LUCIDA_CONSOLE);
     }
 
     @Override
     public NVGOverlay.Painter getPainter() {
-        return hud;
+        return painter;
     }
 
     @Override
     public void setPainter(NVGOverlay.Painter painter) {
-        this.hud = painter;
+        this.painter = painter;
         painter.setFillColor(BACKGROUND_COLOR);
         painter.setStroke(STROKE_COLOR, STROKE_WIDTH);
     }
@@ -61,7 +62,7 @@ public class BaseLF implements SFrameLookAndFeel {
             actualSize = TEXT_SIZE_LARGE;
         }
 
-        return hud.getTextWidth(text, actualSize, FONT);
+        return painter.getTextWidth(text, actualSize, FONT);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class BaseLF implements SFrameLookAndFeel {
         int xMax = x + width;
         int yMax = y + height;
 
-        hud.polygon(color, STROKE_COLOR, STROKE_WIDTH,
+        painter.polygon(color, STROKE_COLOR, STROKE_WIDTH,
                 new Vector2i(x + indent, y),
                 new Vector2i(xMax - indent, y),
                 new Vector2i(xMax, y + indent),
@@ -158,27 +159,27 @@ public class BaseLF implements SFrameLookAndFeel {
 
         switch (align) {
             case LEFT_MIDDLE:
-                hud.text(x, y + (height / 2), actualSize,
+                painter.text(x, y + (height / 2), actualSize,
                         font, EnumSet.of(ALIGN_LEFT), textColor, text, width);
                 break;
             case LEFT_TOP:
-                hud.text(x, y, actualSize,
+                painter.text(x, y, actualSize,
                         font, EnumSet.of(ALIGN_TOP, ALIGN_LEFT), textColor, text, width);
                 break;
             case CENTER_MIDDLE:
-                hud.text(x, y + (height / 2), actualSize,
+                painter.text(x, y + (height / 2), actualSize,
                         font, EnumSet.noneOf(NVGOverlay.Alignment.class), textColor, text, width);
                 break;
             case CENTER_TOP:
-                hud.text(x, y, actualSize,
+                painter.text(x, y, actualSize,
                         font, EnumSet.of(ALIGN_TOP), textColor, text, width);
                 break;
             case RIGHT_MIDDLE:
-                hud.text(x, y + (height / 2), actualSize,
+                painter.text(x, y + (height / 2), actualSize,
                         font, EnumSet.of(ALIGN_RIGHT), textColor, text, width);
                 break;
             case RIGHT_TOP:
-                hud.text(x, y, actualSize,
+                painter.text(x, y, actualSize,
                         font, EnumSet.of(ALIGN_TOP, ALIGN_RIGHT), textColor, text, width);
                 break;
             default:
@@ -188,17 +189,17 @@ public class BaseLF implements SFrameLookAndFeel {
 
     @Override
     public int createImage(ByteBuffer buffer, int width, int height) {
-        return hud.createImageFromBuffer(buffer, width, height);
+        return painter.createImageFromBuffer(buffer, width, height);
     }
 
     @Override
     public void drawImage(Vector2ic pos, int imageWidth, int imageHeight, int imageId) {
-        hud.drawImage(imageId, pos.x(), pos.y(), imageWidth, imageHeight, 0, 1.0f);
+        painter.drawImage(imageId, pos.x(), pos.y(), imageWidth, imageHeight, 0, 1.0f);
     }
 
     @Override
     public void cleanup() {
-        hud = null;
+        painter = null;
     }
 
     @Override

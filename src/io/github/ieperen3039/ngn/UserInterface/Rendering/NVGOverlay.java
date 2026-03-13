@@ -56,16 +56,16 @@ public final class NVGOverlay {
             throw new IOException("Could not initialize NanoVG");
         }
 
-        List<NGFont> fonts = NGFont.ALL_FONTS;
-        for (int i = 0; i < fonts.size(); i++) {
-            fontBuffer.add(fonts.get(i).asByteBuffer());
-            if (nvgCreateFontMem(vg, fonts.get(i).name, fontBuffer.get(i), 1) == -1) {
-                Logger.ERROR.print("Could not create font " + fonts.get(i).name);
-            }
-        }
-
         nvgColorBuffer = NVGColor.create();
         paint = NVGPaint.create();
+    }
+
+    public void loadFont(NGFont fonts) {
+        ByteBuffer fontData = fonts.asByteBuffer();
+        fontBuffer.add(fontData);
+        if (nvgCreateFontMem(vg, fonts.name, fontData, 1) == -1) {
+            Logger.ERROR.print("Could not create font " + fonts.name);
+        }
     }
 
     public void cleanup() {

@@ -6,6 +6,7 @@ import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.UserInterface.Components.SComponent;
 import io.github.ieperen3039.ngn.UserInterface.Components.SFiller;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.BaseLF;
+import io.github.ieperen3039.ngn.UserInterface.Rendering.NGFont;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.NVGOverlay;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
 
@@ -30,10 +31,10 @@ public class SimpleUIManager implements UIManager {
         mainPanel = new SFiller(0, 0);
     }
 
-    public void init(GLFWWindow window, RenderManager renderer) {
+    public void init(GLFWWindow window, RenderManager renderer, NVGOverlay overlay) {
         this.window = window;
 
-        lookAndFeel.init(renderer);
+        lookAndFeel.init(renderer, overlay);
         mainPanel.setSize(window.getWidth(), window.getHeight());
     }
 

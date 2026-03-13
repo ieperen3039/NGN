@@ -43,10 +43,10 @@ public class UIRendererWithOffload extends GenericThreadLoop {
 
     public void init(RenderManager root, GLFWWindow window, Settings settings) throws IOException {
         this.window = window;
-        uiManager.init(window, root);
         mouseHandler.init(window, uiManager);
 
         overlay.init(settings.ANTIALIAS_LEVEL);
+        uiManager.init(window, root, overlay);
         overlay.addHudItem(uiManager::draw);
         overlay.addHudItem((hud) -> {
             if (settings.PRINT_ROLL) {
