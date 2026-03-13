@@ -80,43 +80,34 @@ public class BaseLF implements SFrameLookAndFeel {
             case BUTTON:
             case SCROLL_BAR_DRAG_ELEMENT:
             case ICON_BUTTON:
-                switch (state) {
-                    default:
-                    case ENABLED:
-                        Color4f thisColor = color == null ? BUTTON_COLOR : color;
-                        drawRectangle(x, y, width, height, BUTTON_INDENT, thisColor);
-                        break;
-                    case DISABLED:
-                        break;
-                    case HOVERED:
-                        Color4f thisColor1 = color == null ? SELECTION_COLOR : color;
-                        drawRectangle(x, y, width, height, BUTTON_INDENT, thisColor1);
-                        break;
-                    case ACTIVATED:
-                        Color4f thisColor2 = color == null ? BUTTON_COLOR.darken(0.5f) : color;
-                        drawRectangle(x, y, width, height, BUTTON_INDENT, thisColor2);
-                        break;
+                if (color == null) {
+                    color = switch (state) {
+                        case ENABLED -> BUTTON_COLOR;
+                        case DISABLED -> Color4f.WHITE;
+                        case HOVERED -> SELECTION_COLOR;
+                        case ACTIVATED -> BUTTON_COLOR.darken(0.5f);
+                        default -> BUTTON_COLOR;
+                    };
                 }
+                drawRectangle(x, y, width, height, BUTTON_INDENT, color);
+                break;
 
             case INPUT_FIELD:
-                Color4f thisColor3 = color == null ? INPUT_FIELD_COLOR : color;
-                drawRectangle(x, y, width, height, DEFAULT_INDENT, thisColor3);
+            if (color == null) color = INPUT_FIELD_COLOR;
+                drawRectangle(x, y, width, height, DEFAULT_INDENT, color);
                 break;
 
             case DROP_DOWN_HEAD:
             case DROP_DOWN_OPTION_FIELD:
-                switch (state) {
-                    default:
-                    case ENABLED:
-                        drawRectangle(x, y, width, height, DEFAULT_INDENT, color == null ? BACKGROUND_COLOR : color);
-                        break;
-                    case DISABLED:
-                        drawRectangle(x, y, width, height, DEFAULT_INDENT, Color4f.LIGHT_GREY);
-                    case ACTIVATED:
-                    case HOVERED:
-                        drawRectangle(x, y, width, height, DEFAULT_INDENT, color == null ? BACKGROUND_COLOR.darken(0.1f)  : color);
-                        break;
+                if (color == null) {
+                    color = switch (state) {
+                        default -> BACKGROUND_COLOR;
+                        case ENABLED -> BACKGROUND_COLOR;
+                        case DISABLED -> Color4f.LIGHT_GREY;
+                        case ACTIVATED, HOVERED -> BACKGROUND_COLOR.darken(0.1f);
+                    };
                 }
+                drawRectangle(x, y, width, height, DEFAULT_INDENT, color);
                 break;
             case PANEL:
             case FRAME_HEADER:
