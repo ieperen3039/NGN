@@ -36,8 +36,6 @@ public class SDropDown extends SComponent implements MouseClickListener {
     private int minWidth;
     private int textWidth;
 
-    private int dropOptionHeight = 50;
-
     /**
      * create a dropdown menu with the given possible values, with a minimum width of 150 and height of 50
      * @param gui     a reference to the gui in which this is displayed
@@ -50,7 +48,7 @@ public class SDropDown extends SComponent implements MouseClickListener {
         this.current = initial;
         this.minHeight = 80;
         this.minWidth = 250;
-        this.optionPane = new DropDownOptions(values);
+        this.optionPane = new DropDownOptions(values, new SComponentProperties(minWidth, minHeight));
         this.gui = gui;
 
         setGrowthPolicy(true, false);
@@ -66,7 +64,7 @@ public class SDropDown extends SComponent implements MouseClickListener {
         assert values.length > 0;
         this.values = values;
         this.current = initial;
-        this.optionPane = new DropDownOptions(values);
+        this.optionPane = new DropDownOptions(values, properties);
         this.gui = gui;
 
         this.minWidth = properties.minWidth;
@@ -108,7 +106,7 @@ public class SDropDown extends SComponent implements MouseClickListener {
 
         this.current = initial;
         this.values = arr;
-        this.optionPane = new DropDownOptions(arr);
+        this.optionPane = new DropDownOptions(arr, properties);
         this.gui = gui;
         setGrowthPolicy(properties.wantHzGrow, properties.wantVtGrow);
     }
@@ -127,11 +125,6 @@ public class SDropDown extends SComponent implements MouseClickListener {
     public void setMinimumSize(int width, int height) {
         minWidth = width;
         minHeight = height;
-    }
-
-    /** sets the height of a single option in the drop-down section of the component. */
-    public void setDropOptionHeight(int dropOptionHeight) {
-        this.dropOptionHeight = dropOptionHeight;
     }
 
     public SDropDown addStateChangeListener(Consumer<Integer> action) {
@@ -193,22 +186,21 @@ public class SDropDown extends SComponent implements MouseClickListener {
     }
 
     private class DropDownOptions extends SComposite implements MouseClickListener {
-        private DropDownOptions(String[] values) {
+        private DropDownOptions(String[] values, SComponentProperties properties) {
             super(new SPanel(1, values.length));
             setVisible(false);
+            setGrowthPolicy(true, false);
 
             for (int i = 0; i < values.length; i++) {
                 final int index = i;
-                SExtendedTextComponent option = new SExtendedTextComponent(
-                        values[index], minWidth, dropOptionHeight, true, NGFont.TextType.REGULAR, SFrameLookAndFeel.Alignment.LEFT_MIDDLE
-                );
+                SExtendedTextComponent option = new SExtendedTextComponent(values[index], properties);
 
                 option.setClickListener((b, x, y) -> {
                     setCurrent(index);
                     close();
                 });
 
-                add(option, new Vector2i(0, i));
+                add(option, new Vector2i(0, index));
             }
         }
 
