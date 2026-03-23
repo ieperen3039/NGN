@@ -18,12 +18,16 @@ import io.github.ieperen3039.ngn.Rendering.Textures.Texture;
 import io.github.ieperen3039.ngn.Tools.Logger;
 
 public abstract class PostProcessingStep {
+    private static final Resource.Path VERTEX_PATH = ShaderProgram.SHADER_DIRECTORY.resolve("PostProcessing", "vertex.glsl");
     protected final ShaderUniforms uniforms;
 
     private final int programId;
+    private final int vertexShaderId;
     private final int fragmentShaderId;
     private final int quadVao;
     private final int quadVbo;
+    private final int targetTextureWidth;
+    private final int targetTextureHeight;
 
     /**
      * create a PostProcessing shader based on just a framgent shader. The fragment shader accepts one input:
@@ -42,12 +46,19 @@ public abstract class PostProcessingStep {
      *                         searched for in the shader folder
      *                         itself, and should exclude any first slash)
      */
-    public PostProcessingStep(Resource.Path fragmentPath, int windowWidth, int windowHeight)
+    public PostProcessingStep(Resource.Path fragmentPath, int targetTextureWidth, int targetTextureHeight)
             throws ShaderException, IOException {
+        this.targetTextureWidth = targetTextureWidth;
+        this.targetTextureHeight = targetTextureHeight;
+
         this.programId = glCreateProgram();
         if (this.programId == 0) {
             throw new ShaderException("OpenGL error: Could not create Shader");
         }
+        
+        final String vertexCode = VERTEX_PATH.asText();
+        vertexShaderId = ShaderProgram.createShader(programId, GL_VERTEX_SHADER, vertexCode);
+
         final String fragmentCode = fragmentPath.asText();
         fragmentShaderId = ShaderProgram.createShader(programId, GL_FRAGMENT_SHADER, fragmentCode);
 
@@ -58,6 +69,7 @@ public abstract class PostProcessingStep {
         }
 
         glDetachShader(programId, fragmentShaderId);
+        glDetachShader(programId, vertexShaderId);
 
         glValidateProgram(programId);
         if (glGetProgrami(programId, GL_VALIDATE_STATUS) == GL_FALSE) {
@@ -106,9 +118,14 @@ public abstract class PostProcessingStep {
         glUseProgram(programId);
 
         input.attach(GL_TEXTURE0);
+
         uniforms.setUniform("texture_sampler", 0);
 
-        preparePostProcessing();
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_BLEND);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glViewport(0, 0, targetTextureWidth, targetTextureHeight);
+        preparePostProcessing(input.getWidth(), input.getHeight());
 
         glBindVertexArray(quadVao);
         glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -117,7 +134,7 @@ public abstract class PostProcessingStep {
         glUseProgram(0);
     }
 
-    protected abstract void preparePostProcessing();
+    protected abstract void preparePostProcessing(int width, int height);
 
     public void cleanup() {
         glDeleteVertexArrays(quadVao);

@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL13.*;
 
 /**
@@ -142,6 +143,7 @@ public class BlinnPhongShader extends SceneShader implements TextureShader {
     }
 
     public SGL getGL(Camera camera, ViewPort viewPort, Settings settings) {
+        glViewport(viewPort.x(), viewPort.y(), viewPort.width(), viewPort.height() );
         initialize(camera.getEye(), settings);
         return new SceneShaderGL(this, camera, viewPort);
     }

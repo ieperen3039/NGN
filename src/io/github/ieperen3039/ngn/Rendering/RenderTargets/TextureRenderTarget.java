@@ -1,7 +1,7 @@
 package io.github.ieperen3039.ngn.Rendering.RenderTargets;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL30.*;
 
 import io.github.ieperen3039.ngn.Rendering.Textures.Texture;
@@ -19,19 +19,12 @@ public abstract class TextureRenderTarget extends RenderTarget implements Textur
         this.textureHeight = targetTextureHeight;
     }
 
-    // binds the result texture
-    void bindTexture() {
-        glBindTexture(GL_TEXTURE_2D, textureId);
-    }
-
-    void unbindTexture() {
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
+    public void check(){}
 
     @Override
     public void attach(int sampler) {
         glActiveTexture(sampler);
-        bindTexture();
+        glBindTexture(GL_TEXTURE_2D, textureId);
     }
 
     @Override

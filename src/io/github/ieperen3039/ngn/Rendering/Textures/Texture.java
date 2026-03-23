@@ -30,7 +30,7 @@ public interface Texture {
 
     default ByteBuffer toByteBufferRGBA() {
         attach(GL_TEXTURE0);
-        ByteBuffer buffer = ByteBuffer.allocate(getWidth() * getHeight() * 4);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(getWidth() * getHeight() * 4);
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         Toolbox.checkGLError("toByteBufferRGBA");
         return buffer;
