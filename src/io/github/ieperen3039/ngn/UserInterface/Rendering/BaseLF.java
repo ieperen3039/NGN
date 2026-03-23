@@ -32,7 +32,7 @@ public class BaseLF implements SFrameLookAndFeel {
     private static final Color4f BACKGROUND_COLOR = Color4f.WHITE;
     private static final Color4f STROKE_COLOR = Color4f.BLACK;
     private static final Color4f BUTTON_COLOR = Color4f.LIGHT_GREY;
-    private static final Color4f SELECTION_COLOR = BUTTON_COLOR.intensify(0.1f);
+    private static final Color4f SELECTION_COLOR = BUTTON_COLOR.intensify(0.2f);
     private static final Color4f INPUT_FIELD_COLOR = Color4f.LIGHT_GREY;
 
     private NVGOverlay.Painter painter;
