@@ -69,13 +69,8 @@ public class Resource<T> extends Asset<T> {
             return new Path(newPath);
         }
 
-        public static Path get(String... elements) {
-            StringBuilder pathBuilder = new StringBuilder(elements[0]);
-            for (int i = 1; i < elements.length; i++) {
-                pathBuilder.append("/");
-                pathBuilder.append(elements[i]);
-            }
-            return new Path(pathBuilder.toString());
+        public static Path get(String path) {
+            return new Path(path);
         }
 
         /**

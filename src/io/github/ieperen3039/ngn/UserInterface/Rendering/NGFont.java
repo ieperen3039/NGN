@@ -6,8 +6,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
@@ -25,10 +23,9 @@ public class NGFont {
         REGULAR, TITLE, EMPHASIS
     }
 
-    public NGFont(String... path) {
+    public NGFont(String path) {
         Resource.Path directory = Resource.Path.get(path);
-        String name = path[path.length - 1];
-        this.name = name.substring(name.lastIndexOf('/') + 1);
+        this.name = path.substring(path.lastIndexOf('/') + 1);
 
         try (InputStream fontStream = directory.asStream()) {
             byte[] bytes = fontStream.readAllBytes();

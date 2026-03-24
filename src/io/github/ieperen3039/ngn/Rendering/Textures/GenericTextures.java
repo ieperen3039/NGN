@@ -1,9 +1,11 @@
 package io.github.ieperen3039.ngn.Rendering.Textures;
 
+import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL11.GL_REPEAT;
+
 import io.github.ieperen3039.ngn.AssetHandling.Asset;
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
 import io.github.ieperen3039.ngn.AssetHandling.Resource.Path;
-import io.github.ieperen3039.ngn.Rendering.MeshLoading.MeshFile;
 
 /**
  * @author Geert van Ieperen created on 1-2-2019.
@@ -17,7 +19,7 @@ public enum GenericTextures implements Texture {
 
     GenericTextures(String... relative) {
         Path path = Resource.Path.get("ngn/images").resolve(relative);
-        tex = Texture.createAsset(path);
+        tex = Resource.get(p -> new FileTexture(p.asStream(), GL_NEAREST, GL_REPEAT), path);
     }
 
     @Override

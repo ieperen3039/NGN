@@ -21,6 +21,9 @@ public class FileTexture implements Texture {
     private final int height;
 
     public FileTexture(InputStream in) throws IOException {
+        this(in, GL_LINEAR, GL_REPEAT);
+    }
+    public FileTexture(InputStream in, int magnificationMode, int clampMode) throws IOException {
         PNGDecoder image = new PNGDecoder(in);
 
         this.width = image.getWidth();
@@ -42,10 +45,10 @@ public class FileTexture implements Texture {
         // Tell OpenGL how to unpack the RGBA bytes. Each component is 1 byte size
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, magnificationMode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnificationMode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, clampMode);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, clampMode);
 
         // Upload the texture data
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
