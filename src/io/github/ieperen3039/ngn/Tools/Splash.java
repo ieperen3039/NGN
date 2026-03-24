@@ -12,8 +12,8 @@ import java.awt.image.BufferedImage;
  * @author Geert van Ieperen created on 4-5-2019.
  */
 public class Splash extends Frame implements Runnable {
-    public Splash(Resource.Path path) {
-        setTitle("Loading " + Settings.TITLE + "...");
+    public Splash(Resource.Path path, String appTitle) {
+        setTitle("Loading " + appTitle + "...");
 
         try {
             BufferedImage splashImage = ImageIO.read(path.asStream());

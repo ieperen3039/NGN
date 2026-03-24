@@ -4,6 +4,8 @@ import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Vectors;
+
+import org.joml.Matrix4f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -122,10 +124,19 @@ public class MovableCamera implements Camera {
     public void set(Vector3fc focus) {
         this.focus.set(focus);
     }
-
+    
     @Override
-    public boolean isIsometric() {
-        return root.settings().ISOMETRIC_VIEW;
+    public Matrix4f getProjectionMatrix(float aspectRatio) {
+        Settings settings = root.settings();
+        Matrix4f vpMatrix = new Matrix4f();
+
+        if (settings.ISOMETRIC_VIEW) {
+            float visionSize = (vectorToFocus().length() - settings.Z_NEAR) / 2;
+            vpMatrix.setOrthoSymmetric(aspectRatio * visionSize, visionSize, settings.Z_NEAR, settings.Z_FAR);
+        } else {
+            vpMatrix.setPerspective(settings.FOV, aspectRatio, settings.Z_NEAR, settings.Z_FAR);
+        }
+        return vpMatrix;
     }
 
     @Override

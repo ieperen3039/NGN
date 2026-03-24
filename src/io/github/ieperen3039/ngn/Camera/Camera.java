@@ -62,19 +62,7 @@ public interface Camera extends ToolElement, MouseListener {
         );
     }
 
-    default Matrix4f getProjectionMatrix(float aspectRatio) {
-        Matrix4f vpMatrix = new Matrix4f();
-
-        if (isIsometric()) {
-            float visionSize = (vectorToFocus().length() - Settings.Z_NEAR) / 2;
-            vpMatrix.setOrthoSymmetric(aspectRatio * visionSize, visionSize, Settings.Z_NEAR, Settings.Z_FAR);
-        } else {
-            vpMatrix.setPerspective(Settings.FOV, aspectRatio, Settings.Z_NEAR, Settings.Z_FAR);
-        }
-        return vpMatrix;
-    }
-
-    boolean isIsometric();
+    Matrix4f getProjectionMatrix(float aspectRatio);
 
     default Vector2f project(Vector3fc vector, Main.ViewPort window) {
         // view + projection transform

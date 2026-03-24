@@ -3,6 +3,8 @@ package io.github.ieperen3039.ngn.Camera;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Vectors;
+
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -27,10 +29,10 @@ public class PointCenteredCamera implements Camera {
     private boolean isHeld = false;
     private Main root;
 
-    public PointCenteredCamera(Vector3fc focus) {
+    public PointCenteredCamera(Vector3fc focus, float zNear, float zFar) {
         this.focus = new Vector3f(focus);
         this.rotation = new Quaternionf();
-        this.vDist = (Settings.Z_FAR - Settings.Z_NEAR) / 10;
+        this.vDist = (zNear - zFar) / 10;
     }
 
     public PointCenteredCamera(Vector3fc focus, Vector3fc eye) {
@@ -114,10 +116,19 @@ public class PointCenteredCamera implements Camera {
     public void set(Vector3fc focus) {
         this.focus.set(focus);
     }
-
+    
     @Override
-    public boolean isIsometric() {
-        return root.settings().ISOMETRIC_VIEW;
+    public Matrix4f getProjectionMatrix(float aspectRatio) {
+        Settings settings = root.settings();
+        Matrix4f vpMatrix = new Matrix4f();
+
+        if (settings.ISOMETRIC_VIEW) {
+            float visionSize = (vectorToFocus().length() - settings.Z_NEAR) / 2;
+            vpMatrix.setOrthoSymmetric(aspectRatio * visionSize, visionSize, settings.Z_NEAR, settings.Z_FAR);
+        } else {
+            vpMatrix.setPerspective(settings.FOV, aspectRatio, settings.Z_NEAR, settings.Z_FAR);
+        }
+        return vpMatrix;
     }
 
     public void set(Vector3fc focus, Vector3fc eye) {

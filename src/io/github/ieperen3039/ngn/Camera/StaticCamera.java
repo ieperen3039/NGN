@@ -2,6 +2,8 @@ package io.github.ieperen3039.ngn.Camera;
 
 
 import io.github.ieperen3039.ngn.Core.Main;
+
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -12,12 +14,29 @@ public class StaticCamera implements Camera {
     private Vector3fc eye, focus;
     private Vector3fc up;
     private boolean isometric;
+    private float fov;
+    private float zNear;
+    private float zFar;
 
-    public StaticCamera(Vector3fc eye, Vector3fc focus, Vector3fc up, boolean isometric) {
+    public StaticCamera(Vector3fc eye, Vector3fc focus, Vector3fc up, float fov, float zNear, float zFar) {
+        this(eye, focus, up, fov, zNear, zFar, false);
+    }
+
+    public StaticCamera(Vector3fc eye, Vector3fc focus, Vector3fc up) {
+        this(eye, focus, up, (float) Math.toRadians(45), 0.1f, 1000.0f, false);
+    }
+
+    public static StaticCamera isometric(Vector3fc eye, Vector3fc focus, Vector3fc up, float zNear, float zFar){
+        return new StaticCamera(eye, focus, up, 0, zNear, zFar, true);
+    }
+
+    private StaticCamera(Vector3fc eye, Vector3fc focus, Vector3fc up, float fov, float zNear, float zFar, boolean isometric) {
         this.eye = eye;
         this.focus = focus;
         this.up = up;
-        this.isometric = isometric;
+        this.fov = fov;
+        this.zNear = zNear;
+        this.zFar = zFar;
     }
 
     @Override
@@ -60,10 +79,18 @@ public class StaticCamera implements Camera {
     public void cleanup() {
 
     }
-
+    
     @Override
-    public boolean isIsometric() {
-        return isometric;
+    public Matrix4f getProjectionMatrix(float aspectRatio) {
+        Matrix4f vpMatrix = new Matrix4f();
+
+        if (isometric) {
+            float visionSize = (vectorToFocus().length() - zNear) / 2;
+            vpMatrix.setOrthoSymmetric(aspectRatio * visionSize, visionSize, zNear, zFar);
+        } else {
+            vpMatrix.setPerspective(fov, aspectRatio, zNear, zFar);
+        }
+        return vpMatrix;
     }
 
     @Override

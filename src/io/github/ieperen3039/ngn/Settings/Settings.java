@@ -7,7 +7,7 @@ import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
  * @author Geert van Ieperen. Created on 13-9-2018.
  */
 public class Settings {
-    public static String TITLE = "Untitled";
+    public String TITLE = "Untitled";
 
     // video settings
     public int TARGET_FPS = 60;
@@ -15,9 +15,9 @@ public class Settings {
     public int WINDOW_WIDTH = 1400;
     public int WINDOW_HEIGHT = 800;
     public int ANTIALIAS_LEVEL = 1;
-    public static final float Z_NEAR = 0.05f;
-    public static final float Z_FAR = 50f;
-    public static final float FOV = (float) Math.toRadians(45);
+    public float Z_NEAR = 0.05f;
+    public float Z_FAR = 50f;
+    public float FOV = (float) Math.toRadians(45);
     public Color4f AMBIENT_LIGHT = Color4f.rgb(200, 200, 255, 0.3f);
 
     // camera settings
