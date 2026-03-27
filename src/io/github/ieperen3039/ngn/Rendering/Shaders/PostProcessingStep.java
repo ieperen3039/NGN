@@ -28,9 +28,14 @@ public abstract class PostProcessingStep {
     private final int quadVbo;
     private final int targetTextureWidth;
     private final int targetTextureHeight;
+    private final float xOffset;
+    private final float xScale;
+    private final float yOffset;
+    private final float yScale;
 
     /**
-     * create a PostProcessing shader based on just a framgent shader. The fragment shader accepts one input:
+     * create a PostProcessing shader based on just a framgent shader. The fragment
+     * shader accepts one input:
      * ```
      * in vec2 vTexCoord;
      * ```
@@ -39,15 +44,48 @@ public abstract class PostProcessingStep {
      * uniform sampler2D texture_sampler;
      * ```
      * 
-     * @param fragmentPath the path to the fragment shader
      * @throws ShaderException if a new shader could not be created for internal
      *                         reasons
      * @throws IOException     if the defined files could not be found (the file is
      *                         searched for in the shader folder
      *                         itself, and should exclude any first slash)
+     * @see #PostProcessingStep(Resource.Path,int,int,float,float)
      */
     public PostProcessingStep(Resource.Path fragmentPath, int targetTextureWidth, int targetTextureHeight)
             throws ShaderException, IOException {
+        this(fragmentPath, targetTextureWidth, targetTextureHeight, 0, 1, 0, 1);
+    }
+
+    /**
+     * create a PostProcessing shader based on just a framgent shader. The fragment
+     * shader accepts one input:
+     * ```
+     * in vec2 vTexCoord;
+     * ```
+     * and:
+     * ```
+     * uniform sampler2D texture_sampler;
+     * ```
+     * 
+     * The output can be set to a subregion of the input texture, which appears like
+     * a zoom factor of `(1 - widthStart - widthEnd) / width` in width, and 
+     * `(1 - heightStart - heightEnd) / height` in height.
+     * 
+     * @param widthStart  This fraction of the lower x axis is cut off from the input
+     * @param widthEnd    This fraction of the upper x axis is cut off from the input
+     * @param heightStart This fraction of the lower y axis is cut off from the input
+     * @param heightEnd   This fraction of the upper y axis is cut off from the input
+     * @throws ShaderException if the fragment shader or the internal vertex shader
+     *                         could not be created
+     *                         (usually due to a syntax error in the shader code)
+     * @throws IOException     if the Fragment Path does not refer to a valid text
+     *                         file
+     */
+    public PostProcessingStep(
+        Resource.Path fragmentPath, int targetTextureWidth, int targetTextureHeight,
+        float widthStart, float widthEnd,
+        float heightStart, float heightEnd
+    ) throws ShaderException, IOException {
         this.targetTextureWidth = targetTextureWidth;
         this.targetTextureHeight = targetTextureHeight;
 
@@ -55,7 +93,7 @@ public abstract class PostProcessingStep {
         if (this.programId == 0) {
             throw new ShaderException("OpenGL error: Could not create Shader");
         }
-        
+
         final String vertexCode = VERTEX_PATH.asText();
         vertexShaderId = ShaderProgram.createShader(programId, GL_VERTEX_SHADER, vertexCode);
 
@@ -76,13 +114,24 @@ public abstract class PostProcessingStep {
             Logger.WARN.print("Warning validating Shader code: " + glGetProgramInfoLog(programId, 1024));
         }
 
+        float widthFactor = widthEnd - widthStart;
+        xOffset = (widthFactor / 2) + widthStart;
+        xScale = 1 / widthFactor;
+
+        float heightFactor = heightEnd - heightStart;
+        yOffset = (heightFactor / 2) + heightStart;
+        yScale = 1 / heightFactor;
+
         uniforms = new ShaderUniforms(programId);
         uniforms.createUniform("texture_sampler");
+        uniforms.createUniform("xOffset");
+        uniforms.createUniform("xScale");
+        uniforms.createUniform("yOffset");
+        uniforms.createUniform("yScale");
 
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        // Fullscreen quad (hardcoded here for efficiency)
         float[] quadVertices = {
                 // positions // texCoords
                 -1f, 1f, 0f, 1f,
@@ -120,6 +169,10 @@ public abstract class PostProcessingStep {
         input.attach(GL_TEXTURE0);
 
         uniforms.setUniform("texture_sampler", 0);
+        uniforms.setUniform("xOffset", xOffset);
+        uniforms.setUniform("xScale", xScale);
+        uniforms.setUniform("yOffset", yOffset);
+        uniforms.setUniform("yScale", yScale);
 
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
