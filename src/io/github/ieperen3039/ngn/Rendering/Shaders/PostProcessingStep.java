@@ -28,10 +28,6 @@ public abstract class PostProcessingStep {
     private final int quadVbo;
     private final int targetTextureWidth;
     private final int targetTextureHeight;
-    private final float xOffset;
-    private final float xScale;
-    private final float yOffset;
-    private final float yScale;
 
     /**
      * create a PostProcessing shader based on just a framgent shader. The fragment
@@ -114,33 +110,30 @@ public abstract class PostProcessingStep {
             Logger.WARN.print("Warning validating Shader code: " + glGetProgramInfoLog(programId, 1024));
         }
 
-        float widthFactor = widthEnd - widthStart;
-        xOffset = (widthFactor / 2) + widthStart;
-        xScale = 1 / widthFactor;
-
-        float heightFactor = heightEnd - heightStart;
-        yOffset = (heightFactor / 2) + heightStart;
-        yScale = 1 / heightFactor;
-
         uniforms = new ShaderUniforms(programId);
         uniforms.createUniform("texture_sampler");
-        uniforms.createUniform("xOffset");
-        uniforms.createUniform("xScale");
-        uniforms.createUniform("yOffset");
-        uniforms.createUniform("yScale");
 
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+        float widthFactor = widthEnd - widthStart;
+        float heightFactor = heightEnd - heightStart;
+
+        float xMin = -(widthStart / widthFactor);
+        float xMax = (1 - widthStart) / widthFactor;
+        float yMin = -(heightStart / heightFactor);
+        float yMax = (1 - heightStart) / heightFactor;
+
+        // we could also scale the vertices by (1/factor)
         float[] quadVertices = {
                 // positions // texCoords
-                -1f, 1f, 0f, 1f,
-                -1f, -1f, 0f, 0f,
-                1f, -1f, 1f, 0f,
+                -1f, 1f, xMin, yMax,
+                -1f, -1f, xMin, yMin,
+                1f, -1f, xMax, yMin,
 
-                -1f, 1f, 0f, 1f,
-                1f, -1f, 1f, 0f,
-                1f, 1f, 1f, 1f,
+                -1f, 1f, xMin, yMax,
+                1f, -1f, xMax, yMin,
+                1f, 1f, xMax, yMax,
         };
 
         quadVao = glGenVertexArrays();
@@ -169,10 +162,6 @@ public abstract class PostProcessingStep {
         input.attach(GL_TEXTURE0);
 
         uniforms.setUniform("texture_sampler", 0);
-        uniforms.setUniform("xOffset", xOffset);
-        uniforms.setUniform("xScale", xScale);
-        uniforms.setUniform("yOffset", yOffset);
-        uniforms.setUniform("yScale", yScale);
 
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
