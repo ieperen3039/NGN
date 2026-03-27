@@ -2,7 +2,9 @@ package io.github.ieperen3039.ngn.Rendering.Lights;
 
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
-import io.github.ieperen3039.ngn.Tools.Directory;
+
+import java.io.File;
+
 import org.joml.Matrix4fc;
 import org.joml.Vector3fc;
 
@@ -35,7 +37,7 @@ public interface SceneLights {
      */
     void update();
 
-    void dumpShadowMap(Directory dir);
+    void dumpShadowMap(File file);
 
     Matrix4fc getLightMatrix();
 }

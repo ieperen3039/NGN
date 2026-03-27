@@ -504,9 +504,8 @@ public final class Toolbox {
     }
 
     public static void writePNG(
-            Directory dir, String filename, ByteBuffer buffer, int bpp, int width, int height
+            File file, ByteBuffer buffer, int bpp, int width, int height
     ) {
-        String format = "png";
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < height; y++) {
@@ -520,9 +519,8 @@ public final class Toolbox {
         }
 
         try {
-            File file = dir.getFile(filename + "." + format); // The file to save to.
             if (file.exists()) {
-                Files.delete(file.toPath());
+                file.delete();
             } else {
                 boolean success = file.mkdirs();
                 if (!success) {
@@ -530,6 +528,8 @@ public final class Toolbox {
                     return;
                 }
             }
+            String fileName = file.getName();
+            String format = fileName.substring(fileName.lastIndexOf('.') + 1);
             ImageIO.write(image, format, file);
 
         } catch (IOException e) {
@@ -538,9 +538,8 @@ public final class Toolbox {
     }
 
     public static void writePNGGray(
-            Directory dir, String filename, ByteBuffer buffer, int width, int height
+            File file, ByteBuffer buffer, int width, int height
     ) {
-        String format = "png";
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         for (int y = 0; y < height; y++) {
@@ -552,9 +551,8 @@ public final class Toolbox {
         }
 
         try {
-            File file = dir.getFile(filename + "." + format); // The file to save to.
             if (file.exists()) {
-                Files.delete(file.toPath());
+                file.delete();
             } else {
                 boolean success = file.mkdirs();
                 if (!success) {
@@ -562,6 +560,8 @@ public final class Toolbox {
                     return;
                 }
             }
+            String fileName = file.getName();
+            String format = fileName.substring(fileName.lastIndexOf('.') + 1);
             ImageIO.write(image, format, file);
 
         } catch (IOException e) {
@@ -569,8 +569,8 @@ public final class Toolbox {
         }
     }
 
-    public static void writeToFile(Directory dir, String filename, ByteBuffer buffer) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(dir.getFile(filename + ".bin"));
+    public static void writeToFile(File file, ByteBuffer buffer) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(file);
              FileChannel channel = fos.getChannel()) {
             buffer.rewind(); // Prepare buffer for reading
             channel.write(buffer);

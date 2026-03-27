@@ -1,6 +1,5 @@
 package io.github.ieperen3039.ngn.Rendering;
 
-import io.github.ieperen3039.ngn.Tools.Directory;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
 import org.joml.Vector2i;
@@ -11,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.Callback;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.util.ArrayList;
@@ -152,16 +152,13 @@ public class GLFWWindow {
      * @param filename     the file to save to
      * @param bufferToRead the GL buffer to read, usually one of {@link GL11#GL_FRONT} or {@link GL11#GL_BACK}
      */
-    public void printScreen(Directory dir, String filename, int bufferToRead) {
+    public void printScreen(File file, String filename, int bufferToRead) {
         glReadBuffer(bufferToRead);
         int bpp = 4; // Assuming a 32-bit display with a byte each for red, green, blue, and alpha.
         ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * bpp);
         glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
-        new Thread(() ->
-                Toolbox.writePNG(dir, filename, buffer, bpp, width, height),
-                "Writing frame to disc"
-        ).start();
+        new Thread(() -> Toolbox.writePNG(file, buffer, bpp, width, height), "Writing frame to disc").start();
     }
 
     /**

@@ -2,11 +2,13 @@ package io.github.ieperen3039.ngn.Rendering.Textures;
 
 import io.github.ieperen3039.ngn.AssetHandling.Asset;
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
-import io.github.ieperen3039.ngn.Tools.Directory;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
 
+import java.io.File;
 import java.nio.ByteBuffer;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
@@ -37,9 +39,8 @@ public interface Texture {
     }
 
     default void dump(String fileName) {
-        Logger.DEBUG.print("Dumping texture " + fileName);
         ByteBuffer buffer = toByteBufferRGBA();
-        Toolbox.writePNG(Directory.out, fileName, buffer, 4, getWidth(), getHeight());
+        Toolbox.writePNG(new File(fileName), buffer, 4, getWidth(), getHeight());
         glBindTexture(GL_TEXTURE_2D, 0);
 
         Toolbox.checkGLError("texture dump");
