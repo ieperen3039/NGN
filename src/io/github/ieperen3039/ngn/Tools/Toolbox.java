@@ -67,7 +67,8 @@ public final class Toolbox {
             matShader = (MaterialShader) shader;
         }
 
-        matShader.setMaterial(mat, Color4f.BLUE);
+        // x
+        matShader.setMaterial(mat, Color4f.RED);
         gl.pushMatrix();
         {
             gl.scale(1, CURSOR_SIZE, CURSOR_SIZE);
@@ -75,7 +76,8 @@ public final class Toolbox {
         }
         gl.popMatrix();
 
-        matShader.setMaterial(mat, Color4f.RED);
+        // y
+        matShader.setMaterial(mat, Color4f.GREEN);
         gl.pushMatrix();
         {
             gl.scale(CURSOR_SIZE, 1, CURSOR_SIZE);
@@ -83,7 +85,8 @@ public final class Toolbox {
         }
         gl.popMatrix();
 
-        matShader.setMaterial(mat, Color4f.GREEN);
+        // z
+        matShader.setMaterial(mat, Color4f.BLUE);
         gl.pushMatrix();
         {
             gl.scale(CURSOR_SIZE, CURSOR_SIZE, 1);

@@ -67,6 +67,7 @@ public class CameraIndicator implements Entity {
 
             gl.pushMatrix();
             {
+                // -z indicator
                 gl.scale(POINTER_SIZE, POINTER_SIZE, POINTER_LENGTH / 2);
                 gl.translate(0, 0, -1);
                 matShader.setMaterial(mat, Color4f.RED);
@@ -76,6 +77,7 @@ public class CameraIndicator implements Entity {
 
             gl.pushMatrix();
             {
+                // y indicator
                 gl.scale(POINTER_SIZE, UP_POINTER_LENGTH / 2, POINTER_SIZE);
                 gl.translate(0, 1, 0);
                 matShader.setMaterial(mat, Color4f.GREEN);

@@ -11,23 +11,11 @@ import java.util.Locale;
  * @author Geert van Ieperen. Created on 13-9-2018.
  */
 public final class Vectors {
-    public static final Vector3fc X = newXVector();
+    public static final Vector3fc X = new Vector3f(1, 0, 0);
     public static final Vector3fc Y = new Vector3f(0, 1, 0);
-    public static final Vector3fc Z = newZVector();
-    public static final Vector3fc O = newZeroVector();
+    public static final Vector3fc Z = new Vector3f(0, 0, 1);
+    public static final Vector3fc O = new Vector3f(0, 0, 0);
     private static final float VECTOR_EQUALITY_DIST = 1e-6f;
-
-    public static Vector3f newZeroVector() {
-        return new Vector3f(0, 0, 0);
-    }
-
-    public static Vector3f newZVector() {
-        return new Vector3f(0, 0, 1);
-    }
-
-    public static Vector3f newXVector() {
-        return new Vector3f(1, 0, 0);
-    }
 
     public static String toString(Vector3fc v) {
         if (v == null) return "null";

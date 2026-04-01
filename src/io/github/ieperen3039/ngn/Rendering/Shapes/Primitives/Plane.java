@@ -89,7 +89,7 @@ public abstract class Plane {
      * @return the local average of all border positions
      */
     public Vector3fc getMiddle() {
-        Vector3f middle = Vectors.newZeroVector();
+        Vector3f middle = new Vector3f(0, 0, 0);
         int i = 0;
         while (i < boundary.length) {
             middle.add(boundary[i]);
