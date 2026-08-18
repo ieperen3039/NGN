@@ -36,9 +36,9 @@ public class PointCenteredCamera implements Camera {
     }
 
     public PointCenteredCamera(Vector3fc focus, Vector3fc eye) {
-        this.vDist = eye.distance(focus);
         this.focus = new Vector3f(focus);
-        this.rotation = new Quaternionf().lookAlong(new Vector3f(focus).sub(eye), Vectors.Y);
+        this.rotation = new Quaternionf();
+        set(focus, eye, Vectors.Z);
     }
 
     @Override
