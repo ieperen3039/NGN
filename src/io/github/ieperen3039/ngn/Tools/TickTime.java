@@ -5,7 +5,7 @@ public interface TickTime {
     /**
      * @return the time at the call of updateLooptime
      */
-    float getTime();
+    double getTime();
 
     /**
      * @return The number of milliseconds between the previous two ticks.

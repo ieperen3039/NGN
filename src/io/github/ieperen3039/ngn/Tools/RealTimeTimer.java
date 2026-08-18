@@ -34,8 +34,8 @@ public class RealTimeTimer implements TickTime {
      * @return the time at the call of updateLooptime
      */
     @Override
-    public float getTime() {
-        return currentTime / 1000f;
+    public double getTime() {
+        return currentTime / 1000.0;
     }
 
     /**
