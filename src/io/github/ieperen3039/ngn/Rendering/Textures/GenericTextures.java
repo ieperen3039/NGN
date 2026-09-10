@@ -19,7 +19,7 @@ public enum GenericTextures implements Texture {
 
     GenericTextures(String... relative) {
         Path path = Resource.Path.get("ngn/images").resolve(relative);
-        tex = Resource.get(p -> new FileTexture(p.asStream(), GL_NEAREST, GL_NEAREST, GL_REPEAT), path);
+        tex = Resource.get(p -> new FileTexture(p.asStream(), GL_NEAREST, GL_NEAREST, GL_REPEAT, 0.0f), path);
     }
 
     @Override

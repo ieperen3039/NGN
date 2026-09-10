@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
+import static org.lwjgl.opengl.GL46.GL_TEXTURE_MAX_ANISOTROPY;
 
 /**
  * @author Cas Wognum (TU/e, 1012585)
@@ -21,9 +22,9 @@ public class FileTexture implements Texture {
     private final int height;
 
     public FileTexture(InputStream in) throws IOException {
-        this(in, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT);
+        this(in, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT, 1.0f);
     }
-    public FileTexture(InputStream in, int minFilter, int maxFilter, int clampMode) throws IOException {
+    public FileTexture(InputStream in, int minFilter, int maxFilter, int clampMode, float anisotropicFilter) throws IOException {
         PNGDecoder image = new PNGDecoder(in);
 
         this.width = image.getWidth();
@@ -47,6 +48,7 @@ public class FileTexture implements Texture {
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, maxFilter);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, anisotropicFilter);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, clampMode);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, clampMode);
 
