@@ -41,6 +41,9 @@ public class TextureFromBlob implements Texture {
         // Upload the texture data
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, blob);
 
+        // GL_UNPACK_ROW_LENGTH is global state; restore the default so later uploads (e.g. FileTexture) are not affected
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+
         // Generate Mip Map
         glGenerateMipmap(GL_TEXTURE_2D);
     }
