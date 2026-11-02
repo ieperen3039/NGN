@@ -23,17 +23,22 @@ import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 public class MouseToolCallbacks implements ToolElement {
     private final ExecutorService taskScheduler = Executors.newSingleThreadExecutor();
     private final KeyControl keyControl = new KeyControl();
-    private MouseTool DEFAULT_MOUSE_TOOL;
+    private final LayeredMouseSelector selector = new LayeredMouseSelector();
     private Main root;
-    private MouseTool currentTool;
+    private volatile MouseTool activeTool = null;
+    private MouseTool defaultTool;
+
+    // only accessed from the input thread
+    private MouseTool gestureOwner = null;
+    private int buttonsHeld = 0;
 
     @Override
     public void init(Main root) {
         if (this.root != null) return;
         this.root = root;
 
-        DEFAULT_MOUSE_TOOL = new DefaultMouseTool(root);
-        currentTool = DEFAULT_MOUSE_TOOL;
+        defaultTool = new DefaultMouseTool(root);
+        selector.addLayer(new UISelector(root.gui()));
 
         GLFWWindow target = root.window();
         Vector2i mousePosition = target.getMousePosition();
@@ -47,21 +52,33 @@ public class MouseToolCallbacks implements ToolElement {
     }
 
     public MouseTool getMouseTool() {
-        return currentTool;
+        return activeTool;
     }
 
+    /**
+     * @param tool the new active tool, or null for no active tool (only the default tool). A running gesture stays
+     *             with its owner.
+     */
     public void setMouseTool(MouseTool tool) {
-        MouseTool newTool = (tool != null) ? tool : DEFAULT_MOUSE_TOOL;
+        MouseTool old = activeTool;
+        if (old == tool) return;
 
-        if (!currentTool.equals(newTool)) {
-            if (currentTool != DEFAULT_MOUSE_TOOL) currentTool.dispose();
-            currentTool = newTool;
-            Logger.DEBUG.print("Set mousetool to " + newTool);
-        }
+        if (old != null) old.onDeactivate();
+        activeTool = tool;
+        if (tool != null) tool.onActivate();
+        Logger.DEBUG.print("Set mousetool to " + tool);
     }
 
     public MouseTool getDefaultMouseTool() {
-        return DEFAULT_MOUSE_TOOL;
+        return defaultTool;
+    }
+
+    public void setDefaultMouseTool(MouseTool tool) {
+        defaultTool = tool;
+    }
+
+    public LayeredMouseSelector getSelector() {
+        return selector;
     }
 
     public KeyControl getKeyControl() {
@@ -101,12 +118,56 @@ public class MouseToolCallbacks implements ToolElement {
             Vector2i pos = root.window().getMousePosition();
 
             if (action == GLFW_PRESS) {
-                execute(() -> currentTool.onClick(button, pos.x, pos.y));
+                execute(() -> press(button, pos.x, pos.y));
 
             } else if (action == GLFW_RELEASE) {
-                execute(() -> currentTool.onRelease(button));
+                execute(() -> release(button, pos.x, pos.y));
             }
         }
+    }
+
+    private void press(int button, int x, int y) {
+        MouseTarget target = selector.pick(x, y);
+        buttonsHeld++;
+
+        if (gestureOwner != null) {
+            gestureOwner.onPress(button, target, x, y);
+            return;
+        }
+
+        if (activeTool != null) {
+            boolean hold = activeTool.onPress(button, target, x, y);
+            if (hold) gestureOwner = activeTool;
+        } else {
+            boolean hold = defaultTool.onPress(button, target, x, y);
+            if (hold) gestureOwner = defaultTool;
+        }
+    }
+
+    private void release(int button, int x, int y) {
+        MouseTarget target = selector.pick(x, y);
+        buttonsHeld = Math.max(0, buttonsHeld - 1);
+
+        MouseTool owner = gestureOwner;
+        if (buttonsHeld == 0) gestureOwner = null;
+        if (owner != null) owner.onRelease(button, target, x, y);
+    }
+
+    private void move(int xDiff, int yDiff, float x, float y) {
+        if (gestureOwner != null) {
+            gestureOwner.onDrag(xDiff, yDiff, x, y);
+            return;
+        }
+
+        MouseTarget target = selector.pick((int) x, (int) y);
+        if (activeTool != null && activeTool.onHover(target, xDiff, yDiff, x, y)) return;
+        defaultTool.onHover(target, xDiff, yDiff, x, y);
+    }
+
+    private void scroll(float value, int x, int y) {
+        MouseTarget target = selector.pick(x, y);
+        if (activeTool != null && activeTool.onScroll(value, target, x, y)) return;
+        defaultTool.onScroll(value, target, x, y);
     }
 
     private class MouseMoveCallback extends GLFWCursorPosCallback {
@@ -130,14 +191,15 @@ public class MouseToolCallbacks implements ToolElement {
                 xGiven += xDiff;
                 yGiven += yDiff;
             }
-            execute(() -> currentTool.onMouseMove(xDiff, yDiff, xFloat, yFloat));
+            execute(() -> move(xDiff, yDiff, xFloat, yFloat));
         }
     }
 
     private class MouseScrollCallback extends GLFWScrollCallback {
         @Override
         public void invoke(long window, double xoffset, double yoffset) {
-            execute(() -> currentTool.onScroll((float) yoffset));
+            Vector2i pos = root.window().getMousePosition();
+            execute(() -> scroll((float) yoffset, pos.x, pos.y));
         }
     }
 

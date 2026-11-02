@@ -1,93 +1,50 @@
 package io.github.ieperen3039.ngn.InputHandling.MouseTools;
 
-import io.github.ieperen3039.ngn.Camera.Camera;
-import io.github.ieperen3039.ngn.Core.Main;
-import io.github.ieperen3039.ngn.InputHandling.MouseListener;
-import io.github.ieperen3039.ngn.InputHandling.MouseReleaseListener;
-import io.github.ieperen3039.ngn.UserInterface.FrameManagers.UIManager;
-
-import org.joml.Vector2i;
-import org.lwjgl.glfw.GLFW;
-
 /**
+ * Mouse behaviour. Events arrive already resolved to a {@link MouseTarget}; all methods default to "not handled",
+ * so tools override only what they need. Unhandled events fall through to the default tool (UI and camera).
+ *
+ * <p>Example, a station build tool: the game adds a selector layer returning a MapTarget. onHover moves a ghost and
+ * returns false, so UI and camera keep working. onPress(LEFT, MapTarget) spawns a preview and returns true, onDrag
+ * rotates it, onRelease places it and calls setMouseTool(null). A right press during the gesture cancels. onPress on
+ * a {@link UITarget} returns false, so toolbar clicks still work.
+ *
+ * <p>Example, a UI reorder tool: only reacts to a UITarget whose component is reorderable. onDrag moves the item,
+ * onRelease(target) drops it onto the slot under the cursor. Everything else falls through to the camera.
  * @author Geert van Ieperen created on 24-4-2020.
  */
-public abstract class MouseTool implements MouseListener {
-    protected Main root;
-
-    private MouseReleaseListener releaseListener;
-    private Runnable onCancel = null;
-
-    public MouseTool(Main root) {
-        this.root = root;
-        releaseListener = root.camera();
+public interface MouseTool {
+    default void onActivate() {
     }
 
-    @Override
-    public void onClick(int button, int x, int y) {
-        if (root.gui().checkMouseClick(button, x, y)) {
-            releaseListener = root.gui();
-            return;
-        }
-
-        if (button == GLFW.GLFW_MOUSE_BUTTON_RIGHT && onCancel != null) {
-            disableThis();
-            return;
-        }
-
-        Camera camera = root.camera();
-        camera.onClick(button, x, y);
-        releaseListener = camera;
-    }
-
-    public void disableThis() {
-        if (onCancel == null) {
-            root.inputHandling().setMouseTool(null);
-
-        } else {
-            onCancel.run();
-        }
-    }
-
-    @Override
-    public void onRelease(int button) {
-        // this prevents the case when a mouse-down caused a mouse tool switch
-        if (releaseListener != null) {
-            releaseListener.onRelease(button);
-            releaseListener = null;
-        }
-    }
-
-    @Override
-    public void onScroll(float value) {
-        Vector2i pos = root.window().getMousePosition();
-        UIManager gui = root.gui();
-
-        if (gui.covers(pos.x, pos.y)) {
-            gui.onScroll(value);
-            return;
-        }
-
-        // camera
-        root.camera().onScroll(value);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
-
-    @Override
-    public final void onMouseMove(int xDelta, int yDelta, float xPos, float yPos) {
-        root.gui().onMouseMove(xDelta, yDelta, xPos, yPos);
-        if (root.gui().covers((int) xPos, (int) yPos)) return;
-
-        root.camera().onMouseMove(xDelta, yDelta, xPos, yPos);
+    default void onDeactivate() {
     }
 
     /**
-     * activates when this mousetool is deactivated
+     * mouse moved without a gesture in progress
+     * @return true to stop fall-through
      */
-    public void dispose() {
+    default boolean onHover(MouseTarget target, int xDelta, int yDelta, float xSc, float ySc) {
+        return false;
+    }
+
+    /**
+     * @return true to take ownership of this gesture (receives onDrag/onRelease until all buttons are up)
+     */
+    default boolean onPress(int button, MouseTarget target, int xSc, int ySc) {
+        return false;
+    }
+
+    default void onDrag(int xDelta, int yDelta, float xSc, float ySc) {
+    }
+
+    /**
+     * @param target what is under the cursor at release (useful for drop targets)
+     */
+    default void onRelease(int button, MouseTarget target, int xSc, int ySc) {
+    }
+
+    default boolean onScroll(float value, MouseTarget target, int xSc, int ySc) {
+        return false;
     }
 }
