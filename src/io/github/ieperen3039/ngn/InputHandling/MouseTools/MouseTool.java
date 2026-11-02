@@ -29,12 +29,13 @@ public interface MouseTool {
     }
 
     /**
-     * @return true to take ownership of this gesture (receives onDrag/onRelease until all buttons are up)
+     * @return true to stop fall-through and take ownership of this gesture (receive onDrag/onRelease events until all buttons are up)
      */
     default boolean onPress(int button, MouseTarget target, int xSc, int ySc) {
         return false;
     }
 
+    /** mouse moved with a gesture in progress */
     default void onDrag(int xDelta, int yDelta, float xSc, float ySc) {
     }
 
@@ -44,6 +45,9 @@ public interface MouseTool {
     default void onRelease(int button, MouseTarget target, int xSc, int ySc) {
     }
 
+    /**
+     * @return true to stop fall-through
+     */
     default boolean onScroll(float value, MouseTarget target, int xSc, int ySc) {
         return false;
     }

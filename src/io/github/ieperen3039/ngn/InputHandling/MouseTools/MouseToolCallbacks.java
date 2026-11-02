@@ -9,6 +9,7 @@ import io.github.ieperen3039.ngn.Tools.Toolbox;
 import org.joml.Vector2i;
 import org.lwjgl.glfw.*;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,10 +24,10 @@ import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 public class MouseToolCallbacks implements ToolElement {
     private final ExecutorService taskScheduler = Executors.newSingleThreadExecutor();
     private final KeyControl keyControl = new KeyControl();
-    private final LayeredMouseSelector selector = new LayeredMouseSelector();
+    private volatile List<MouseSelector> selectors = null;
     private Main root;
     private volatile MouseTool activeTool = null;
-    private MouseTool defaultTool;
+    private volatile MouseTool defaultTool = null;
 
     // only accessed from the input thread
     private MouseTool gestureOwner = null;
@@ -37,8 +38,9 @@ public class MouseToolCallbacks implements ToolElement {
         if (this.root != null) return;
         this.root = root;
 
-        defaultTool = new DefaultMouseTool(root);
-        selector.addLayer(new UISelector(root.gui()));
+        // keep any tool or layers set before init
+        if (defaultTool == null) defaultTool = new DefaultMouseTool(root);
+        if (selectors == null) setSelectionLayers(new UISelector(root.gui()));
 
         GLFWWindow target = root.window();
         Vector2i mousePosition = target.getMousePosition();
@@ -77,8 +79,13 @@ public class MouseToolCallbacks implements ToolElement {
         defaultTool = tool;
     }
 
-    public LayeredMouseSelector getSelector() {
-        return selector;
+    /**
+     * Initialize all layers that listen to mouse behaviour.
+     * The first layer that does not return null will have its target passed to the active MouseTool.
+     * Make sure to add a UISelector, or the UI will never receive events.
+     */
+    public void setSelectionLayers(MouseSelector... layers) {
+        selectors = List.of(layers);
     }
 
     public KeyControl getKeyControl() {
@@ -97,6 +104,14 @@ public class MouseToolCallbacks implements ToolElement {
                 Toolbox.display(ex);
             }
         });
+    }
+
+    private MouseTarget pick(int xSc, int ySc) {
+        for (MouseSelector layer : selectors) {
+            MouseTarget target = layer.pick(xSc, ySc);
+            if (target != null) return target;
+        }
+        return MouseTarget.NONE;
     }
 
     private class KeyPressCallback extends GLFWKeyCallback {
@@ -127,7 +142,7 @@ public class MouseToolCallbacks implements ToolElement {
     }
 
     private void press(int button, int x, int y) {
-        MouseTarget target = selector.pick(x, y);
+        MouseTarget target = pick(x, y);
         buttonsHeld++;
 
         if (gestureOwner != null) {
@@ -145,7 +160,7 @@ public class MouseToolCallbacks implements ToolElement {
     }
 
     private void release(int button, int x, int y) {
-        MouseTarget target = selector.pick(x, y);
+        MouseTarget target = pick(x, y);
         buttonsHeld = Math.max(0, buttonsHeld - 1);
 
         MouseTool owner = gestureOwner;
@@ -159,13 +174,13 @@ public class MouseToolCallbacks implements ToolElement {
             return;
         }
 
-        MouseTarget target = selector.pick((int) x, (int) y);
+        MouseTarget target = pick((int) x, (int) y);
         if (activeTool != null && activeTool.onHover(target, xDiff, yDiff, x, y)) return;
         defaultTool.onHover(target, xDiff, yDiff, x, y);
     }
 
     private void scroll(float value, int x, int y) {
-        MouseTarget target = selector.pick(x, y);
+        MouseTarget target = pick(x, y);
         if (activeTool != null && activeTool.onScroll(value, target, x, y)) return;
         defaultTool.onScroll(value, target, x, y);
     }
