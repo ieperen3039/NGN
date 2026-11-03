@@ -3,9 +3,6 @@ package io.github.ieperen3039.ngn.Rendering.Lights;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 
-import java.io.File;
-
-import org.joml.Matrix4fc;
 import org.joml.Vector3fc;
 
 /**
@@ -13,10 +10,9 @@ import org.joml.Vector3fc;
  */
 public interface SceneLights {
     /**
-     * adds a point-light to the simulation.
-     * @param light the new light
+     * update the lights after entity position updates
      */
-    void addPointLight(PointLight light);
+    void update();
 
     /**
      * initializes the lights on the scene.
@@ -25,19 +21,27 @@ public interface SceneLights {
     void draw(SGL gl);
 
     /**
-     * set the parameters of the one infinitely-far light source of the scene.
-     * @param origin    a vector TO the light source
-     * @param color     the color of the light source
-     * @param intensity the light intensity
+     * adds a point-light to the simulation.
+     * @param vectorToLight world-space position of light source
+     * @param color     the color of the light
+     * @param intensity the brightness
      */
-    void addDirectionalLight(Vector3fc origin, Color4f color, float intensity);
+    default void addPointLight(Vector3fc position, Color4f color, float intensity) {
+        addPointLight(new FixedPointLight(position, color, intensity));
+    }
+
+    void addPointLight(PointLight light);
 
     /**
-     * update the lights after entity position updates
+     * set the parameters of the one infinitely-far light source of the scene.
+     * @param vectorToLight    a vector TO the light source
+     * @param color     the color of the light
+     * @param intensity the brightness
      */
-    void update();
+    
+    default void addDirectionalLight(Vector3fc vectorToLight, Color4f color, float intensity) {
+        addDirectionalLight(new FixedDirectionalLight(vectorToLight, color, intensity));
+    }
 
-    void dumpShadowMap(File file);
-
-    Matrix4fc getLightMatrix();
+    void addDirectionalLight(DirectionalLight light);
 }

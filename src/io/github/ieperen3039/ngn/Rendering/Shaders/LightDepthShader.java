@@ -4,10 +4,14 @@ import io.github.ieperen3039.ngn.AssetHandling.Resource;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.Lights.DirectionalLight;
+import io.github.ieperen3039.ngn.Rendering.Lights.FixedDirectionalLight;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.AbstractSGL;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
+import io.github.ieperen3039.ngn.Tools.Vectors;
+
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.lwjgl.system.MemoryStack;
 
@@ -25,19 +29,23 @@ import static org.lwjgl.opengl.GL30.*;
  * @author Geert van Ieperen created on 7-1-2019.
  */
 @SuppressWarnings("Duplicates")
-public class DepthShader implements ShaderProgram, LightShader {
+public class LightDepthShader implements ShaderProgram {
     private static final Resource.Path SHADOW_SHADER_PATH = SHADER_DIRECTORY.resolve("Depth");
     private static final Resource.Path VERTEX_PATH = SHADOW_SHADER_PATH.resolve("vertex.vert");
     private static final Resource.Path FRAGMENT_PATH = SHADOW_SHADER_PATH.resolve("fragment.frag");
+    private static final float LIGHT_Z_NEAR = 0.5f;
+    private static final float LIGHT_Z_FAR_MULTIPLIER = 2;
+    private static final float LIGHT_CUBE_SIZE = 2;
+
     private final Map<String, Integer> uniforms;
 
     private int programId;
     private int vertexShaderID;
     private int fragmentShaderID;
 
-    private DirectionalLight directionalLight;
+    private DirectionalLight light;
 
-    public DepthShader() throws ShaderException, IOException {
+    public LightDepthShader() throws ShaderException, IOException {
         this.uniforms = new HashMap<>();
 
         this.programId = glCreateProgram();
@@ -124,19 +132,12 @@ public class DepthShader implements ShaderProgram, LightShader {
         setUniform("lightSpaceMatrix", lightSpaceMatrix);
     }
 
-    @Override
-    public void setPointLight(Vector3fc mPosition, Color4f color, float intensity) {
-        // ignore
+    public void setLight(Vector3fc direction, Color4f color, float intensity) {
+        setLight(new FixedDirectionalLight(direction, color, intensity));
     }
 
-    @Override
-    public void setDirectionalLight(Vector3fc direction, Color4f color, float intensity) {
-        directionalLight = new DirectionalLight(color, direction, intensity);
-    }
-
-    @Override
-    public void discardRemainingLights() {
-        // ignore
+    public void setLight(DirectionalLight light) {
+        this.light = light;
     }
 
     /**
@@ -152,9 +153,18 @@ public class DepthShader implements ShaderProgram, LightShader {
      * @author Geert van Ieperen created on 30-1-2019.
      */
     public class DepthGL extends AbstractSGL {
+        final Matrix4fc lightSpaceMatrix;
+        
+        public DepthGL() {
+            Vector3f directionToLight = new Vector3f(light.getDirectionToLight());
+            lightSpaceMatrix = new Matrix4f()
+                    .setOrthoSymmetric(LIGHT_CUBE_SIZE, LIGHT_CUBE_SIZE, LIGHT_Z_NEAR, LIGHT_Z_NEAR * LIGHT_Z_FAR_MULTIPLIER)
+                    .lookAlong(directionToLight.negate(), Vectors.Y);
+        }
+
         @Override
         public void render(Mesh object, int index) {
-            setLightSpaceMatrix(directionalLight.getLightSpaceMatrix());
+            setLightSpaceMatrix(lightSpaceMatrix);
             setModelMatrix(getModelMatrix());
 
             object.render(LOCK);
@@ -162,12 +172,12 @@ public class DepthShader implements ShaderProgram, LightShader {
 
         @Override
         public ShaderProgram getShader() {
-            return DepthShader.this;
+            return LightDepthShader.this;
         }
 
         @Override
         public Matrix4fc getViewProjectionMatrix() {
-            return directionalLight.getLightSpaceMatrix();
+            return lightSpaceMatrix;
         }
 
         public void cleanup() {
