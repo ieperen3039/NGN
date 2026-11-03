@@ -32,11 +32,13 @@ struct Material
     float reflectance;
 };
 
-const int MAX_POINT_LIGHTS = 2;
-const int MAX_DIRECTIONAL_LIGHTS = 8;
+const int MAX_POINT_LIGHTS = 8;
+const int MAX_DIRECTIONAL_LIGHTS = 4;
 
 const float ATT_LIN = 0.1;
 const float ATT_EXP = 0.01;
+
+const float SCREEN_GAMMA = 2.2; // Assume the monitor is calibrated to the sRGB color space
 
 uniform Material material;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
@@ -59,24 +61,16 @@ vec4 specular_color;
 // calculates the diffuse and specular color component caused by one light
 vec3 calcBlinnPhong(vec3 light_color, vec3 position, vec3 light_direction, vec3 normal, float light_intensity) {
     // Diffuse component
-    float diff = max(dot(normal, light_direction), 0.0);
-    vec3 diffuse = diffuse_color.xyz * light_color * diff;
+    float lambertian = max(dot(normal, light_direction), 0.0);
+    vec3 diffuse = diffuse_color * lambertian;
 
-    // (phong) specular
-    vec3 lightReflect = reflect(light_direction, normal);
-    vec3 virtualLightPosition = normalize(-lightReflect);
-    float linearSpec = max(0.0, dot(virtualLightPosition, normalize(cameraPosition)));
-    float shine = pow(linearSpec, specularPower * material.reflectance);
-    vec3 specular = shine * light_color * material.specular.xyz * material.specular.w;
+    vec3 view_direction = normalize(-position);
+    vec3 half_direction = normalize(light_direction + view_direction);
+    float specular_angle = max(dot(half_direction, normal), 0.0);
+    float specular_factor = pow(specular_angle, specularPower);
+    vec3 specular = specular_color * specular_factor
 
-    return (diffuse + specular) * light_intensity;
-}
-
-// Calculate Attenuation
-// calculates the falloff of light on a given distance vector
-float calcAttenuation(vec3 light_direction) {
-    float distance = length(light_direction);
-    return (1.0 / (1.0 + ATT_LIN * distance + ATT_EXP * distance * distance));
+    return (diffuse + specular) * lightColor * lightPower / distance;
 }
 
 // caluclates the color addition caused by a point-light
@@ -84,12 +78,14 @@ vec3 calcPointLightComponents(PointLight light) {
     if (light.intensity == 0) return vec3(0, 0, 0);
 
     vec3 light_direction = light.mPosition - mVertexPosition;
-    float att = calcAttenuation(light_direction);
+    
+    float distance = length(light_direction);
+    float attenuation = (1.0 / (1.0 + ATT_LIN * distance + ATT_EXP * distance * distance));
 
-    if (att == 0) {
+    if (attenuation < (1 / 256)) {
         return vec3(0, 0, 0);
     } else {
-        float attenuatedIntensity = att * light.intensity;
+        float attenuatedIntensity = attenuation * light.intensity;
         return calcBlinnPhong(light.color, mVertexPosition, normalize(light_direction), mVertexNormal, attenuatedIntensity);
     }
 }
@@ -116,21 +112,23 @@ void main() {
     specular_color = material.specular;
 
     // diffuse and specular color accumulator
-    vec3 diffuseSpecular = vec3(0.0, 0.0, 0.0);
+    vec3 diffuse_specular = vec3(0.0, 0.0, 0.0);
 
     // Calculate directional light
-    diffuseSpecular += calcDirectionalLightComponents(directionalLights[0]);
-    diffuseSpecular += calcDirectionalLightComponents(directionalLights[1]);
-    diffuseSpecular += calcDirectionalLightComponents(directionalLights[2]);
-    diffuseSpecular += calcDirectionalLightComponents(directionalLights[3]);
-    diffuseSpecular += calcDirectionalLightComponents(directionalLights[4]);
-    diffuseSpecular += calcDirectionalLightComponents(directionalLights[5]);
-    diffuseSpecular += calcDirectionalLightComponents(directionalLights[6]);
-    diffuseSpecular += calcDirectionalLightComponents(directionalLights[7]);
+    for (int i = 0; i < MAX_DIRECTIONAL_LIGHTS; i++) {
+        diffuse_specular += calcDirectionalLightComponents(directionalLights[i]);
+    }
 
     // Calculate Point Lights
-    diffuseSpecular += calcPointLightComponents(pointLights[0]);
-    diffuseSpecular += calcPointLightComponents(pointLights[1]);
+    for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+        diffuse_specular += calcPointLightComponents(pointLights[i]);
+    }
 
-    fragColor = diffuse_color * vec4(ambientLight, 1.0) + vec4(diffuseSpecular, 0.0);
+    vec3 fragColor = diffuse_color * ambientLight + diffuse_specular;
+    // apply gamma correction (assume ambientColor, diffuseColor and specColor
+    // have been linearized, i.e. have no gamma correction in them)
+    vec3 fragColorGammaCorrected = pow(diffuse_specular, vec3(1.0 / SCREEN_GAMMA));
+    // use the gamma corrected color in the fragment
+    gl_FragColor = vec4(colorGammaCorrected, 1.0);
+
 }
