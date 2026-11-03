@@ -23,6 +23,9 @@ public interface SGL extends MatrixStack {
     /** @return the view projection matrix used to render the current scene */
     Matrix4fc getViewProjectionMatrix();
 
+    /** will be called after all rendering is done */
+    default void cleanup() {};
+
     /**
      * Objects should use GPU calls only in their render method. To prevent invalid uses of the {@link
      * Mesh#render(Painter)} object, a Painter object is required to call that render method.
@@ -36,5 +39,4 @@ public interface SGL extends MatrixStack {
         protected Painter() {
         }
     }
-
 }

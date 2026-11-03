@@ -200,6 +200,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
             for (Consumer<SGL> tgt : targets) {
                 tgt.accept(gl);
             }
+            gl.cleanup();
             shader.unbind();
         }
     }

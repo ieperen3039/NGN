@@ -62,15 +62,15 @@ vec4 specular_color;
 vec3 calcBlinnPhong(vec3 light_color, vec3 position, vec3 light_direction, vec3 normal, float light_intensity) {
     // Diffuse component
     float lambertian = max(dot(normal, light_direction), 0.0);
-    vec3 diffuse = diffuse_color * lambertian;
+    vec3 diffuse = diffuse_color.xyz * lambertian * diffuse_color.w;
 
     vec3 view_direction = normalize(-position);
     vec3 half_direction = normalize(light_direction + view_direction);
     float specular_angle = max(dot(half_direction, normal), 0.0);
     float specular_factor = pow(specular_angle, specularPower);
-    vec3 specular = specular_color * specular_factor
+    vec3 specular = specular_color.xyz * specular_factor * specular_color.w;
 
-    return (diffuse + specular) * lightColor * lightPower / distance;
+    return (diffuse + specular) * light_color * light_intensity;
 }
 
 // caluclates the color addition caused by a point-light
@@ -82,11 +82,11 @@ vec3 calcPointLightComponents(PointLight light) {
     float distance = length(light_direction);
     float attenuation = (1.0 / (1.0 + ATT_LIN * distance + ATT_EXP * distance * distance));
 
-    if (attenuation < (1 / 256)) {
+    if (attenuation < (1.0 / 256.0)) {
         return vec3(0, 0, 0);
     } else {
         float attenuatedIntensity = attenuation * light.intensity;
-        return calcBlinnPhong(light.color, mVertexPosition, normalize(light_direction), mVertexNormal, attenuatedIntensity);
+        return calcBlinnPhong(light.color, mVertexPosition, light_direction / distance, mVertexNormal, attenuatedIntensity);
     }
 }
 
@@ -129,6 +129,6 @@ void main() {
     // have been linearized, i.e. have no gamma correction in them)
     vec3 fragColorGammaCorrected = pow(diffuse_specular, vec3(1.0 / SCREEN_GAMMA));
     // use the gamma corrected color in the fragment
-    gl_FragColor = vec4(colorGammaCorrected, 1.0);
+    gl_FragColor = vec4(fragColorGammaCorrected, 1.0);
 
 }

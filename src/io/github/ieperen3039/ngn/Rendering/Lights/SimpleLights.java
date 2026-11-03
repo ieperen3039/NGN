@@ -1,10 +1,8 @@
 package io.github.ieperen3039.ngn.Rendering.Lights;
 
-import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.LightShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
-import org.joml.Vector3fc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +28,15 @@ public class SimpleLights implements SceneLights {
         }
     }
 
-    public void clear() {
-        synchronized (directionLights) {
-            directionLights.clear();
-        }
+    @Override
+    public void addPointLight(PointLight light) {
         synchronized (pointLights) {
-            pointLights.clear();
+            pointLights.add(light);
         }
     }
 
-    public void addLight(DirectionalLight light) {
+    @Override
+    public void addDirectionalLight(DirectionalLight light) {
         synchronized (directionLights) {
             directionLights.add(light);
         }
@@ -47,5 +44,14 @@ public class SimpleLights implements SceneLights {
     
     @Override
     public void update() {
+    }
+
+    public void clear() {
+        synchronized (directionLights) {
+            directionLights.clear();
+        }
+        synchronized (pointLights) {
+            pointLights.clear();
+        }
     }
 }

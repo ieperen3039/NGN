@@ -44,4 +44,7 @@ public interface SceneLights {
     }
 
     void addDirectionalLight(DirectionalLight light);
+
+    /** remove all lights from the scene */
+    void clear();
 }
