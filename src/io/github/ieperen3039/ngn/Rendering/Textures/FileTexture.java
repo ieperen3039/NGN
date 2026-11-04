@@ -34,7 +34,8 @@ public class FileTexture implements Texture {
         int byteSize = 4;
         ByteBuffer buf = ByteBuffer.allocateDirect(byteSize * width * height);
         PNGDecoder.Format format = image.decideTextureFormat(PNGDecoder.Format.RGBA);
-        image.decode(buf, width * byteSize, format);
+        // GL textures store the bottom row first
+        image.decodeFlipped(buf, width * byteSize, format);
         buf.flip();
 
         // Create a new OpenGL texture

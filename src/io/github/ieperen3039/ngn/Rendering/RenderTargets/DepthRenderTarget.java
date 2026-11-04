@@ -52,10 +52,13 @@ public class DepthRenderTarget extends TextureRenderTarget {
         glBindTexture(GL_TEXTURE_2D, 0);
         Toolbox.checkGLError("DepthRenderTarget read");
 
+        // GL stores the bottom row first, the result must have the top row first
         ByteBuffer rgba = ByteBuffer.allocateDirect(width * height * 4);
-        for (int i = 0; i < width * height; i++) {
-            byte d = depth.get(i);
-            rgba.put(d).put(d).put(d).put((byte) 0xFF);
+        for (int y = height - 1; y >= 0; y--) {
+            for (int x = 0; x < width; x++) {
+                byte d = depth.get(y * width + x);
+                rgba.put(d).put(d).put(d).put((byte) 0xFF);
+            }
         }
         return rgba.flip();
     }

@@ -506,6 +506,27 @@ public final class Toolbox {
         return list.get(random.nextInt(list.size()));
     }
 
+    /**
+     * Reverses the row order of an image buffer. CPU-side images (files, {@link io.github.ieperen3039.ngn.AssetHandling.Image},
+     * NanoVG) store the top row first, while GL textures store the bottom row first. Use this when copying between them.
+     * @param source         the image data, starting at position 0
+     * @param sourceRowBytes the number of bytes between the start of two rows in the source, may include padding
+     * @param rowBytes       the number of bytes of image data in one row
+     * @param rows           the number of rows
+     * @return a new direct buffer of {@code rowBytes * rows} bytes without padding
+     */
+    public static ByteBuffer flipRows(ByteBuffer source, int sourceRowBytes, int rowBytes, int rows) {
+        ByteBuffer target = ByteBuffer.allocateDirect(rowBytes * rows);
+
+        for (int y = 0; y < rows; y++) {
+            int sourceStart = (rows - 1 - y) * sourceRowBytes;
+            target.put(y * rowBytes, source, sourceStart, rowBytes);
+        }
+
+        return target;
+    }
+
+    /** @param buffer RGB(A) image data, top row first */
     public static void writePNG(
             File file, ByteBuffer buffer, int bpp, int width, int height
     ) {
@@ -521,25 +542,10 @@ public final class Toolbox {
             }
         }
 
-        try {
-            if (file.exists()) {
-                file.delete();
-            } else {
-                boolean success = file.mkdirs();
-                if (!success) {
-                    Logger.ERROR.print("Could not create directories", file);
-                    return;
-                }
-            }
-            String fileName = file.getName();
-            String format = fileName.substring(fileName.lastIndexOf('.') + 1);
-            ImageIO.write(image, format, file);
-
-        } catch (IOException e) {
-            Logger.ERROR.print(e);
-        }
+        writeImage(file, image);
     }
 
+    /** @param buffer one byte per pixel, top row first */
     public static void writePNGGray(
             File file, ByteBuffer buffer, int width, int height
     ) {
@@ -553,16 +559,17 @@ public final class Toolbox {
             }
         }
 
+        writeImage(file, image);
+    }
+
+    private static void writeImage(File file, BufferedImage image) {
         try {
-            if (file.exists()) {
-                file.delete();
-            } else {
-                boolean success = file.mkdirs();
-                if (!success) {
-                    Logger.ERROR.print("Could not create directories", file);
-                    return;
-                }
+            File directory = file.getAbsoluteFile().getParentFile();
+            if (!directory.isDirectory() && !directory.mkdirs()) {
+                Logger.ERROR.print("Could not create directories", directory);
+                return;
             }
+
             String fileName = file.getName();
             String format = fileName.substring(fileName.lastIndexOf('.') + 1);
             ImageIO.write(image, format, file);

@@ -71,6 +71,7 @@ public class SplitChannelRenderTarget extends RenderTarget {
     }
 
     // remember to call glFinish if you didnt unbind since rendering
+    // the result is in GL row order: bottom row first
     public ByteBuffer getRenderBufferAlreadyBound(int channelIndex) {
         glBindTexture(GL_TEXTURE_2D, colorBuffers[channelIndex]);
         ByteBuffer buffer = ByteBuffer.allocateDirect(targetTextureWidth * targetTextureHeight);

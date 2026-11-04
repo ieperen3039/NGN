@@ -25,6 +25,6 @@ void main()
 
     mVertexNormal = normalize(normalMatrix * vertexNormal);
     mVertexPosition = mPosition.xyz;
-    mTexCoord = vec2(texCoord.x, -texCoord.y);
+    mTexCoord = texCoord;
     mColor = color;
 }

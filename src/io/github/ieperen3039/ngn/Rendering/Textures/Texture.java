@@ -30,12 +30,14 @@ public interface Texture {
 
     int getHeight();
 
+    /** @return the contents of this texture in RGBA format, top row first */
     default ByteBuffer toByteBufferRGBA() {
         attach(GL_TEXTURE0);
-        ByteBuffer buffer = ByteBuffer.allocateDirect(getWidth() * getHeight() * 4);
+        int rowBytes = getWidth() * 4;
+        ByteBuffer buffer = ByteBuffer.allocateDirect(rowBytes * getHeight());
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         Toolbox.checkGLError("toByteBufferRGBA");
-        return buffer;
+        return Toolbox.flipRows(buffer, rowBytes, rowBytes, getHeight());
     }
 
     default void dump(String fileName) {

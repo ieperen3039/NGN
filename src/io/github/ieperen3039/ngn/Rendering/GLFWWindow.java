@@ -158,7 +158,11 @@ public class GLFWWindow {
         ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * bpp);
         glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
-        new Thread(() -> Toolbox.writePNG(file, buffer, bpp, width, height), "Writing frame to disc").start();
+        new Thread(() -> {
+            // GL reads the bottom row first
+            ByteBuffer image = Toolbox.flipRows(buffer, width * bpp, width * bpp, height);
+            Toolbox.writePNG(file, image, bpp, width, height);
+        }, "Writing frame to disc").start();
     }
 
     /**

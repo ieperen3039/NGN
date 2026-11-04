@@ -31,6 +31,6 @@ void main()
 
     mVertexNormal = normalize(normalMatrix * vertexNormal);
     mVertexPosition = mPosition.xyz;
-    mTexCoord = vec2(texCoord.x, 1 - texCoord.y);
+    mTexCoord = texCoord;
     mColor = color;
 }
