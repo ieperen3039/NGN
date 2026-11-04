@@ -21,7 +21,7 @@ struct PointLight
 struct DirectionalLight
 {
     vec3 color;
-    vec3 mPosition; // actually direction
+    vec3 mPosition; // direction
     float intensity;
 };
 
@@ -59,16 +59,16 @@ vec4 specular_color;
 
 // Blinn-Phong lighting
 // calculates the diffuse and specular color component caused by one light
-vec3 calcBlinnPhong(vec3 light_color, vec3 position, vec3 light_direction, vec3 normal, float light_intensity) {
+vec3 calcBlinnPhong(vec3 light_color, vec3 eye_position, vec3 light_direction, vec3 normal, float light_intensity) {
     // Diffuse component
     float lambertian = max(dot(normal, light_direction), 0.0);
-    vec3 diffuse = diffuse_color.xyz * lambertian * diffuse_color.w;
+    vec3 diffuse = diffuse_color.xyz * lambertian;
 
-    vec3 view_direction = normalize(-position);
+    vec3 view_direction = normalize(eye_position);
     vec3 half_direction = normalize(light_direction + view_direction);
     float specular_angle = max(dot(half_direction, normal), 0.0);
-    float specular_factor = pow(specular_angle, specularPower);
-    vec3 specular = specular_color.xyz * specular_factor * specular_color.w;
+    float specular_factor = pow(specular_angle, specularPower * material.reflectance);
+    vec3 specular = specular_color.xyz * specular_factor;
 
     return (diffuse + specular) * light_color * light_intensity;
 }
@@ -77,16 +77,17 @@ vec3 calcBlinnPhong(vec3 light_color, vec3 position, vec3 light_direction, vec3 
 vec3 calcPointLightComponents(PointLight light) {
     if (light.intensity == 0) return vec3(0, 0, 0);
 
-    vec3 light_direction = light.mPosition - mVertexPosition;
-    
-    float distance = length(light_direction);
+    vec3 vLightPosition = light.mPosition - mVertexPosition;
+    vec3 vEyePosition = cameraPosition - mVertexPosition;
+
+    float distance = length(vLightPosition);
     float attenuation = (1.0 / (1.0 + ATT_LIN * distance + ATT_EXP * distance * distance));
 
     if (attenuation < (1.0 / 256.0)) {
         return vec3(0, 0, 0);
     } else {
         float attenuatedIntensity = attenuation * light.intensity;
-        return calcBlinnPhong(light.color, mVertexPosition, light_direction / distance, mVertexNormal, attenuatedIntensity);
+        return calcBlinnPhong(light.color, vEyePosition, normalize(vLightPosition), mVertexNormal, attenuatedIntensity);
     }
 }
 
@@ -96,8 +97,10 @@ vec3 calcDirectionalLightComponents(DirectionalLight light) {
         return vec3(0, 0, 0);
 
     } else {
-        vec3 nLightDir = normalize(-light.mPosition);
-        return calcBlinnPhong(light.color, mVertexPosition, nLightDir, mVertexNormal, light.intensity);
+        vec3 nvLightDirection = normalize(light.mPosition);
+        vec3 vEyePosition = cameraPosition - mVertexPosition;
+
+        return calcBlinnPhong(light.color, vEyePosition, nvLightDirection, mVertexNormal, light.intensity);
     }
 }
 
@@ -124,11 +127,10 @@ void main() {
         diffuse_specular += calcPointLightComponents(pointLights[i]);
     }
 
-    vec3 fragColor = diffuse_color * ambientLight + diffuse_specular;
+    vec3 fragColorRaw = diffuse_color.xyz * ambientLight + diffuse_specular;
     // apply gamma correction (assume ambientColor, diffuseColor and specColor
     // have been linearized, i.e. have no gamma correction in them)
-    vec3 fragColorGammaCorrected = pow(diffuse_specular, vec3(1.0 / SCREEN_GAMMA));
+    vec3 fragColorGammaCorrected = pow(fragColorRaw, vec3(1.0 / SCREEN_GAMMA));
     // use the gamma corrected color in the fragment
-    gl_FragColor = vec4(fragColorGammaCorrected, 1.0);
-
+    fragColor = vec4(fragColorGammaCorrected, diffuse_color.w);
 }

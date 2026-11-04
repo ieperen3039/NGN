@@ -129,7 +129,7 @@ public class SingleShadowMapLights implements SceneLights, Serializable {
         }
     }
 
-    ShaderProgram shadowPass() {
+    public ShaderProgram shadowPass() {
         shadowShader.setLightSpaceMatrix(lightSpaceMatrix);
         return shadowShader;
     }

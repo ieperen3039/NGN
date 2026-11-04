@@ -24,7 +24,7 @@ import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL13.*;
 
 public class BPShadowShader extends SceneShader implements ShadowLightShader, TextureShader {
-    private static final Resource.Path BP_SHADOW_PATH = SHADER_DIRECTORY.resolve("BPShadowShader");
+    private static final Resource.Path BP_SHADOW_PATH = SHADER_DIRECTORY.resolve("BPShadow");
     private static final Resource.Path VERTEX_PATH = BP_SHADOW_PATH.resolve("vertex.glsl");
     private static final Resource.Path FRAGMENT_PATH = BP_SHADOW_PATH.resolve("fragment.glsl");
     private static final int MAX_POINT_LIGHTS = 16;
@@ -46,11 +46,15 @@ public class BPShadowShader extends SceneShader implements ShadowLightShader, Te
         uniforms.createUniform("material.reflectance");
 
         createLightsUniform("pointLights", MAX_POINT_LIGHTS);
-        uniforms.createUniform("directionalLight");
+        uniforms.createUniform("directionalLight.color");
+        uniforms.createUniform("directionalLight.mDirection");
+        uniforms.createUniform("directionalLight.intensity");
+        uniforms.createUniform("directionalLight.lightSpaceMatrix");
+        uniforms.createUniform("dynamicShadowMap");
 
         uniforms.createUniform("texture_sampler");
         uniforms.createUniform("hasTexture");
-        uniforms.createUniform("drawHeightLines");
+        uniforms.createUniform("doDrawHeightLines");
 
         uniforms.createUniform("ambientLight");
         uniforms.createUniform("specularPower");
@@ -63,14 +67,13 @@ public class BPShadowShader extends SceneShader implements ShadowLightShader, Te
         uniforms.setUniform("specularPower", SPECULAR_POWER);
 
         uniforms.setUniform("hasTexture", false);
-        uniforms.setUniform("drawHeightLines", false);
+        uniforms.setUniform("doDrawHeightLines", false);
 
         // Texture for the model
         uniforms.setUniform("texture_sampler", 0);
         GenericTextures.CHECKER.attach(GL_TEXTURE0);
 
         uniforms.setUniform("dynamicShadowMap", 1);
-        shadowMap.attach(GL_TEXTURE1);
 
         nextPointLightIndex = 0;
         discardRemainingLights();
@@ -136,12 +139,13 @@ public class BPShadowShader extends SceneShader implements ShadowLightShader, Te
     }
 
     @Override
-    public void setLightWithShadows(Matrix4fc lightSpace, Color4f color, float intensity, Texture shadowMap) {
+    public void setLightWithShadows(Matrix4fc lightSpace, Vector3fc direction, Color4f color, float intensity, Texture shadowMap) {
         this.shadowMap = shadowMap;
-        Vector3fc direction = lightSpace.transformDirection(new Vector3f(0, 0, -1));
+        shadowMap.attach(GL_TEXTURE1);
+        
         uniforms.setUniform("hasTexture", false);
-        uniforms.setUniform("directionalLight.color", color); // vec3
-        uniforms.setUniform("directionalLight.direction", direction); // vec3
+        uniforms.setUniform("directionalLight.color", color.toVector3f()); // vec3
+        uniforms.setUniform("directionalLight.mDirection", direction); // vec3
         uniforms.setUniform("directionalLight.intensity", intensity); // float
         uniforms.setUniform("directionalLight.lightSpaceMatrix", lightSpace); // mat4
     }

@@ -19,7 +19,7 @@ struct PointLight
 struct DirectionalLight
 {
     vec3 color;
-    vec3 direction;
+    vec3 mDirection;
     float intensity;
     mat4 lightSpaceMatrix;
 };
@@ -49,7 +49,7 @@ uniform DirectionalLight directionalLight;
 
 uniform sampler2D texture_sampler;
 uniform bool hasTexture;
-uniform bool drawHeightLines;
+uniform bool doDrawHeightLines;
 
 uniform vec3 ambientLight;
 uniform float specularPower;
@@ -64,24 +64,24 @@ vec4 specular_color;
 
 // Blinn-Phong lighting
 // calculates the diffuse and specular color component caused by one light
-vec3 calcBlinnPhong(vec3 light_color, vec3 position, vec3 light_direction, vec3 normal, float light_intensity) {
+vec3 calcBlinnPhong(vec3 light_color, vec3 eye_position, vec3 light_direction, vec3 normal, float light_intensity) {
     // Diffuse component
     float lambertian = max(dot(normal, light_direction), 0.0);
-    vec3 diffuse = diffuse_color * lambertian;
+    vec3 diffuse = diffuse_color.xyz * lambertian;
 
-    vec3 view_direction = normalize(-position);
+    vec3 view_direction = normalize(eye_position);
     vec3 half_direction = normalize(light_direction + view_direction);
     float specular_angle = max(dot(half_direction, normal), 0.0);
-    float specular_factor = pow(specular_angle, specularPower);
-    vec3 specular = specular_color * specular_factor
+    float specular_factor = pow(specular_angle, specularPower * material.reflectance);
+    vec3 specular = specular_color.xyz * specular_factor;
 
-    return (diffuse + specular) * lightColor * lightPower / distance;
+    return (diffuse + specular) * light_color * light_intensity;
 }
 
 // Calculate Attenuation
 // calculates the falloff of light on a given distance vector
-float calcAttenuation(vec3 light_direction) {
-    float distance = length(light_direction);
+float calcAttenuation(vec3 light_position) {
+    float distance = length(light_position);
     return (1.0 / (1.0 + ATT_LIN * distance + ATT_EXP * distance * distance));
 }
 
@@ -101,7 +101,7 @@ float calcShadow2D(mat4 lsMatrix, vec3 vPosition, vec3 vNormal, vec3 nLightDir, 
     ivec2 resolution = textureSize(shadowMap, 0);
     ivec2 pixCoord = ivec2(round(projCoords.xy * resolution));
 
-    float light = 1.0;
+    float light = 0.0;
     {
         float pcfDepth = texelFetch(shadowMap, pixCoord, 0).r;
         float addition = currentDepth - bias < pcfDepth ? 1.0 : 0.0;
@@ -133,14 +133,17 @@ float calcShadow2D(mat4 lsMatrix, vec3 vPosition, vec3 vNormal, vec3 nLightDir, 
 vec3 calcPointLightComponents(PointLight light) {
     if (light.intensity == 0) return vec3(0, 0, 0);
 
-    vec3 light_direction = light.mPosition - mVertexPosition;
-    float att = calcAttenuation(light_direction);
+    vec3 vLightPosition = light.mPosition - mVertexPosition;
+    vec3 vEyePosition = cameraPosition - mVertexPosition;
 
-    if (att == 0) {
+    float distance = length(vLightPosition);
+    float attenuation = (1.0 / (1.0 + ATT_LIN * distance + ATT_EXP * distance * distance));
+
+    if (attenuation < (1.0 / 256.0)) {
         return vec3(0, 0, 0);
     } else {
-        float attenuatedIntensity = att * light.intensity;
-        return calcBlinnPhong(light.color, mVertexPosition, normalize(light_direction), mVertexNormal, attenuatedIntensity);
+        float attenuatedIntensity = attenuation * light.intensity;
+        return calcBlinnPhong(light.color, vEyePosition, normalize(vLightPosition), mVertexNormal, attenuatedIntensity);
     }
 }
 
@@ -149,16 +152,13 @@ vec3 calcDirectionalLightComponents(DirectionalLight light) {
     if (light.intensity == 0.0){
         return vec3(0, 0, 0);
 
-    } else if (!light.doShadows){
-        vec3 nLightDir = normalize(light.direction);
-        return calcBlinnPhong(light.color, mVertexPosition, nLightDir, mVertexNormal, light.intensity);
-
     } else {
-        vec3 nLightDir = normalize(light.direction);
-        float dynamicShadow = calcShadow2D(light.lightSpaceMatrix, mVertexPosition, mVertexNormal, nLightDir, dynamicShadowMap);
+        vec3 nvLightDirection = normalize(light.mDirection);
+        vec3 vEyePosition = cameraPosition - mVertexPosition;
+        float dynamicShadow = calcShadow2D(light.lightSpaceMatrix, mVertexPosition, mVertexNormal, nvLightDirection, dynamicShadowMap);
         if (dynamicShadow == 0) return vec3(0, 0, 0);
 
-        vec3 component = calcBlinnPhong(light.color, mVertexPosition, nLightDir, mVertexNormal, light.intensity);
+        vec3 component = calcBlinnPhong(light.color, vEyePosition, nvLightDirection, mVertexNormal, light.intensity);
         return component * dynamicShadow;
     }
 }
@@ -213,40 +213,37 @@ void main() {
     specular_color = material.specular;
 
     // diffuse and specular color accumulator
-    vec3 diffuseSpecular = vec3(0.0, 0.0, 0.0);
+    vec3 diffuse_specular = vec3(0.0, 0.0, 0.0);
 
     // Calculate directional light
-    diffuseSpecular += calcDirectionalLightComponents(directionalLight);
+    diffuse_specular += calcDirectionalLightComponents(directionalLight);
 
     // Calculate Point Lights
-    diffuseSpecular += calcPointLightComponents(pointLights[0]);
-    diffuseSpecular += calcPointLightComponents(pointLights[1]);
-    diffuseSpecular += calcPointLightComponents(pointLights[2]);
-    diffuseSpecular += calcPointLightComponents(pointLights[3]);
-    diffuseSpecular += calcPointLightComponents(pointLights[4]);
-    diffuseSpecular += calcPointLightComponents(pointLights[5]);
-    diffuseSpecular += calcPointLightComponents(pointLights[6]);
-    diffuseSpecular += calcPointLightComponents(pointLights[7]);
-    diffuseSpecular += calcPointLightComponents(pointLights[8]);
-    diffuseSpecular += calcPointLightComponents(pointLights[9]);
-    diffuseSpecular += calcPointLightComponents(pointLights[10]);
-    diffuseSpecular += calcPointLightComponents(pointLights[11]);
-    diffuseSpecular += calcPointLightComponents(pointLights[12]);
-    diffuseSpecular += calcPointLightComponents(pointLights[13]);
-    diffuseSpecular += calcPointLightComponents(pointLights[14]);
-    diffuseSpecular += calcPointLightComponents(pointLights[15]);
+    diffuse_specular += calcPointLightComponents(pointLights[0]);
+    diffuse_specular += calcPointLightComponents(pointLights[1]);
+    diffuse_specular += calcPointLightComponents(pointLights[2]);
+    diffuse_specular += calcPointLightComponents(pointLights[3]);
+    diffuse_specular += calcPointLightComponents(pointLights[4]);
+    diffuse_specular += calcPointLightComponents(pointLights[5]);
+    diffuse_specular += calcPointLightComponents(pointLights[6]);
+    diffuse_specular += calcPointLightComponents(pointLights[7]);
+    diffuse_specular += calcPointLightComponents(pointLights[8]);
+    diffuse_specular += calcPointLightComponents(pointLights[9]);
+    diffuse_specular += calcPointLightComponents(pointLights[10]);
+    diffuse_specular += calcPointLightComponents(pointLights[11]);
+    diffuse_specular += calcPointLightComponents(pointLights[12]);
+    diffuse_specular += calcPointLightComponents(pointLights[13]);
+    diffuse_specular += calcPointLightComponents(pointLights[14]);
+    diffuse_specular += calcPointLightComponents(pointLights[15]);
 
-    vec4 col = diffuse_color * vec4(ambientLight, 1.0) + vec4(diffuseSpecular, 0.0);
-    vec4 col_component = vec4(sigm(col.x), sigm(col.y), sigm(col.z), col.w);
-
-    if (drawHeightLines) {
-        col_component = drawHeightLines(col_component)
+    if (doDrawHeightLines) {
+        diffuse_specular = drawHeightLines(diffuse_specular);
     }
 
-    vec3 fragColor = diffuse_color * ambientLight + diffuse_specular;
+    vec3 fragColorRaw = diffuse_color.xyz * ambientLight + diffuse_specular;
     // apply gamma correction (assume ambientColor, diffuseColor and specColor
     // have been linearized, i.e. have no gamma correction in them)
-    vec3 fragColorGammaCorrected = pow(diffuse_specular, vec3(1.0 / SCREEN_GAMMA));
+    vec3 fragColorGammaCorrected = pow(fragColorRaw, vec3(1.0 / SCREEN_GAMMA));
     // use the gamma corrected color in the fragment
-    gl_FragColor = vec4(colorGammaCorrected, 1.0);
+    fragColor = vec4(fragColorGammaCorrected, diffuse_color.w);
 }
