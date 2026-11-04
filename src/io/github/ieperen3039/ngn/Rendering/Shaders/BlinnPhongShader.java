@@ -93,13 +93,13 @@ public class BlinnPhongShader extends SceneShader implements TextureShader {
     }
 
     @Override
-    public void setDirectionalLight(Vector3fc direction, Color4f color, float intensity) {
+    public void setDirectionalLight(Vector3fc vectorToLight, Color4f color, float intensity) {
         int lightNumber = nextDirectionalLightIndex++;
         if (lightNumber >= MAX_DIRECTIONAL_LIGHTS) {
             Logger.ERROR.print("Too many directional lights: ", lightNumber, "/", MAX_DIRECTIONAL_LIGHTS);
             return;
         }
-        setLightsUniform("directionalLights", lightNumber, color, direction.mul(-1, new Vector3f()), intensity);
+        setLightsUniform("directionalLights", lightNumber, color, vectorToLight, intensity);
     }
 
     @Override
