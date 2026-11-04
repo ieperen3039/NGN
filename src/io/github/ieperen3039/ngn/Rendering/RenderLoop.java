@@ -5,7 +5,6 @@ import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Core.Main.ViewPort;
 import io.github.ieperen3039.ngn.Core.ToolElement;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
-import io.github.ieperen3039.ngn.Rendering.Shaders.PostProcessingStep;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Logger;
@@ -17,7 +16,6 @@ import io.github.ieperen3039.ngn.UserInterface.Rendering.NVGOverlay;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL11.*;

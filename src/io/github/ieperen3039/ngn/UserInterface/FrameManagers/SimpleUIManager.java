@@ -6,7 +6,6 @@ import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.UserInterface.Components.SComponent;
 import io.github.ieperen3039.ngn.UserInterface.Components.SFiller;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.BaseLF;
-import io.github.ieperen3039.ngn.UserInterface.Rendering.NGFont;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.NVGOverlay;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
 

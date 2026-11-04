@@ -10,7 +10,6 @@ import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
 import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIComponentType.*;
-import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIState.ACTIVATED;
 import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIState.ENABLED;
 
 import java.util.ArrayList;

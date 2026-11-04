@@ -31,7 +31,6 @@ public class BPShadowShader extends SceneShader implements ShadowLightShader, Te
     private static final float SPECULAR_POWER = 1f;
 
     private int nextPointLightIndex = 0;
-    private Texture shadowMap;
 
     /**
      * @throws ShaderException if a new shader could not be created by some opengl reason
@@ -140,7 +139,6 @@ public class BPShadowShader extends SceneShader implements ShadowLightShader, Te
 
     @Override
     public void setLightWithShadows(Matrix4fc lightSpace, Vector3fc direction, Color4f color, float intensity, Texture shadowMap) {
-        this.shadowMap = shadowMap;
         shadowMap.attach(GL_TEXTURE1);
         
         uniforms.setUniform("hasTexture", false);

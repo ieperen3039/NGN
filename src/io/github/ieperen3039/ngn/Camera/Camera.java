@@ -3,7 +3,6 @@ package io.github.ieperen3039.ngn.Camera;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Core.ToolElement;
 import io.github.ieperen3039.ngn.InputHandling.MouseListener;
-import io.github.ieperen3039.ngn.Settings.Settings;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;

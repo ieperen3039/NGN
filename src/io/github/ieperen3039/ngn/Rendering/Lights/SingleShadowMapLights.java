@@ -4,12 +4,8 @@ import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
 import io.github.ieperen3039.ngn.Camera.Camera;
 import io.github.ieperen3039.ngn.Core.Main;
-import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.RenderTargets.DepthRenderTarget;
 import io.github.ieperen3039.ngn.Rendering.Shaders.LightDepthShader;
@@ -17,19 +13,14 @@ import io.github.ieperen3039.ngn.Rendering.Shaders.LightShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderException;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShadowLightShader;
-import io.github.ieperen3039.ngn.Tools.Toolbox;
 import io.github.ieperen3039.ngn.Tools.Vectors;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
-
-import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Handles pointlights, and one directional light source with shadows

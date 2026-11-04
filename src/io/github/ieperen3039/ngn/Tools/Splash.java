@@ -1,7 +1,6 @@
 package io.github.ieperen3039.ngn.Tools;
 
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
-import io.github.ieperen3039.ngn.Settings.Settings;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

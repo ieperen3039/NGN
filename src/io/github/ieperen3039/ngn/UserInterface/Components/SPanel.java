@@ -1,7 +1,6 @@
 package io.github.ieperen3039.ngn.UserInterface.Components;
 
 import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIComponentType.PANEL;
-import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIState.ACTIVATED;
 import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIState.ENABLED;
 
 import org.joml.Vector2i;

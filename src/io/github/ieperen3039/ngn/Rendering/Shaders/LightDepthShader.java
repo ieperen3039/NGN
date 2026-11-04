@@ -1,32 +1,18 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
+
+import java.io.IOException;
+
+import org.joml.Matrix4fc;
+
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
 import io.github.ieperen3039.ngn.Core.Main;
-import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
-import io.github.ieperen3039.ngn.Rendering.Lights.DirectionalLight;
-import io.github.ieperen3039.ngn.Rendering.Lights.FixedDirectionalLight;
 import io.github.ieperen3039.ngn.Rendering.Lights.SingleShadowMapLights;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.AbstractSGL;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
 import io.github.ieperen3039.ngn.Rendering.RenderTargets.DepthRenderTarget;
-import io.github.ieperen3039.ngn.Tools.Vectors;
-
-import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-import org.lwjgl.system.MemoryStack;
-
-import java.io.IOException;
-import java.nio.FloatBuffer;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glViewport;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 
 /**
  * @author Geert van Ieperen created on 7-1-2019.

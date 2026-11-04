@@ -6,10 +6,8 @@ import org.joml.Vector2ic;
 import io.github.ieperen3039.ngn.UserInterface.SComponentProperties;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
 
-import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIComponentType.PANEL;
 import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIComponentType.PROGRESS_BAR;
 import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIComponentType.PROGRESS_BAR_FILL;
-import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIState.ACTIVATED;
 import static io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel.UIState.ENABLED;
 
 import java.util.function.Supplier;

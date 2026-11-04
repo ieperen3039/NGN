@@ -7,8 +7,6 @@ package io.github.ieperen3039.ngn.Rendering.Lights;
 
 
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
-import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
