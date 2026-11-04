@@ -103,15 +103,6 @@ public class SingleShadowMapLights implements SceneLights, Serializable {
         }
     }
 
-    public void print(String name, int res) {
-        glReadBuffer(GL_BACK);
-        int bpp = 4; // Assuming a 32-bit display with a byte each for red, green, blue, and alpha.
-        ByteBuffer buffer = BufferUtils.createByteBuffer(res * res * bpp);
-        GL11.glReadPixels(0, 0, res, res, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-        new Thread(() -> Toolbox.writePNG(new File(name), buffer, bpp, res, res), "Writing frame to disc" ).start();
-    }
-
     @Override
     public void draw(SGL gl) {
         ShaderProgram shader = gl.getShader();
