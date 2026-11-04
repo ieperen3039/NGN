@@ -22,7 +22,7 @@ import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL13.*;
 
 /**
- * A shader that uses a shadow-map and a Blinn-Phong model for lighting
+ * A shader that uses a Blinn-Phong model for lighting
  * @author Geert van Ieperen
  */
 @SuppressWarnings("Duplicates")
@@ -30,8 +30,8 @@ public class BlinnPhongShader extends SceneShader implements TextureShader {
     private static final Resource.Path BLINN_PHONG_PATH = SHADER_DIRECTORY.resolve("BlinnPhong");
     private static final Resource.Path VERTEX_PATH = BLINN_PHONG_PATH.resolve("vertex.glsl");
     private static final Resource.Path FRAGMENT_PATH = BLINN_PHONG_PATH.resolve("fragment.glsl");
-    private static final int MAX_POINT_LIGHTS = 2;
-    private static final int MAX_DIRECTIONAL_LIGHTS = 8;
+    private static final int MAX_POINT_LIGHTS = 8;
+    private static final int MAX_DIRECTIONAL_LIGHTS = 4;
     private static final float SPECULAR_POWER = 1f;
 
     private int nextPointLightIndex = 0;
