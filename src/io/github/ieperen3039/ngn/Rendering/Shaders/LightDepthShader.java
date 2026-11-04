@@ -5,6 +5,7 @@ import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.Lights.DirectionalLight;
 import io.github.ieperen3039.ngn.Rendering.Lights.FixedDirectionalLight;
+import io.github.ieperen3039.ngn.Rendering.Lights.SingleShadowMapLights;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.AbstractSGL;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
 import io.github.ieperen3039.ngn.Rendering.RenderTargets.DepthRenderTarget;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
@@ -41,10 +43,10 @@ public class LightDepthShader implements ShaderProgram {
     private int vertexShaderID;
     private int fragmentShaderID;
 
-    private DepthRenderTarget renderTarget;
-    private Matrix4fc lightSpaceMatrix;
+    private SingleShadowMapLights lightManager;
 
-    public LightDepthShader() throws ShaderException, IOException {
+    public LightDepthShader(SingleShadowMapLights lightManager) throws ShaderException, IOException {
+        this.lightManager = lightManager;
         this.programId = glCreateProgram();
         if (this.programId == 0) {
             throw new ShaderException("OpenGL error: Could not create Shader");
@@ -95,14 +97,6 @@ public class LightDepthShader implements ShaderProgram {
         }
     }
 
-    public void setLightSpaceMatrix(Matrix4fc lightSpaceMatrix) {
-        this.lightSpaceMatrix = new Matrix4f(lightSpaceMatrix);
-    }
-
-    public void setRenderTarget(DepthRenderTarget target) {
-        renderTarget = target;
-    }
-
     /**
      * create a GL object that allows rendering the depth map of a scene
      * @return a GL object that renders a depth map in the frame buffer of the first light that is rendered.
@@ -116,9 +110,18 @@ public class LightDepthShader implements ShaderProgram {
      * @author Geert van Ieperen created on 30-1-2019.
      */
     public class DepthGL extends AbstractSGL {
+        private DepthRenderTarget renderTarget;
+        private Matrix4fc lightSpaceMatrix;
+
         public DepthGL() {
+            this.lightSpaceMatrix = lightManager.loadLightSpaceMatrix();
+            this.renderTarget = lightManager.getRenderTarget();
+
             uniforms.setUniform("lightSpaceMatrix", lightSpaceMatrix);
+            
             renderTarget.bind();
+            glViewport(0, 0, renderTarget.getWidth(), renderTarget.getHeight());
+            glClear(GL_DEPTH_BUFFER_BIT);
         }
 
         @Override

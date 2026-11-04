@@ -14,11 +14,16 @@ public class DepthRenderTarget extends TextureRenderTarget {
 
         bind();
 
-        int depthBuffer = glGenRenderbuffers();
-        glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        // Attach a color buffer as the texture
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, textureId, 0);
+        
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         Toolbox.checkGLError(this.toString());
         
