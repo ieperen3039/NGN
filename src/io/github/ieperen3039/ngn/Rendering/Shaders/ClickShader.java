@@ -4,6 +4,7 @@ import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
 import org.joml.Vector2i;
+import org.joml.Vector2ic;
 import org.joml.Vector3i;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -100,6 +101,10 @@ public class ClickShader {
 
         // convert to local
         return colorToNumber(new Vector3i(r, g, b));
+    }
+
+    public Vector2ic getMousePosition() {
+        return mousePosition;
     }
 
     public void cleanup() {

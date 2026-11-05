@@ -23,7 +23,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * Repeatedly renders a frame of the main camera of the simulation given by
  * {@link #init(Main)}
- * 
+ *
  * @author Geert van Ieperen. Created on 13-9-2018.
  */
 public class RenderLoop extends GenericThreadLoop implements ToolElement {
@@ -35,7 +35,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
 
     /**
      * creates a new, paused gameloop
-     * 
+     *
      * @param targetFPS the target frames per second
      */
     public RenderLoop(int targetFPS) {
@@ -63,10 +63,10 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
     }
 
     /**
-     * generates a new render bundle, which allows adding rendering actions which
+     * Generates a new render bundle, which allows adding rendering actions which
      * are executed in order on the given
      * shader. There is no guarantee on execution order between shaders
-     * 
+     *
      * @param shader the shader used, or null to use a basic Phong shading
      * @return a bundle that allows adding rendering options.
      */
@@ -87,8 +87,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
         // cache value of accurateTiming for this loop
         boolean accurateTimingThisLoop = this.accurateTiming;
 
-        if (accurateTimingThisLoop)
-            timer.startTiming("loop init");
+        if (accurateTimingThisLoop) timer.startTiming("loop init");
 
         GLFWWindow window = root.window();
         if (window.getWidth() == 0 || window.getHeight() == 0) {
@@ -121,8 +120,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
 
         for (RenderBundle renderBundle : renders) {
             String identifier = renderBundle.shader.getClass().getSimpleName();
-            if (accurateTimingThisLoop)
-                timer.startTiming(identifier);
+            if (accurateTimingThisLoop) timer.startTiming(identifier);
 
             renderBundle.draw();
 
@@ -135,8 +133,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
 
         int windowWidth = window.getWidth();
         int windowHeight = window.getHeight();
-        if (accurateTimingThisLoop)
-            timer.startTiming("GUI");
+        if (accurateTimingThisLoop) timer.startTiming("GUI");
         overlay.draw(windowWidth, windowHeight, 10, 10, 12);
 
         if (accurateTimingThisLoop) {
@@ -156,8 +153,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
 
         // loop clean
         Toolbox.checkGLError("Render loop");
-        if (window.shouldClose())
-            initiateStop();
+        if (window.shouldClose()) initiateStop();
     }
 
     public void addHudItem(Consumer<NVGOverlay.Painter> draw) {
@@ -184,7 +180,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
 
         /**
          * appends the given consumer to the end of the render sequence
-         * 
+         *
          * @return this
          */
         public RenderBundle add(Consumer<SGL> drawable) {

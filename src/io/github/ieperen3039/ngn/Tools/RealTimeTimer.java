@@ -3,7 +3,7 @@ package io.github.ieperen3039.ngn.Tools;
 /**
  * @author Geert van Ieperen adapter design pattern
  */
-public class RealTimeTimer implements TickTime {
+public class RealTimeTimer implements TickTimeTimer {
     private long currentTime;
     private long previousTime;
     private final long startTime;
@@ -16,6 +16,7 @@ public class RealTimeTimer implements TickTime {
 
     /**
      * starts a new tick at the given time in milliseconds.
+     *
      * @param newElement the new current value
      */
     public void updateTimeMillis(long newElement) {
@@ -23,11 +24,9 @@ public class RealTimeTimer implements TickTime {
         currentTime = newElement;
     }
 
-    /**
-     * starts a new tick at the given deltaTime since the last tick.
-     */
-    public void addDeltaTime(double deltaTime) {
-        updateTimeMillis(currentTime + (long) (deltaTime * 1000));
+    @Override
+    public void updateTime(double newTime) {
+        updateTimeMillis((long) (newTime * 1000));
     }
 
     /**
@@ -41,7 +40,6 @@ public class RealTimeTimer implements TickTime {
     /**
      * @return The number of milliseconds between the previous two ticks.
      */
-    @Override
     public long getDeltaTimeMillis() {
         return currentTime - previousTime;
     }
@@ -57,7 +55,6 @@ public class RealTimeTimer implements TickTime {
     /**
      * @return time since the start of the current tick in milliseconds.
      */
-    @Override
     public long getMillisSinceLastUpdate() {
         return getSystemElapsedMillis() - currentTime;
     }
@@ -73,6 +70,7 @@ public class RealTimeTimer implements TickTime {
     /**
      * Adds a new tick at the current system time
      */
+    @Override
     public void updateLoopTime() {
         updateTimeMillis(getSystemElapsedMillis());
     }
