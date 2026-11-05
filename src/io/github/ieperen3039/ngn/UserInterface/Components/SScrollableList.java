@@ -34,7 +34,7 @@ public class SScrollableList extends SContainer.GhostContainer implements MouseS
         this.layout = layout;
 
         for (SComponent element : elements) {
-            super.add(element, null);
+            super.add(element);
         }
 
         scroller = new SScrollBar(elements.size(), nrOfShownElts);
@@ -48,8 +48,8 @@ public class SScrollableList extends SContainer.GhostContainer implements MouseS
     }
 
     @Override
-    public void add(SComponent comp, Object prop) {
-        super.add(comp, prop);
+    public void add(SComponent comp) {
+        super.add(comp);
         scroller.resize(children().size(), nrOfShownElts);
     }
 

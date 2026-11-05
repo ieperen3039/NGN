@@ -10,14 +10,14 @@ import java.util.Collections;
 /**
  * A layout with only one element. The property class is Void (always null).
  * <p>
- * The {@link #add(SComponent, Object)} method will replace the given component with the new component
+ * The {@link #add(SComponent)} method will replace the given component with the new component
  * @author Geert van Ieperen. Created on 29-10-2018.
  */
 public class SingleElementLayout implements SLayoutManager {
     private SComponent target;
 
     @Override
-    public void add(SComponent comp, Object prop) {
+    public void add(SComponent comp) {
         target = comp;
     }
 
@@ -55,11 +55,6 @@ public class SingleElementLayout implements SLayoutManager {
     public int getMinimumHeight() {
         if (target == null) return 0;
         return target.minHeight();
-    }
-
-    @Override
-    public Class<?> getPropertyClass() {
-        return null;
     }
 
     @Override

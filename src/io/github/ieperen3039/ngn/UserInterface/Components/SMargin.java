@@ -23,17 +23,17 @@ import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
 public class SMargin extends SContainer {
     public SMargin(int marginPixels, SComponent target) {
         super(new SingleElementLayout(), new ComponentBorder(marginPixels));
-        add(target, null);
+        add(target);
     }
 
     public SMargin(int xMargin, int yMargin, SComponent target) {
         super(new SingleElementLayout(), new ComponentBorder(xMargin, xMargin, yMargin, yMargin));
-        add(target, null);
+        add(target);
     }
 
     public SMargin(int left, int right, int top, int bottom, SComponent target) {
         super(new SingleElementLayout(), new ComponentBorder(left, right, top, bottom));
-        add(target, null);
+        add(target);
     }
 
     @Override

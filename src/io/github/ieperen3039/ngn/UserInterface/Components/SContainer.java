@@ -4,6 +4,7 @@ import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
 import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.GridLayoutManager;
+import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.ListLayoutManager;
 import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.SLayoutManager;
 import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.SingleElementLayout;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
@@ -43,10 +44,9 @@ public abstract class SContainer extends SComponent {
 
     /**
      * @param comp the component to be added
-     * @param prop the property instance accepted by the current layout manager
      */
-    public void add(SComponent comp, Object prop) {
-        layout.add(comp, prop);
+    public void add(SComponent comp) {
+        layout.add(comp);
         comp.setParent(this);
         invalidateLayout();
     }
@@ -151,10 +151,10 @@ public abstract class SContainer extends SComponent {
 
     /** creates a new invisible container with the given components on a single column */
     public static SContainer column(SComponent... components) {
-        SContainer column = new GhostContainer(new GridLayoutManager(1, components.length));
+        SContainer column = new GhostContainer(new ListLayoutManager(false));
 
-        for (int i = 0; i < components.length; i++) {
-            column.add(components[i], new Vector2i(0, i));
+        for (SComponent component : components) {
+            column.add(component);
         }
 
         column.setSize(0, 0);
@@ -163,10 +163,10 @@ public abstract class SContainer extends SComponent {
 
     /** creates a new invisible container with the given components in a single row */
     public static SContainer row(SComponent... components) {
-        SContainer row = new GhostContainer(new GridLayoutManager(components.length, 1));
+        SContainer row = new GhostContainer(new ListLayoutManager(true));
 
-        for (int i = 0; i < components.length; i++) {
-            row.add(components[i], new Vector2i(i, 0));
+        for (SComponent component : components) {
+            row.add(component);
         }
 
         row.setSize(0, 0);
@@ -181,7 +181,7 @@ public abstract class SContainer extends SComponent {
 
         public GhostContainer(SComponent target) {
             this(new SingleElementLayout());
-            add(target, null);
+            add(target);
         }
 
         @Override

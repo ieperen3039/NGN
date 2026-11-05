@@ -62,8 +62,8 @@ public class SFrame extends SComposite {
         }
         bodyComponent = SContainer.singleton(new SFiller());
 
-        add(upperBar, new Vector2i(0, 0));
-        add(bodyComponent, new Vector2i(0, 1));
+        add(upperBar);
+        add(bodyComponent);
 
         setSize(width, height);
         setGrowthPolicy(false, false);
@@ -95,7 +95,7 @@ public class SFrame extends SComposite {
      * @return this
      */
     public SComposite setMainPanel(SComponent comp) {
-        bodyComponent.add(comp, null);
+        bodyComponent.add(comp);
         invalidateLayout();
         return this;
     }

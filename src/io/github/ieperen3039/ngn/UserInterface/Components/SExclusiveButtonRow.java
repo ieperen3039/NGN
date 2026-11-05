@@ -1,10 +1,7 @@
 package io.github.ieperen3039.ngn.UserInterface.Components;
 
-import org.joml.Vector2i;
-import org.joml.Vector2ic;
-
 import io.github.ieperen3039.ngn.UserInterface.SComponentProperties;
-import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.GridLayoutManager;
+import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.ListLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,22 +36,15 @@ public class SExclusiveButtonRow extends SComposite {
      * @param elements         the names of the buttons. There will be as much buttons as names.
      */
     public SExclusiveButtonRow(boolean horizontal, SComponentProperties buttonProperties, String... elements) {
-        super(new SContainer.GhostContainer(
-                new GridLayoutManager(horizontal ? elements.length : 1, horizontal ? 1 : elements.length)
-        ));
+        super(new SContainer.GhostContainer(new ListLayoutManager(horizontal)));
 
         selectionListeners = new ArrayList<>();
         deselectionListeners = new ArrayList<>();
         switchListeners = new ArrayList<>();
 
-        Vector2i pos = new Vector2i(0, 0);
-        Vector2ic delta = horizontal ? new Vector2i(1, 0) : new Vector2i(0, 1);
-
         for (int i = 0; i < elements.length; i++) {
             SToggleButton button = getToggleButton(buttonProperties, elements, i);
-
-            add(button, pos);
-            pos.add(delta);
+            add(button);
         }
     }
 

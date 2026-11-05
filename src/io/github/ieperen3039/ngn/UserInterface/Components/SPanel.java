@@ -7,6 +7,7 @@ import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
 import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.GridLayoutManager;
+import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.ListLayoutManager;
 import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.SLayoutManager;
 import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.SingleElementLayout;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
@@ -15,18 +16,6 @@ import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
  * @author Geert van Ieperen. Created on 20-9-2018.
  */
 public class SPanel extends SContainer {
-
-    /** when using the default constructor, you can use these values to denote the positions */
-    public static final Object NORTH = new Vector2i(1, 0);
-    public static final Object EAST = new Vector2i(2, 1);
-    public static final Object SOUTH = new Vector2i(1, 2);
-    public static final Object WEST = new Vector2i(0, 1);
-    public static final Object NORTHEAST = new Vector2i(2, 0);
-    public static final Object SOUTHEAST = new Vector2i(2, 2);
-    public static final Object MORTHWEST = new Vector2i(0, 0);
-    public static final Object SOUTHWEST = new Vector2i(0, 2);
-    public static final Object MIDDLE = new Vector2i(1, 1);
-
     /**
      * creates a panel with the given layout manager
      * @param layoutManager  a new layout manager for this component
@@ -51,9 +40,7 @@ public class SPanel extends SContainer {
     public SPanel(
             int cols, int rows, boolean growHorizontal, boolean growVertical
     ) {
-        this(
-                (cols * rows > 0 ? new GridLayoutManager(cols, rows) : new SingleElementLayout()),
-                growHorizontal, growVertical);
+        this(new GridLayoutManager(cols, rows), growHorizontal, growVertical);
     }
 
     /**
@@ -63,7 +50,7 @@ public class SPanel extends SContainer {
      * @param rows number of rows in y direction
      */
     public SPanel(int cols, int rows) {
-        super((cols * rows > 0 ? new GridLayoutManager(cols, rows) : new SingleElementLayout()));
+        super(new GridLayoutManager(cols, rows));
     }
 
     /**
@@ -84,22 +71,13 @@ public class SPanel extends SContainer {
     }
 
     /**
-     * creates a panel that uses a default GridLayout of 3x3 and with minimum size of (0, 0) and a no-growth policy.
-     * Objects should be located using one of {@link #NORTH}, {@link #EAST}, {@link #SOUTH}, {@link #WEST}, {@link
-     * #NORTHEAST}, {@link #SOUTHEAST}, {@link #MORTHWEST}, {@link #SOUTHWEST}, {@link #MIDDLE}
-     */
-    public SPanel() {
-        super(new GridLayoutManager(3, 3));
-    }
-
-    /**
-     * creates a panel with a single element. Calling {@link #add(SComponent, Object)} causes this element to be
-     * replaced with the new element.
+     * creates a panel with a single element. Calling {@link #add(SComponent)} causes the new element to be 
+     * added below the current element.
      * @param content the element of this panel.
      */
     public SPanel(SComponent content) {
-        super(new SingleElementLayout());
-        add(content, null);
+        super(new ListLayoutManager(false));
+        add(content);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class SComponentArea extends SContainer.GhostContainer {
      * removes the current component, and sets this component's visibility to false
      */
     public void hide() {
-        add(FILLER, null);
+        add(FILLER);
         setVisible(false);
     }
 
@@ -45,7 +45,7 @@ public class SComponentArea extends SContainer.GhostContainer {
 
         if (element.minWidth() <= width && element.minHeight() <= height) {
             element.setSize(width, height);
-            add(element, null);
+            add(element);
             setVisible(true);
 
         } else {

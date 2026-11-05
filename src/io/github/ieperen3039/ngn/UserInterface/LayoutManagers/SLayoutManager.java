@@ -10,22 +10,21 @@ import java.util.Collection;
  * a layout manager with the same purpose as an {@link java.awt.LayoutManager}: it lays the components in a nice order.
  * @author Geert van Ieperen. Created on 21-9-2018.
  * @see GridLayoutManager
+ * @see ListLayoutManager
  */
 public interface SLayoutManager {
 
     /**
-     * adds a component to this layout manager. Every component that has been added must be returned by {@link
-     * #getComponents()} (but not necessarily in order). Adding null values is not permitted. This does not invalidate
-     * the layout.
+     * adds a component to this layout manager, in a way specific to the implementation. Every component that has been 
+     * added must be returned by {@link #getComponents()} (but not necessarily in order).
      * @param comp the component to be added
-     * @param prop the properties that describe position, policies etc.
      * @see #remove(SComponent)
      * @see #recalculateProperties()
      */
-    void add(SComponent comp, Object prop);
+    void add(SComponent comp);
 
     /**
-     * inverts an action of {@link #add(SComponent, Object)}. After returning, the layout manager has no references to
+     * inverts an action of {@link #add(SComponent)}. After returning, the layout manager has no references to
      * the object. This does not invalidate the layout.
      * @param comp the component to be removed from the layout.
      */
@@ -62,12 +61,6 @@ public interface SLayoutManager {
      * @return the minimum height of the components together in this layout
      */
     int getMinimumHeight();
-
-    /**
-     * @return the properties class expected when adding elements
-     * @see #add(SComponent, Object)
-     */
-    Class<?> getPropertyClass();
 
     /**
      * remove all elements from this layout

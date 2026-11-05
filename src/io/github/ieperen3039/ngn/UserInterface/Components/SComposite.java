@@ -26,8 +26,8 @@ public abstract class SComposite extends SComponent {
         panel.setParent(this);
     }
 
-    protected void add(SComponent component, Object property) {
-        contents.add(component, property);
+    protected void add(SComponent component) {
+        contents.add(component);
     }
 
     protected void removeComponent(SComponent component) {

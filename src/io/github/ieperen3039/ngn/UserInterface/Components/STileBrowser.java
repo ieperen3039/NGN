@@ -44,7 +44,7 @@ public class STileBrowser extends SContainer {
         buttonFurther = new SButton(">", BUTTON_PROPERTIES, () -> inc(1));
 
         for (SComponent elt : elements) {
-            layoutManager.add(elt, null);
+            layoutManager.add(elt);
         }
 
         layoutBorder.add(buttonBack.minWidth(), buttonFurther.minWidth(), 0, 0);
@@ -73,7 +73,7 @@ public class STileBrowser extends SContainer {
      * @param elt the element to add
      */
     public void add(SComponent elt) {
-        super.add(elt, null);
+        super.add(elt);
     }
 
     @Override

@@ -16,6 +16,7 @@ import org.joml.Vector2ic;
 import io.github.ieperen3039.ngn.InputHandling.MouseClickListener;
 import io.github.ieperen3039.ngn.UserInterface.SComponentProperties;
 import io.github.ieperen3039.ngn.UserInterface.FrameManagers.UIManager;
+import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.ListLayoutManager;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.NGFont;
 import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
 
@@ -187,7 +188,7 @@ public class SDropDown extends SComponent implements MouseClickListener {
 
     private class DropDownOptions extends SComposite implements MouseClickListener {
         private DropDownOptions(String[] values, SComponentProperties properties) {
-            super(new SPanel(1, values.length));
+            super(new SPanel(new ListLayoutManager(false)));
             setVisible(false);
             setGrowthPolicy(true, false);
 
@@ -200,7 +201,7 @@ public class SDropDown extends SComponent implements MouseClickListener {
                     close();
                 });
 
-                add(option, new Vector2i(0, index));
+                add(option);
             }
         }
 

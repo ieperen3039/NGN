@@ -50,18 +50,14 @@ public class LimitedVisibilityLayout implements SLayoutManager {
     }
 
     @Override
-    public void add(SComponent comp, Object prop) {
+    public void add(SComponent comp) {
         assert comp != null;
+        elements.add(comp);
+    }
 
-        if (prop instanceof Integer) {
-            elements.add((int) prop, comp);
-
-        } else if (prop == null) {
-            elements.add(comp);
-
-        } else {
-            throw new IllegalArgumentException("prop must be an Integer, but was " + prop.getClass());
-        }
+    public void add(SComponent comp, int position) {
+        assert comp != null;
+        elements.add(position, comp);
     }
 
     @Override
@@ -185,11 +181,6 @@ public class LimitedVisibilityLayout implements SLayoutManager {
     @Override
     public int getMinimumHeight() {
         return vertical ? Math.max(sumVisibleMinLongSize, minLayoutLongSize) : minLayoutShortSize;
-    }
-
-    @Override
-    public Class<?> getPropertyClass() {
-        return Integer.class;
     }
 
     @Override

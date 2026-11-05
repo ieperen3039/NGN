@@ -7,7 +7,8 @@ import io.github.ieperen3039.ngn.UserInterface.Components.SComponent;
 import java.util.*;
 
 /**
- * Uses {@link Vector2ic} as object placement. The vector determines the grid (x, y) position and must be positive
+ * A fixed-size grid of components. Use {@link #add(SComponent, int, int)} to place a component at a specific (x, y)
+ * cell, or {@link #add(SComponent)} to fill the next free cell, row by row.
  * @author Geert van Ieperen. Created on 21-9-2018.
  */
 public class GridLayoutManager implements SLayoutManager {
@@ -36,36 +37,48 @@ public class GridLayoutManager implements SLayoutManager {
     }
 
     /**
-     * adds a component to the grid at the specified position
+     * adds a component to the grid at the specified position. If the position is already occupied, the previous
+     * component is replaced.
      * @param comp the component to be added
      * @param x    the x grid position
-     * @param y    the y grip position
+     * @param y    the y grid position
      * @throws IndexOutOfBoundsException if the given x and y fall outside the grid
      */
     public void add(SComponent comp, int x, int y) throws IndexOutOfBoundsException {
-        try {
-            grid[x][y] = comp;
-        } catch (IndexOutOfBoundsException e) {
+        assert comp != null;
+
+        if (x < 0 || x >= xElts || y < 0 || y >= yElts) {
             throw new IndexOutOfBoundsException(String.format(
                     "Tried adding component on position (%d, %d) while grid is of size [ %d x %d ]",
                     x, y, xElts, yElts
             ));
         }
 
-        nrOfElements++;
+        if (grid[x][y] == null) {
+            nrOfElements++;
+        }
+        grid[x][y] = comp;
     }
 
+    /**
+     * adds a component to the first free cell, filling the grid row by row (left to right, then top to bottom).
+     * @param comp the component to be added
+     * @throws IllegalStateException if there is no free cell left
+     */
     @Override
-    public void add(SComponent comp, Object prop) {
+    public void add(SComponent comp) {
         assert comp != null;
 
-        if (prop instanceof Vector2ic pos) {
-            add(comp, pos.x(), pos.y());
-
-        } else {
-            throw new IllegalArgumentException("prop must be an Vector2i instance, but was " + (prop == null ? "null" : prop
-                    .getClass()));
+        for (int y = 0; y < yElts; y++) {
+            for (int x = 0; x < xElts; x++) {
+                if (grid[x][y] == null) {
+                    add(comp, x, y);
+                    return;
+                }
+            }
         }
+
+        throw new IllegalStateException(String.format("Grid of size [ %d x %d ] is full", xElts, yElts));
     }
 
     @Override
@@ -84,7 +97,6 @@ public class GridLayoutManager implements SLayoutManager {
 
     @Override
     public void recalculateProperties() {
-        int startChangeNr = nrOfElements;
         nOfRowGrows = 0;
         nOfColGrows = 0;
         rowWantGrow = new boolean[yElts];
@@ -114,9 +126,6 @@ public class GridLayoutManager implements SLayoutManager {
                 }
             }
         }
-
-        // if something changed while restructuring, try again
-        if (startChangeNr != nrOfElements) recalculateProperties();
     }
 
     @Override
@@ -176,17 +185,13 @@ public class GridLayoutManager implements SLayoutManager {
     }
 
     @Override
-    public Class<?> getPropertyClass() {
-        return Vector2ic.class;
-    }
-
-    @Override
     public void clear() {
         for (int x = 0; x < xElts; x++) {
             for (int y = 0; y < yElts; y++) {
                 grid[x][y] = null;
             }
         }
+        nrOfElements = 0;
     }
 
     @Override
