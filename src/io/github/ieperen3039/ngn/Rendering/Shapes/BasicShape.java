@@ -2,8 +2,8 @@ package io.github.ieperen3039.ngn.Rendering.Shapes;
 
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Face;
 import io.github.ieperen3039.ngn.Rendering.Shapes.Primitives.Plane;
-import org.joml.AABBf;
 import org.joml.Vector3fc;
+import org.joml.primitives.AABBf;
 
 import java.util.Collection;
 import java.util.Collections;

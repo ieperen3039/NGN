@@ -60,7 +60,7 @@ public final class NVGOverlay {
     public void loadFont(NGFont font) {
         ByteBuffer fontData = font.asByteBuffer();
         fontBuffer.add(fontData);
-        if (nvgCreateFontMem(vg, font.name, fontData, 1) == -1) {
+        if (nvgCreateFontMem(vg, font.name, fontData, true) == -1) {
             Logger.ERROR.print("Could not create font " + font.name);
         }
     }

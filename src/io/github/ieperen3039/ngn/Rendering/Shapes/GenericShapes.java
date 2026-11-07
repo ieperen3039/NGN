@@ -7,10 +7,9 @@ import io.github.ieperen3039.ngn.Rendering.Shapes.Primitives.Plane;
 import io.github.ieperen3039.ngn.AssetHandling.GeneratorAsset;
 import io.github.ieperen3039.ngn.AssetHandling.Asset;
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
-import org.joml.AABBf;
-import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
+import org.joml.primitives.AABBf;
 
 import java.util.Collection;
 

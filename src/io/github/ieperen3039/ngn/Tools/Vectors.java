@@ -3,6 +3,8 @@ package io.github.ieperen3039.ngn.Tools;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Pair;
 import org.joml.*;
 import org.joml.Math;
+import org.joml.primitives.AABBf;
+import org.joml.primitives.Rayf;
 
 import java.util.Locale;
 

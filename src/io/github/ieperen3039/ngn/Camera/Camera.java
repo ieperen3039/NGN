@@ -72,4 +72,13 @@ public interface Camera extends ToolElement, MouseListener {
 
         return new Vector2f(xPix, yPix);
     }
+
+    default Vector3f unproject(int xPix, int yPix, Main.ViewPort window) {
+        // window transform
+        float x = (xPix / (window.width() * 0.5f)) - 1;
+        float y = (yPix / (window.height() * -0.5f)) + 1;
+
+        // view + projection transform
+        return new Vector3f(x, y, 0).mulPosition(getViewProjection(window).invert(new Matrix4f()));
+    }
 }

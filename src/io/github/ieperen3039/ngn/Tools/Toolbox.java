@@ -6,10 +6,10 @@ import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.MaterialShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 import io.github.ieperen3039.ngn.Rendering.Shapes.GenericShapes;
-import org.joml.AABBf;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
+import org.joml.primitives.AABBf;
 import org.lwjgl.BufferUtils;
 
 import javax.imageio.ImageIO;

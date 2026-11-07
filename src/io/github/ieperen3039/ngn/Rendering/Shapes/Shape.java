@@ -6,10 +6,10 @@ import io.github.ieperen3039.ngn.Rendering.MeshLoading.MeshFile;
 import io.github.ieperen3039.ngn.Rendering.Shapes.Primitives.Plane;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.Vectors;
-import org.joml.AABBf;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
+import org.joml.primitives.AABBf;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
