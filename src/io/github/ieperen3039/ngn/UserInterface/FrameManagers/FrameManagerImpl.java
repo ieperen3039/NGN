@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
  * 
  * @author Geert van Ieperen. Created on 20-9-2018.
  */
-public class FrameManagerImpl extends SimpleUIManager {
+public class FrameManagerImpl extends SimpleUIManager implements FrameManager {
     private final Deque<SFrame> frames; // the first element in this list has focus
 
     public FrameManagerImpl() {
@@ -51,6 +51,7 @@ public class FrameManagerImpl extends SimpleUIManager {
         }
     }
 
+    @Override
     public void addFrame(SFrame frame) {
         frame.validateLayout();
 
@@ -67,6 +68,7 @@ public class FrameManagerImpl extends SimpleUIManager {
         addFrame(frame, x, y);
     }
 
+    @Override
     public void addFrameCenter(SFrame frame, GLFWWindow window) {
         frame.validateLayout();
         int x = window.getWidth() / 2 - frame.getWidth() / 2;
@@ -81,6 +83,7 @@ public class FrameManagerImpl extends SimpleUIManager {
      * @param x     screen x coordinate in pixels from left
      * @param y     screen y coordinate in pixels from top
      */
+    @Override
     public void addFrame(SFrame frame, int x, int y) {
         // if the frame was already visible, still add it to make it focused.
         frames.remove(frame);
@@ -96,12 +99,13 @@ public class FrameManagerImpl extends SimpleUIManager {
     }
 
     /**
-     * brings the given from to the front-most position
+     * brings the given frame to the front-most position
      * 
      * @param frame a frame that has been added to this manager
      * @throws java.util.NoSuchElementException if the given frame has not been
      *                                          added or has been disposed.
      */
+    @Override
     public void focus(SFrame frame) {
         if (frame.isDisposed()) {
             throw new NoSuchElementException(frame + " is disposed");
@@ -126,6 +130,7 @@ public class FrameManagerImpl extends SimpleUIManager {
      * Removes all frames
      * each of them
      */
+    @Override
     public void clear() {
         frames.forEach(SFrame::dispose);
         frames.clear();
@@ -164,7 +169,8 @@ public class FrameManagerImpl extends SimpleUIManager {
         super.processParentClick(button, component);
     }
 
-    private SFrame getFrame(int xSc, int ySc) {
+    @Override
+    public SFrame getFrame(int xSc, int ySc) {
         // check all frames, starting from the front-most frame
         for (SFrame frame : frames) {
             if (frame.isVisible() && frame.contains(xSc, ySc)) {
@@ -172,13 +178,5 @@ public class FrameManagerImpl extends SimpleUIManager {
             }
         }
         return null;
-    }
-
-    public void addElement(SComponent component) {
-        if (!(component instanceof SFrame)) {
-            component = new SFrame(component.toString(), component);
-        }
-
-        addFrame((SFrame) component);
     }
 }
