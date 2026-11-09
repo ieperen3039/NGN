@@ -7,16 +7,19 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
+import org.joml.primitives.Rayf;
 
 /**
  * A camera class manages movement and position of the camera. The actual implementation of creating the perspective
  * matrix is done based on the values of {@link #getEye()}, {@link #getFocus()} and {@link #getUpVector()}
+ *
  * @author Geert van Ieperen created on 29-10-2017.
  * @see MovableCamera
  */
 public interface Camera extends ToolElement, MouseListener {
     /**
      * a copy of the direction vector of the eye of the camera to the focus of the camera.
+     *
      * @return {@link #getEye()}.to({@link #getFocus()}) The length of this vector may differ by implementation
      */
     Vector3fc vectorToFocus();
@@ -26,23 +29,31 @@ public interface Camera extends ToolElement, MouseListener {
 
     /**
      * updates the state of this camera according to the given passed time.
+     *
      * @param deltaTime the number of seconds passed since last update. This may be real-time or in-game time
      */
     void updatePosition(float deltaTime);
 
-    /** a copy of the position of the camera itself */
+    /**
+     * a copy of the position of the camera itself
+     */
     Vector3fc getEye();
 
-    /** a copy of the point in space where the camera looks to */
+    /**
+     * a copy of the point in space where the camera looks to
+     */
     Vector3fc getFocus();
 
-    /** a copy of the direction of up, the length of this vector is undetermined. */
+    /**
+     * a copy of the direction of up, the length of this vector is undetermined.
+     */
     Vector3fc getUpVector();
 
     void set(Vector3fc focus);
 
     /**
      * Calculates a projection matrix based on a camera position and the given parameters of the viewport
+     *
      * @param window the window used to visualise the current space
      * @return a projection matrix, such that modelspace vectors multiplied with this matrix will be transformed to
      * viewspace.
@@ -63,9 +74,9 @@ public interface Camera extends ToolElement, MouseListener {
 
     Matrix4f getProjectionMatrix(float aspectRatio);
 
-    default Vector2f project(Vector3fc vector, Main.ViewPort window) {
+    default Vector2f project(Vector3fc position, Main.ViewPort window) {
         // view + projection transform
-        Vector3f scPos = new Vector3f(vector).mulPosition(getViewProjection(window));
+        Vector3f scPos = new Vector3f(position).mulPosition(getViewProjection(window));
         // window transform
         float xPix = (scPos.x + 1) * window.width() * 0.5f;
         float yPix = (scPos.y - 1) * window.height() * -0.5f;
@@ -73,12 +84,16 @@ public interface Camera extends ToolElement, MouseListener {
         return new Vector2f(xPix, yPix);
     }
 
-    default Vector3f unproject(int xPix, int yPix, Main.ViewPort window) {
+    default Rayf unproject(int xPix, int yPix, Main.ViewPort window) {
         // window transform
         float x = (xPix / (window.width() * 0.5f)) - 1;
         float y = (yPix / (window.height() * -0.5f)) + 1;
 
-        // view + projection transform
-        return new Vector3f(x, y, 0).mulPosition(getViewProjection(window).invert(new Matrix4f()));
+        Vector3f origin = new Vector3f();
+        Vector3f direction = new Vector3f();
+        getViewProjection(window).unprojectRay(
+                x, y, new int[]{window.x(), window.y(), window.width(), window.height()}, origin, direction
+        );
+        return new Rayf(origin, direction);
     }
 }
