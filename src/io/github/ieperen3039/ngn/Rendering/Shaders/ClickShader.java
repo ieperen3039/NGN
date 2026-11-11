@@ -18,7 +18,7 @@ import java.io.IOException;
 import static org.lwjgl.opengl.GL20.*;
 
 public class ClickShader implements ShaderProgram {
-    private static final Resource.Path CLICK_SHADER_PATH = SHADER_DIRECTORY.resolve("ClickShader");
+    private static final Resource.Path CLICK_SHADER_PATH = SHADER_DIRECTORY.resolve("Click");
     private static final Resource.Path VERTEX_PATH = CLICK_SHADER_PATH.resolve("vertex.glsl");
     private static final Resource.Path FRAGMENT_PATH = CLICK_SHADER_PATH.resolve("fragment.glsl");
     protected final ShaderUniforms uniforms;
