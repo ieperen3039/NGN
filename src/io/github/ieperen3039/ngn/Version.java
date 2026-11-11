@@ -20,6 +20,8 @@ public class Version implements Comparable<Version>, Serializable {
 
     public Version(String versionString) {
         Matcher matcher = PATTERN.matcher(versionString);
+        boolean hasMatch = matcher.matches();
+        assert hasMatch;
         major = Integer.parseInt(matcher.group(1));
         minor = Integer.parseInt(matcher.group(2));
     }
