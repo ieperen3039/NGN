@@ -1,6 +1,5 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
-import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.GLFWWindow;
 import io.github.ieperen3039.ngn.Rendering.RenderTargets.RenderTarget;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
@@ -25,10 +24,13 @@ public class ClickShaderTarget extends RenderTarget {
     private int windowWidth = 0;
     private int windowHeight = 0;
 
-    private Vector2i mousePosition;
+    private Vector2i mousePosition = new Vector2i();
+    private int lastKnownValue = 0;
+    private GLFWWindow window;
 
-    public ClickShaderTarget() {
+    public ClickShaderTarget(GLFWWindow window) {
         super(glGenFramebuffers());
+        this.window = window;
         glBindFramebuffer(GL_FRAMEBUFFER, id);
 
         // color buffer to write to
@@ -49,10 +51,8 @@ public class ClickShaderTarget extends RenderTarget {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    public void update(Main main) {
-        // TODO only render where the mouse is
-
-        GLFWWindow window = main.window();
+    @Override
+    public void bind() {
         mousePosition = window.getMousePosition();
 
         // if the screen size changed, resize buffers to match the new dimensions
@@ -66,33 +66,37 @@ public class ClickShaderTarget extends RenderTarget {
             glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, newWidth, newHeight);
             glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+            int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+            if (status != GL_FRAMEBUFFER_COMPLETE) {
+                throw new ShaderException("ClickShader could not init FrameBuffer : error " + Toolbox.asHex(status));
+            }
+            Toolbox.checkGLError(this.toString());
         }
 
-        int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE) {
-            throw new ShaderException("ClickShader could not init FrameBuffer : error " + Toolbox.asHex(status));
-        }
-
-        glBindFramebuffer(GL_FRAMEBUFFER, id);
+        super.bind();
         glClearColor(0f, 0f, 0f, 0f); // black
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        Toolbox.checkGLError(this.toString());
     }
 
-    public int getValue() {
-        glBindFramebuffer(GL_FRAMEBUFFER, id);
+    @Override
+    public void unbind() {
+        // query mouse pixel now
         ByteBuffer buffer = BufferUtils.createByteBuffer(3); // one for each color
         glReadPixels(mousePosition.x, windowHeight - mousePosition.y, 1, 1, GL_RGB, GL11.GL_UNSIGNED_BYTE, buffer);
 
         int r = Byte.toUnsignedInt(buffer.get(0));
         int g = Byte.toUnsignedInt(buffer.get(1));
         int b = Byte.toUnsignedInt(buffer.get(2));
-        buffer.clear();
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        super.unbind();
 
         // convert to local
-        return colorToNumber(new Vector3i(r, g, b));
+        lastKnownValue = colorToNumber(new Vector3i(r, g, b));
+    }
+
+    public int getValue() {
+        return lastKnownValue;
     }
 
     public Vector2ic getMousePosition() {
