@@ -268,7 +268,7 @@ public class GLFWWindow {
         // Get primary display resolution
         GLFWVidMode vidmode = glfwGetVideoMode(primaryMonitor);
         // Center window on display
-        if (vidmode != null) {
+        if (vidmode != null && doSupportWindowPositioning()) {
             glfwSetWindowPos(
                     window,
                     (vidmode.width() - settings.windowWidth) / 2,
@@ -276,6 +276,13 @@ public class GLFWWindow {
             );
         }
         fullScreen = false;
+    }
+
+    private static boolean doSupportWindowPositioning() {
+        int platform = glfwGetPlatform();
+        return platform == GLFW_PLATFORM_WIN32
+               || platform == GLFW_PLATFORM_X11
+               || platform == GLFW_PLATFORM_COCOA;
     }
 
     public void toggleFullScreen() {
