@@ -97,7 +97,7 @@ public class SingleShadowMapLights implements SceneLights, Serializable {
     }
 
     @Override
-    public void draw(SGL gl, TickTime time) {
+    public void draw(SGL gl, TickTime renderTime) {
         ShaderProgram shader = gl.getShader();
         if (shader instanceof ShadowLightShader lightShader) {
             lightShader.setLightWithShadows(trueLightSpaceMatrix, sunLight.getDirectionToLight(), sunLight.getColor(), sunLight.getIntensity(), renderTarget);

@@ -191,7 +191,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
 
         public void draw(TickTime time) {
             shader.bind();
-            SGL gl = shader.getGL(root);
+            SGL gl = shader.getGL(root, time);
             for (BiConsumer<SGL, TickTime> tgt : targets) {
                 tgt.accept(gl, time);
             }

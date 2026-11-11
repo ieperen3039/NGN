@@ -1,18 +1,18 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-
-import java.io.IOException;
-
-import org.joml.Matrix4fc;
-
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.Lights.SingleShadowMapLights;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.AbstractSGL;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
 import io.github.ieperen3039.ngn.Rendering.RenderTargets.DepthRenderTarget;
+import io.github.ieperen3039.ngn.Tools.TickTime;
+import org.joml.Matrix4fc;
+
+import java.io.IOException;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
 
 /**
  * @author Geert van Ieperen created on 7-1-2019.
@@ -88,7 +88,7 @@ public class LightDepthShader implements ShaderProgram {
      * @return a GL object that renders a depth map in the frame buffer of the first light that is rendered.
      */
     @Override
-    public DepthGL getGL(Main main) {
+    public DepthGL getGL(Main main, TickTime time) {
         return new DepthGL();
     }
 

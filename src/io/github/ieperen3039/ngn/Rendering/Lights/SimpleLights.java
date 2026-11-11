@@ -14,7 +14,7 @@ public class SimpleLights implements SceneLights, Serializable {
     private final List<DirectionalLight> directionLights = new ArrayList<>();
     private final List<PointLight> pointLights = new ArrayList<>();
 
-    public void draw(SGL gl, TickTime time) {
+    public void draw(SGL gl, TickTime renderTime) {
         ShaderProgram shader = gl.getShader();
         if (shader instanceof LightShader lightShader) {
             synchronized (directionLights) {

@@ -7,6 +7,7 @@ import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.MeshLoading.Mesh;
 import io.github.ieperen3039.ngn.Rendering.RenderTargets.RenderTarget;
 import io.github.ieperen3039.ngn.Tools.Logger;
+import io.github.ieperen3039.ngn.Tools.TickTime;
 import io.github.ieperen3039.ngn.Tools.Toolbox;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
@@ -79,7 +80,7 @@ public class ClickShader implements ShaderProgram {
     }
 
     @Override
-    public SGL getGL(Main main) {
+    public SGL getGL(Main main, TickTime time) {
         Matrix4f viewProjectionMatrix = main.camera().getViewProjection(main.getViewPort());
         uniforms.setUniform("viewProjectionMatrix", viewProjectionMatrix);
         return new ClickShaderGL(viewProjectionMatrix);

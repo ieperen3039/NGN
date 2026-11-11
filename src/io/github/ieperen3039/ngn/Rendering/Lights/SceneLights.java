@@ -19,7 +19,7 @@ public interface SceneLights extends ToolElement {
      * initializes the lights on the scene.
      * @param gl the current gl object
      */
-    void draw(SGL gl, TickTime time);
+    void draw(SGL gl, TickTime renderTime);
 
     /**
      * adds a point-light to the simulation.

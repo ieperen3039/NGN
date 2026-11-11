@@ -11,14 +11,13 @@ import io.github.ieperen3039.ngn.Rendering.Textures.GenericTextures;
 import io.github.ieperen3039.ngn.Rendering.Textures.Texture;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Logger;
+import io.github.ieperen3039.ngn.Tools.TickTime;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.io.IOException;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glViewport;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.*;
 
 /**
@@ -138,7 +137,7 @@ public class BlinnPhongShader extends SceneShader implements TextureShader {
     }
 
     @Override
-    public SGL getGL(Main main) {
+    public SGL getGL(Main main, TickTime time) {
         return getGL(main.camera(), main.getViewPort(), main.settings());
     }
 

@@ -43,7 +43,7 @@ public class CameraIndicator implements Entity {
     }
 
     @Override
-    public void draw(SGL gl, TickTime time) {
+    public void draw(SGL gl, TickTime renderTime) {
         Material mat = Material.ROUGH;
         ShaderProgram shader = gl.getShader();
         MaterialShader matShader = (diffuse, specular, reflectance) -> {};

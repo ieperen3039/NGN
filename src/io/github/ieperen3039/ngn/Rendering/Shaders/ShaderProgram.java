@@ -3,6 +3,7 @@ package io.github.ieperen3039.ngn.Rendering.Shaders;
 import io.github.ieperen3039.ngn.AssetHandling.Resource;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
+import io.github.ieperen3039.ngn.Tools.TickTime;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -36,7 +37,7 @@ public interface ShaderProgram {
     /**
      * initialize the uniforms for this shader and return a rendering state object
      */
-    SGL getGL(Main main);
+    SGL getGL(Main main, TickTime time);
 
     /**
      * Create a new shader and return the id of the newly created shader.
