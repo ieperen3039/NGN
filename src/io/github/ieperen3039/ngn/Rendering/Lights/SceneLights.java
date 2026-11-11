@@ -1,14 +1,14 @@
 package io.github.ieperen3039.ngn.Rendering.Lights;
 
+import io.github.ieperen3039.ngn.Core.ToolElement;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
-
 import org.joml.Vector3fc;
 
 /**
  * @author Geert van Ieperen created on 3-2-2019.
  */
-public interface SceneLights {
+public interface SceneLights extends ToolElement {
     /**
      * update the lights after entity position updates
      */
@@ -22,7 +22,7 @@ public interface SceneLights {
 
     /**
      * adds a point-light to the simulation.
-     * @param vectorToLight world-space position of light source
+     * @param position world-space position of light source
      * @param color     the color of the light
      * @param intensity the brightness
      */

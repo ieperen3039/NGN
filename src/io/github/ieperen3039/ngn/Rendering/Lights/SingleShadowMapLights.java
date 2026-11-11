@@ -1,19 +1,15 @@
 package io.github.ieperen3039.ngn.Rendering.Lights;
 
-import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
 import io.github.ieperen3039.ngn.Camera.Camera;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.RenderTargets.DepthRenderTarget;
-import io.github.ieperen3039.ngn.Rendering.Shaders.LightDepthShader;
-import io.github.ieperen3039.ngn.Rendering.Shaders.LightShader;
-import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderException;
-import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
-import io.github.ieperen3039.ngn.Rendering.Shaders.ShadowLightShader;
+import io.github.ieperen3039.ngn.Rendering.Shaders.*;
 import io.github.ieperen3039.ngn.Tools.Vectors;
+import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -38,8 +34,8 @@ public class SingleShadowMapLights implements SceneLights, Serializable {
     // this is overridden by #addDirectionalLight
     private DirectionalLight sunLight = null;
 
-    private DepthRenderTarget renderTarget;
-    private Main main;
+    private transient DepthRenderTarget renderTarget;
+    private transient Main main;
 
     private float lightDist = 1;
     private Vector3f lightFocus = new Vector3f(0, 0, 0);
@@ -49,6 +45,11 @@ public class SingleShadowMapLights implements SceneLights, Serializable {
         // todo settings for DRT size
         Future<DepthRenderTarget> futureRenderTarget = main.computeOnRenderThread(() -> new DepthRenderTarget(1024, 1024));
         this.renderTarget = futureRenderTarget.get();
+    }
+
+    @Override
+    public void cleanup() {
+        renderTarget.cleanup();
     }
 
     @Override

@@ -1,13 +1,15 @@
 package io.github.ieperen3039.ngn.Rendering.Lights;
 
+import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.LightShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleLights implements SceneLights {
+public class SimpleLights implements SceneLights, Serializable {
     private final List<DirectionalLight> directionLights = new ArrayList<>();
     private final List<PointLight> pointLights = new ArrayList<>();
 
@@ -53,5 +55,13 @@ public class SimpleLights implements SceneLights {
         synchronized (pointLights) {
             pointLights.clear();
         }
+    }
+
+    @Override
+    public void init(Main root) throws Exception {
+    }
+
+    @Override
+    public void cleanup() {
     }
 }

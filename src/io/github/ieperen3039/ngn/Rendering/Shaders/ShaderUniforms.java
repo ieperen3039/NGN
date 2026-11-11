@@ -1,19 +1,14 @@
 package io.github.ieperen3039.ngn.Rendering.Shaders;
 
+import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
+import org.joml.*;
+import org.lwjgl.system.MemoryStack;
+
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.lwjgl.opengl.GL20.*;
-
-import org.joml.Matrix3fc;
-import org.joml.Matrix4fc;
-import org.joml.Vector2fc;
-import org.joml.Vector3fc;
-import org.joml.Vector4fc;
-import org.lwjgl.system.MemoryStack;
-
-import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 
 public class ShaderUniforms {
     
@@ -129,5 +124,9 @@ public class ShaderUniforms {
 
     public void setUniform(String uniformName, Color4f color) {
         glUniform4f(unif(uniformName), color.red, color.green, color.blue, color.alpha);
+    }
+
+    public void setUniform(String uniformName, Vector3ic value) {
+        glUniform3i(unif(uniformName), value.x(), value.y(), value.z());
     }
 }
