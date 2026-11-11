@@ -148,11 +148,9 @@ public class GLFWWindow {
 
     /**
      * saves a copy of the front buffer (the display) to disc
-     * @param dir          directory to store the image to
-     * @param filename     the file to save to
      * @param bufferToRead the GL buffer to read, usually one of {@link GL11#GL_FRONT} or {@link GL11#GL_BACK}
      */
-    public void printScreen(File file, String filename, int bufferToRead) {
+    public void printScreen(File file, int bufferToRead) {
         glReadBuffer(bufferToRead);
         int bpp = 4; // Assuming a 32-bit display with a byte each for red, green, blue, and alpha.
         ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * bpp);
