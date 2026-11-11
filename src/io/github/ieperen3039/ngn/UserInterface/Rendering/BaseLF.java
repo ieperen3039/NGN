@@ -7,11 +7,11 @@ import io.github.ieperen3039.ngn.Version;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
-import static io.github.ieperen3039.ngn.UserInterface.Rendering.NGFont.LUCIDA_CONSOLE;
-import static io.github.ieperen3039.ngn.UserInterface.Rendering.NVGOverlay.Alignment.*;
-
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
+
+import static io.github.ieperen3039.ngn.UserInterface.Rendering.NGFont.LUCIDA_CONSOLE;
+import static io.github.ieperen3039.ngn.UserInterface.Rendering.NVGOverlay.Alignment.*;
 
 /**
  * Little more than the absolute basic appearance of a GUI
@@ -195,6 +195,11 @@ public class BaseLF implements SFrameLookAndFeel {
     @Override
     public void cleanup() {
         painter = null;
+    }
+
+    @Override
+    public void renderGl(Runnable action) {
+        painter.render(action);
     }
 
     @Override

@@ -1,12 +1,11 @@
 package io.github.ieperen3039.ngn.UserInterface.Rendering;
 
-import java.nio.ByteBuffer;
-
-import org.joml.Vector2ic;
-
-import io.github.ieperen3039.ngn.Version;
 import io.github.ieperen3039.ngn.Core.RenderManager;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
+import io.github.ieperen3039.ngn.Version;
+import org.joml.Vector2ic;
+
+import java.nio.ByteBuffer;
 
 /**
  * a stateless mapping from abstract descriptions to drawings in NanoVG
@@ -92,6 +91,11 @@ public interface SFrameLookAndFeel {
     int getTextWidth(String text, NGFont.TextType textType);
 
     void cleanup();
+
+    /**
+     * run the given action outside the GUI rendering context
+     */
+    void renderGl(Runnable action);
 
     Version getVersionNumber();
 }
