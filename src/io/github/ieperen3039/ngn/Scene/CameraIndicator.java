@@ -6,6 +6,7 @@ import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.MaterialShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 import io.github.ieperen3039.ngn.Rendering.Shapes.GenericShapes;
+import io.github.ieperen3039.ngn.Tools.TickTime;
 import org.joml.*;
 
 import static org.lwjgl.opengl.GL11.glDepthMask;
@@ -42,7 +43,7 @@ public class CameraIndicator implements Entity {
     }
 
     @Override
-    public void draw(SGL gl) {
+    public void draw(SGL gl, TickTime time) {
         Material mat = Material.ROUGH;
         ShaderProgram shader = gl.getShader();
         MaterialShader matShader = (diffuse, specular, reflectance) -> {};

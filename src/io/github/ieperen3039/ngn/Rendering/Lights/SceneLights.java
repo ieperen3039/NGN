@@ -3,6 +3,7 @@ package io.github.ieperen3039.ngn.Rendering.Lights;
 import io.github.ieperen3039.ngn.Core.ToolElement;
 import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
+import io.github.ieperen3039.ngn.Tools.TickTime;
 import org.joml.Vector3fc;
 
 /**
@@ -18,7 +19,7 @@ public interface SceneLights extends ToolElement {
      * initializes the lights on the scene.
      * @param gl the current gl object
      */
-    void draw(SGL gl);
+    void draw(SGL gl, TickTime time);
 
     /**
      * adds a point-light to the simulation.

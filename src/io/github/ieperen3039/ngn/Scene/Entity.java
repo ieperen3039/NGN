@@ -23,5 +23,5 @@ public interface Entity extends Serializable {
      * @param gl the graphics object to be used for rendering. It is initialized at world's origin. (no translation or
      *           scaling has been applied)
      */
-    void draw(SGL gl);
+    void draw(SGL gl, TickTime time);
 }

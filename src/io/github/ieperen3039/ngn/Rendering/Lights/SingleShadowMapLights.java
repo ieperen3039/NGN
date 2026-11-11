@@ -5,6 +5,7 @@ import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.RenderTargets.DepthRenderTarget;
 import io.github.ieperen3039.ngn.Rendering.Shaders.*;
+import io.github.ieperen3039.ngn.Tools.TickTime;
 import io.github.ieperen3039.ngn.Tools.Vectors;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
@@ -96,7 +97,7 @@ public class SingleShadowMapLights implements SceneLights, Serializable {
     }
 
     @Override
-    public void draw(SGL gl) {
+    public void draw(SGL gl, TickTime time) {
         ShaderProgram shader = gl.getShader();
         if (shader instanceof ShadowLightShader lightShader) {
             lightShader.setLightWithShadows(trueLightSpaceMatrix, sunLight.getDirectionToLight(), sunLight.getColor(), sunLight.getIntensity(), renderTarget);

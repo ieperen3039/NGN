@@ -4,6 +4,7 @@ import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.LightShader;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
+import io.github.ieperen3039.ngn.Tools.TickTime;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class SimpleLights implements SceneLights, Serializable {
     private final List<DirectionalLight> directionLights = new ArrayList<>();
     private final List<PointLight> pointLights = new ArrayList<>();
 
-    public void draw(SGL gl) {
+    public void draw(SGL gl, TickTime time) {
         ShaderProgram shader = gl.getShader();
         if (shader instanceof LightShader lightShader) {
             synchronized (directionLights) {

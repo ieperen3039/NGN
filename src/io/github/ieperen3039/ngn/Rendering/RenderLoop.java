@@ -16,6 +16,7 @@ import io.github.ieperen3039.ngn.UserInterface.Rendering.NVGOverlay;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -122,7 +123,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
             String identifier = renderBundle.shader.getClass().getSimpleName();
             if (accurateTimingThisLoop) timer.startTiming(identifier);
 
-            renderBundle.draw();
+            renderBundle.draw(time);
 
             if (accurateTimingThisLoop) {
                 glFinish();
@@ -171,7 +172,7 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
 
     public class RenderBundle {
         private final ShaderProgram shader;
-        private final List<Consumer<SGL>> targets;
+        private final List<BiConsumer<SGL, TickTime>> targets;
 
         private RenderBundle(ShaderProgram shader) {
             this.shader = shader;
@@ -183,16 +184,16 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
          *
          * @return this
          */
-        public RenderBundle add(Consumer<SGL> drawable) {
+        public RenderBundle add(BiConsumer<SGL, TickTime> drawable) {
             targets.add(drawable);
             return this;
         }
 
-        public void draw() {
+        public void draw(TickTime time) {
             shader.bind();
             SGL gl = shader.getGL(root);
-            for (Consumer<SGL> tgt : targets) {
-                tgt.accept(gl);
+            for (BiConsumer<SGL, TickTime> tgt : targets) {
+                tgt.accept(gl, time);
             }
             gl.cleanup();
             shader.unbind();
