@@ -12,6 +12,7 @@ import io.github.ieperen3039.ngn.Rendering.Textures.Texture;
 import io.github.ieperen3039.ngn.Settings.Settings;
 import io.github.ieperen3039.ngn.Tools.Logger;
 import io.github.ieperen3039.ngn.Tools.TickTime;
+import io.github.ieperen3039.ngn.Tools.Toolbox;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -58,6 +59,7 @@ public class BlinnPhongShader extends SceneShader implements TextureShader {
         uniforms.createUniform("cameraPosition");
 
         uniforms.createUniform("hasTexture");
+        Toolbox.checkGLError(toString());
     }
 
     protected void initialize(Vector3fc cameraPosition, Settings settings) {
@@ -144,6 +146,7 @@ public class BlinnPhongShader extends SceneShader implements TextureShader {
     public SGL getGL(Camera camera, ViewPort viewPort, Settings settings) {
         glViewport(viewPort.x(), viewPort.y(), viewPort.width(), viewPort.height() );
         initialize(camera.getEye(), settings);
+        Toolbox.checkGLError(toString());
         return new SceneShaderGL(this, camera, viewPort);
     }
 }
