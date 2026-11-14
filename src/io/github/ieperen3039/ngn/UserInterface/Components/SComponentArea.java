@@ -1,21 +1,21 @@
 package io.github.ieperen3039.ngn.UserInterface.Components;
 
 import io.github.ieperen3039.ngn.Tools.Logger;
+import io.github.ieperen3039.ngn.UserInterface.Rendering.SFrameLookAndFeel;
 import io.github.ieperen3039.ngn.UserInterface.SComponentProperties;
-import io.github.ieperen3039.ngn.UserInterface.LayoutManagers.SingleElementLayout;
+import org.joml.Vector2ic;
 
 /**
  * an area with fixed minimum size that can show components or be hidden. Components are stretched to fit the designated
  * area. If the minimum size of the component is too large for this area, an assertion is thrown.
  * @author Geert van Ieperen created on 12-7-2019.
  */
-public class SComponentArea extends SContainer.GhostContainer {
-    private static final SFiller FILLER = new SFiller();
+public class SComponentArea extends SComponent {
+    private SComponent inner = null;
     private int width;
     private int height;
 
     public SComponentArea(SComponentProperties props) {
-        super(new SingleElementLayout());
         this.width = props.minWidth;
         this.height = props.minHeight;
         setVisible(false);
@@ -23,7 +23,6 @@ public class SComponentArea extends SContainer.GhostContainer {
     }
 
     public SComponentArea(int width, int height) {
-        super(new SingleElementLayout());
         this.width = width;
         this.height = height;
         setVisible(false);
@@ -34,18 +33,22 @@ public class SComponentArea extends SContainer.GhostContainer {
      * removes the current component, and sets this component's visibility to false
      */
     public void hide() {
-        add(FILLER);
+        inner = null;
         setVisible(false);
     }
 
     public void show(SComponent element) {
-        validateLayout();
+        // validate layout of base, because we will replace this component
+        super.validateLayout();
         int width = getWidth();
         int height = getHeight();
 
         if (element.minWidth() <= width && element.minHeight() <= height) {
             element.setSize(width, height);
-            add(element);
+            element.setGrowthPolicy(true, true);
+            inner = element;
+            element.setParent(this);
+            invalidateLayout();
             setVisible(true);
 
         } else {
@@ -61,5 +64,27 @@ public class SComponentArea extends SContainer.GhostContainer {
     @Override
     public int minHeight() {
         return height;
+    }
+
+    @Override
+    public void draw(SFrameLookAndFeel design, Vector2ic screenPosition) {
+        if (inner != null) inner.draw(design, screenPosition);
+    }
+
+    @Override
+    public SComponent getComponentAt(int xRel, int yRel) {
+        if (inner != null) {
+            return inner.getComponentAt(xRel, yRel);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void doValidateLayout() {
+        super.doValidateLayout();
+        if (inner != null) {
+            inner.validateLayout();
+        }
     }
 }
