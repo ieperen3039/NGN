@@ -47,7 +47,7 @@ public class UIRenderer extends GenericThreadLoop {
         overlay.addHudItem(uiManager::draw);
         overlay.addHudItem((hud) -> {
             if (settings.PRINT_ROLL) {
-                Logger.putOnlinePrint(hud::printRoll);
+                Logger.putOnlinePrint(text -> hud.printRoll(text, settings.PRINT_ROLL_COLOR));
             }
         });
     }

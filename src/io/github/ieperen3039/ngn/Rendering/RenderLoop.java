@@ -57,8 +57,9 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
         accurateTiming = settings.ACCURATE_RENDER_TIMING;
         overlay.init(settings.ANTIALIAS_LEVEL);
         overlay.addHudItem((hud) -> {
-            if (root.settings().PRINT_ROLL) {
-                Logger.putOnlinePrint(hud::printRoll);
+            Settings localSettings = root.settings();
+            if (localSettings.PRINT_ROLL) {
+                Logger.putOnlinePrint(text -> hud.printRoll(text, localSettings.PRINT_ROLL_COLOR));
             }
         });
     }

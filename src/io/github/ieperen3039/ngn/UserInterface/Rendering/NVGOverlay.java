@@ -373,7 +373,7 @@ public final class NVGOverlay {
         }
 
         /** for debugging purposes. Prints the given text in the upper left corner of the screen */
-        public void printRoll(String text) {
+        public void printRoll(String text, Color4f textColor) {
             int y = yPrintRoll + ((printRollSize + 5) * printRollEntry);
 
             text(xPrintRoll, y, printRollSize, NGFont.LUCIDA_CONSOLE, EnumSet.of(Alignment.ALIGN_LEFT), textColor, text, windowWidth - xPrintRoll);

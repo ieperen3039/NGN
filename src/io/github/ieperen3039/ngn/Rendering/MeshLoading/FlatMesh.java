@@ -191,8 +191,8 @@ public class FlatMesh extends AbstractMesh {
                         new int[]{a, b, c}
                 ));
                 faces.add(new Face(
-                        new int[]{b, c, d},
-                        new int[]{b, c, d}
+                        new int[]{c, b, d},
+                        new int[]{c, b, d}
                 ));
             }
         }

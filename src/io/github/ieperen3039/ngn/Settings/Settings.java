@@ -28,6 +28,7 @@ public class Settings {
 
     // other
     public boolean PRINT_ROLL = false;
+    public Color4f PRINT_ROLL_COLOR = Color4f.BLACK;
     public boolean ACCURATE_RENDER_TIMING = false;
     public boolean DEBUG = true;
 }
