@@ -4,6 +4,7 @@ import io.github.ieperen3039.ngn.Core.GenericThreadLoop;
 import io.github.ieperen3039.ngn.Core.Main;
 import io.github.ieperen3039.ngn.Core.Main.ViewPort;
 import io.github.ieperen3039.ngn.Core.ToolElement;
+import io.github.ieperen3039.ngn.DataStructures.Generic.Color4f;
 import io.github.ieperen3039.ngn.Rendering.MatrixStack.SGL;
 import io.github.ieperen3039.ngn.Rendering.Shaders.ShaderProgram;
 import io.github.ieperen3039.ngn.Settings.Settings;
@@ -110,7 +111,9 @@ public class RenderLoop extends GenericThreadLoop implements ToolElement {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glClearColor(1, 1, 1, 1); // white
+
+        Color4f bg = root.settings().BACKGROUND_COLOR;
+        glClearColor(bg.red, bg.green, bg.blue, bg.alpha);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Toolbox.checkGLError(window.toString());

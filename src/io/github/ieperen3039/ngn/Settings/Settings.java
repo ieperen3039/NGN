@@ -19,6 +19,7 @@ public class Settings {
     public float Z_FAR = 50f;
     public float FOV = (float) Math.toRadians(45);
     public Color4f AMBIENT_LIGHT = Color4f.rgb(200, 200, 255, 0.3f);
+    public Color4f BACKGROUND_COLOR = Color4f.WHITE;
 
     // camera settings
     public boolean ISOMETRIC_VIEW = false;
