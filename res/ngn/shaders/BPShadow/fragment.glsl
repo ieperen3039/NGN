@@ -9,6 +9,8 @@ in vec2 mTexCoord;
 // color transformation
 in vec4 mColor;
 
+out vec4 fragColor;
+
 struct PointLight
 {
     vec3 color;
@@ -37,6 +39,8 @@ const float SHADOW_BIAS = 1.0/(1 << 12);
 const float ATT_LIN = 0.1;
 const float ATT_EXP = 0.01;
 
+const float SCREEN_GAMMA = 2.2; // Assume the monitor is calibrated to the sRGB color space
+
 const float LINE_SIZE = 0.0002;
 const float LINE_DENSITY = 100;// 500 seems to be the max
 const float LINE_ALPHA = 0.3;
@@ -61,6 +65,7 @@ uniform mat4 viewProjectionMatrix;
 // global variables
 vec4 diffuse_color;
 vec4 specular_color;
+vec3 vertex_normal; // normalized
 
 // Blinn-Phong lighting
 // calculates the diffuse and specular color component caused by one light
@@ -69,10 +74,16 @@ vec3 calcBlinnPhong(vec3 light_color, vec3 eye_position, vec3 light_direction, v
     float lambertian = max(dot(normal, light_direction), 0.0);
     vec3 diffuse = diffuse_color.xyz * lambertian;
 
-    vec3 view_direction = normalize(eye_position);
-    vec3 half_direction = normalize(light_direction + view_direction);
-    float specular_angle = max(dot(half_direction, normal), 0.0);
-    float specular_factor = pow(specular_angle, specularPower * material.reflectance);
+    float specular_factor = 0.0;
+    if (lambertian > 0.0) {
+        vec3 view_direction = normalize(eye_position);
+        vec3 half_direction = normalize(light_direction + view_direction);
+        float specular_angle = max(dot(half_direction, normal), 0.0);
+        specular_factor = pow(
+                specular_angle,
+                max(specularPower * material.reflectance, 1.0)
+        );
+    }
     vec3 specular = specular_color.xyz * specular_factor;
 
     return (diffuse + specular) * light_color * light_intensity;
@@ -88,9 +99,11 @@ float calcAttenuation(vec3 light_position) {
 // calculates how much light should remain due to shadow
 float calcShadow2D(mat4 lsMatrix, vec3 vPosition, vec3 vNormal, vec3 nLightDir, sampler2D shadowMap) {
     vec4 coord = lsMatrix * vec4(vPosition, 1.0);
-    if (coord.z < -1 || coord.z > 1) return 1.0;
+    if (coord.w <= 0.0) return 1.0;
 
     vec3 projCoords = coord.xyz / coord.w;
+    if (projCoords.z < -1 || projCoords.z > 1) return 1.0;
+
     projCoords = projCoords * 0.5 + 0.5;
 
     if (projCoords.x < 0 || projCoords.x > 1) return 1.0;
@@ -99,7 +112,11 @@ float calcShadow2D(mat4 lsMatrix, vec3 vPosition, vec3 vNormal, vec3 nLightDir, 
     float bias = max(0.01 * (1.0 - dot(vNormal, nLightDir)), SHADOW_BIAS);
     float currentDepth = projCoords.z;
     ivec2 resolution = textureSize(shadowMap, 0);
-    ivec2 pixCoord = ivec2(round(projCoords.xy * resolution));
+    ivec2 pixCoord = ivec2(
+            projCoords.xy * vec2(resolution)
+    );
+
+    pixCoord = clamp(pixCoord, ivec2(0, 0), resolution - ivec2(1, 1));
 
     float light = 0.0;
     {
@@ -136,14 +153,12 @@ vec3 calcPointLightComponents(PointLight light) {
     vec3 vLightPosition = light.mPosition - mVertexPosition;
     vec3 vEyePosition = cameraPosition - mVertexPosition;
 
-    float distance = length(vLightPosition);
-    float attenuation = (1.0 / (1.0 + ATT_LIN * distance + ATT_EXP * distance * distance));
-
+    float attenuation = calcAttenuation(vLightPosition);
     if (attenuation < (1.0 / 256.0)) {
         return vec3(0, 0, 0);
     } else {
         float attenuatedIntensity = attenuation * light.intensity;
-        return calcBlinnPhong(light.color, vEyePosition, normalize(vLightPosition), mVertexNormal, attenuatedIntensity);
+        return calcBlinnPhong(light.color, vEyePosition, normalize(vLightPosition), vertex_normal, attenuatedIntensity);
     }
 }
 
@@ -155,19 +170,15 @@ vec3 calcDirectionalLightComponents(DirectionalLight light) {
     } else {
         vec3 nvLightDirection = normalize(light.mDirection);
         vec3 vEyePosition = cameraPosition - mVertexPosition;
-        float dynamicShadow = calcShadow2D(light.lightSpaceMatrix, mVertexPosition, mVertexNormal, nvLightDirection, dynamicShadowMap);
+        float dynamicShadow = calcShadow2D(light.lightSpaceMatrix, mVertexPosition, vertex_normal, nvLightDirection, dynamicShadowMap);
         if (dynamicShadow == 0) return vec3(0, 0, 0);
 
-        vec3 component = calcBlinnPhong(light.color, vEyePosition, nvLightDirection, mVertexNormal, light.intensity);
+        vec3 component = calcBlinnPhong(light.color, vEyePosition, nvLightDirection, vertex_normal, light.intensity);
         return component * dynamicShadow;
     }
 }
 
-float sigm(float x){
-    return x / sqrt(1 + x * x * x);
-}
-
-vec4 drawHeightLines(vec4 original_color) {
+vec3 drawHeightLines(vec3 original_color) {
     float line_visibility = 0;
 
     float camera_dist = length(cameraPosition - mVertexPosition);
@@ -181,7 +192,12 @@ vec4 drawHeightLines(vec4 original_color) {
     // calculate distance to nearest marker
     float fragment_level = (mVertexPosition.z / MINIMUM_LINE_DIST);
     float distance_from_level = mod(fragment_level, marker_level_dist);
+    //    float distance_from_level = abs(
+    //            mod(fragment_level + 0.5 * marker_level_dist, marker_level_dist)
+    //            - 0.5 * marker_level_dist
+    //    );
     float distance_from_height_line = distance_from_level * MINIMUM_LINE_DIST;
+
 
     if (abs(distance_from_height_line) < LINE_SIZE * camera_dist){
         // if the next marker_level_dist doesn't activate this, fade out
@@ -196,9 +212,9 @@ vec4 drawHeightLines(vec4 original_color) {
         line_visibility *= LINE_ALPHA;
     }
 
-    float x_component = min(1, max(0, (LINE_COLOR_SENSITIVITY * mVertexNormal.x) + 0.5));
-    float y_component = min(1, max(0, (LINE_COLOR_SENSITIVITY * mVertexNormal.y) + 0.5));
-    vec4 line_component = vec4(max(y_component, 0), abs(x_component), max(-y_component, 0), 1.0);
+    float x_component = min(1, max(0, (LINE_COLOR_SENSITIVITY * vertex_normal.x) + 0.5));
+    float y_component = min(1, max(0, (LINE_COLOR_SENSITIVITY * vertex_normal.y) + 0.5));
+    vec3 line_component = vec3(max(y_component, 0), abs(x_component), max(-y_component, 0));
     return (1 - line_visibility) * original_color + line_visibility * line_component;
 }
 
@@ -211,6 +227,8 @@ void main() {
     }
 
     specular_color = material.specular;
+
+    vertex_normal = normalize(mVertexNormal);
 
     // diffuse and specular color accumulator
     vec3 diffuse_specular = vec3(0.0, 0.0, 0.0);

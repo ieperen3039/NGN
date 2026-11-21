@@ -27,8 +27,10 @@ public class ShaderUniforms {
      */
     public void createUniform(String uniformName) throws ShaderException {
         int uniformLocation = glGetUniformLocation(programId, uniformName);
-        if (uniformLocation < 0) {
-            throw new ShaderException("Could not find uniform:" + uniformName);
+        if (uniformLocation == -1) {
+            throw new ShaderException("Could not find uniform '" + uniformName + "'");
+        } else if (uniformLocation < 0) {
+            throw new ShaderException("GetUniformLocation failed for '" + uniformName + "'");
         }
         uniforms.put(uniformName, uniformLocation);
     }

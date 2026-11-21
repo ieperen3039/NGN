@@ -56,6 +56,7 @@ uniform mat4 viewProjectionMatrix;
 // global variables
 vec4 diffuse_color;
 vec4 specular_color;
+vec3 vertex_normal; // normalized
 
 // Blinn-Phong lighting
 // calculates the diffuse and specular color component caused by one light
@@ -64,10 +65,17 @@ vec3 calcBlinnPhong(vec3 light_color, vec3 eye_position, vec3 light_direction, v
     float lambertian = max(dot(normal, light_direction), 0.0);
     vec3 diffuse = diffuse_color.xyz * lambertian;
 
-    vec3 view_direction = normalize(eye_position);
-    vec3 half_direction = normalize(light_direction + view_direction);
-    float specular_angle = max(dot(half_direction, normal), 0.0);
-    float specular_factor = pow(specular_angle, specularPower * material.reflectance);
+
+    float specular_factor = 0.0;
+    if (lambertian > 0.0) {
+        vec3 view_direction = normalize(eye_position);
+        vec3 half_direction = normalize(light_direction + view_direction);
+        float specular_angle = max(dot(half_direction, normal), 0.0);
+        specular_factor = pow(
+                specular_angle,
+                max(specularPower * material.reflectance, 1.0)
+        );
+    }
     vec3 specular = specular_color.xyz * specular_factor;
 
     return (diffuse + specular) * light_color * light_intensity;
@@ -87,7 +95,7 @@ vec3 calcPointLightComponents(PointLight light) {
         return vec3(0, 0, 0);
     } else {
         float attenuatedIntensity = attenuation * light.intensity;
-        return calcBlinnPhong(light.color, vEyePosition, normalize(vLightPosition), mVertexNormal, attenuatedIntensity);
+        return calcBlinnPhong(light.color, vEyePosition, normalize(vLightPosition), vertex_normal, attenuatedIntensity);
     }
 }
 
@@ -100,7 +108,7 @@ vec3 calcDirectionalLightComponents(DirectionalLight light) {
         vec3 nvLightDirection = normalize(light.mPosition);
         vec3 vEyePosition = cameraPosition - mVertexPosition;
 
-        return calcBlinnPhong(light.color, vEyePosition, nvLightDirection, mVertexNormal, light.intensity);
+        return calcBlinnPhong(light.color, vEyePosition, nvLightDirection, vertex_normal, light.intensity);
     }
 }
 
@@ -113,6 +121,7 @@ void main() {
     }
 
     specular_color = material.specular;
+    vertex_normal = normalize(mVertexNormal);
 
     // diffuse and specular color accumulator
     vec3 diffuse_specular = vec3(0.0, 0.0, 0.0);
