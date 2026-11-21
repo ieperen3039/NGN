@@ -6,8 +6,9 @@ import io.github.ieperen3039.ngn.UserInterface.SComponentProperties;
 import org.joml.Vector2ic;
 
 /**
- * an area with fixed minimum size that can show components or be hidden. Components are stretched to fit the designated
- * area. If the minimum size of the component is too large for this area, an assertion is thrown.
+ * An area that can show a component or be hidden. This component has its own minimum size, and the given component is
+ * stretched to fit. The growth policy and minimum size of the given component is ignored. If the minimum size of the
+ * component is larger than the minimum size of this component, an assertion is thrown.
  * @author Geert van Ieperen created on 12-7-2019.
  */
 public class SComponentArea extends SComponent {
@@ -18,26 +19,34 @@ public class SComponentArea extends SComponent {
     public SComponentArea(SComponentProperties props) {
         this.width = props.minWidth;
         this.height = props.minHeight;
-        setVisible(false);
         setGrowthPolicy(props.wantHzGrow, props.wantVtGrow);
     }
 
     public SComponentArea(int width, int height) {
         this.width = width;
         this.height = height;
-        setVisible(false);
         setGrowthPolicy(false, false);
     }
 
     /**
-     * removes the current component, and sets this component's visibility to false
+     * removes the current component
      */
     public void hide() {
         inner = null;
-        setVisible(false);
     }
 
+    /**
+     * sets the current component
+     *
+     * @param element an element, or null if the element should be removed
+     * @see hide
+     */
     public void show(SComponent element) {
+        if (element == null) {
+            hide();
+            return;
+        }
+
         // validate layout of base, because we will replace this component
         super.validateLayout();
         int width = getWidth();
@@ -49,7 +58,6 @@ public class SComponentArea extends SComponent {
             inner = element;
             element.setParent(this);
             invalidateLayout();
-            setVisible(true);
 
         } else {
             Logger.ASSERT.print("Element too large to show", element, element.getSize(), getSize());
