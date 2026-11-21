@@ -3,8 +3,9 @@
 in vec3 mVertexPosition;
 out vec4 fragColor;
 
-uniform vec4 color;
+uniform ivec3 color;
 
 void main() {
-    fragColor = color;
+    vec3 fColor = color;
+    fragColor = vec4(fColor / 255.0, 1.0);
 }
