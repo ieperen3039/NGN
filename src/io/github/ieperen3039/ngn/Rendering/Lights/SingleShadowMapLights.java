@@ -81,7 +81,7 @@ public class SingleShadowMapLights implements SceneLights, Serializable {
             shouldUpdate = true;
         }
 
-        if (shouldUpdate) {
+        if (shouldUpdate && sunLight != null) {
             lightDist = viewDist;
             lightFocus.set(playerFocus);
             
@@ -98,6 +98,8 @@ public class SingleShadowMapLights implements SceneLights, Serializable {
 
     @Override
     public void draw(SGL gl, TickTime renderTime) {
+        if (sunLight == null) return;
+
         ShaderProgram shader = gl.getShader();
         if (shader instanceof ShadowLightShader lightShader) {
             lightShader.setLightWithShadows(trueLightSpaceMatrix, sunLight.getDirectionToLight(), sunLight.getColor(), sunLight.getIntensity(), renderTarget);
