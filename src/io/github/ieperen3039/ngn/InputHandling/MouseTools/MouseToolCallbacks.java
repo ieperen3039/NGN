@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static io.github.ieperen3039.ngn.InputHandling.MouseTools.MouseTool.HandleResult.*;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
@@ -29,7 +30,7 @@ public class MouseToolCallbacks implements ToolElement {
     private volatile MouseTool activeTool = null;
     private volatile MouseTool defaultTool = null;
 
-    // only accessed from the input thread
+    // this mouse tool will keep receiving press/move/release events until all buttons are released
     private MouseTool gestureOwner = null;
     private int buttonsHeld = 0;
 
@@ -151,12 +152,16 @@ public class MouseToolCallbacks implements ToolElement {
         }
 
         if (activeTool != null) {
-            boolean hold = activeTool.onPress(button, target, x, y);
-            if (hold) gestureOwner = activeTool;
-        } else {
-            boolean hold = defaultTool.onPress(button, target, x, y);
-            if (hold) gestureOwner = defaultTool;
+            MouseTool.HandleResult result = activeTool.onPress(button, target, x, y);
+            if (result == CAPTURE) gestureOwner = activeTool;
+            if (result == DEACTIVATE) setMouseTool(null);
+            if (result != CONTINUE) return;
         }
+
+        // either no active tool, or it didn't handle the press
+        MouseTool.HandleResult result = defaultTool.onPress(button, target, x, y);
+        if (result == CAPTURE) gestureOwner = defaultTool;
+        if (result == DEACTIVATE) setMouseTool(null);
     }
 
     private void release(int button, int x, int y) {
@@ -165,7 +170,11 @@ public class MouseToolCallbacks implements ToolElement {
 
         MouseTool owner = gestureOwner;
         if (buttonsHeld == 0) gestureOwner = null;
-        if (owner != null) owner.onRelease(button, target, x, y);
+        if (owner != null) {
+            MouseTool.HandleResult result = owner.onRelease(button, target, x, y);
+            assert result != CAPTURE;
+            if (result == DEACTIVATE) setMouseTool(null);
+        }
     }
 
     private void move(int xDiff, int yDiff, float x, float y) {
@@ -175,14 +184,28 @@ public class MouseToolCallbacks implements ToolElement {
         }
 
         MouseTarget target = pick((int) x, (int) y);
-        if (activeTool != null && activeTool.onHover(target, xDiff, yDiff, x, y)) return;
-        defaultTool.onHover(target, xDiff, yDiff, x, y);
+        if (activeTool != null) {
+            MouseTool.HandleResult result = activeTool.onHover(target, xDiff, yDiff, x, y);
+            assert result != CAPTURE;
+            if (result == DEACTIVATE) setMouseTool(null);
+            if (result != CONTINUE) return;
+        }
+        MouseTool.HandleResult result = defaultTool.onHover(target, xDiff, yDiff, x, y);
+        assert result != CAPTURE;
+        if (result == DEACTIVATE) setMouseTool(null);
     }
 
     private void scroll(float value, int x, int y) {
         MouseTarget target = pick(x, y);
-        if (activeTool != null && activeTool.onScroll(value, target, x, y)) return;
-        defaultTool.onScroll(value, target, x, y);
+        if (activeTool != null) {
+            MouseTool.HandleResult result = activeTool.onScroll(value, target, x, y);
+            assert result != CAPTURE;
+            if (result == DEACTIVATE) setMouseTool(null);
+            if (result != CONTINUE) return;
+        }
+        MouseTool.HandleResult result = defaultTool.onScroll(value, target, x, y);
+        if (result == CAPTURE) gestureOwner = activeTool;
+        if (result == DEACTIVATE) setMouseTool(null);
     }
 
     private class MouseMoveCallback extends GLFWCursorPosCallback {

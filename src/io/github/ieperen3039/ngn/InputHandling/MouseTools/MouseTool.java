@@ -14,6 +14,25 @@ package io.github.ieperen3039.ngn.InputHandling.MouseTools;
  * @author Geert van Ieperen created on 24-4-2020.
  */
 public interface MouseTool {
+    enum HandleResult {
+        /**
+         * continue handling this action
+         */
+        CONTINUE,
+        /**
+         * stop handling this action
+         */
+        STOP,
+        /**
+         * capture this gesture and stop handling
+         */
+        CAPTURE,
+        /**
+         * stop handling this action and deactivate this tool
+         */
+        DEACTIVATE
+    }
+
     default void onActivate() {
     }
 
@@ -22,33 +41,35 @@ public interface MouseTool {
 
     /**
      * mouse moved without a gesture in progress
-     * @return true to stop fall-through
+     * @return what has to happen next. Cannot return CAPTURE.
      */
-    default boolean onHover(MouseTarget target, int xDelta, int yDelta, float xSc, float ySc) {
-        return false;
+    default HandleResult onHover(MouseTarget target, int xDelta, int yDelta, float xSc, float ySc) {
+        return HandleResult.CONTINUE;
     }
 
     /**
-     * @return true to stop fall-through and take ownership of this gesture (receive onDrag/onRelease events until all buttons are up)
+     * @return what has to happen next.
      */
-    default boolean onPress(int button, MouseTarget target, int xSc, int ySc) {
-        return false;
+    default HandleResult onPress(int button, MouseTarget target, int xSc, int ySc) {
+        return HandleResult.CONTINUE;
     }
 
-    /** mouse moved with a gesture in progress */
+    /** the mouse moved with a gesture in progress */
     default void onDrag(int xDelta, int yDelta, float xSc, float ySc) {
     }
 
     /**
-     * @param target what is under the cursor at release (useful for drop targets)
+     * @param target what is under the cursor at release (useful for drop targets).
+     * @return what has to happen next. Cannot return CAPTURE.
      */
-    default void onRelease(int button, MouseTarget target, int xSc, int ySc) {
+    default HandleResult onRelease(int button, MouseTarget target, int xSc, int ySc) {
+        return HandleResult.CONTINUE;
     }
 
     /**
-     * @return true to stop fall-through
+     * @return what has to happen next. Cannot return CAPTURE.
      */
-    default boolean onScroll(float value, MouseTarget target, int xSc, int ySc) {
-        return false;
+    default HandleResult onScroll(float value, MouseTarget target, int xSc, int ySc) {
+        return HandleResult.CONTINUE;
     }
 }

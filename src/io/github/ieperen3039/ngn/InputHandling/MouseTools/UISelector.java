@@ -1,5 +1,6 @@
 package io.github.ieperen3039.ngn.InputHandling.MouseTools;
 
+import io.github.ieperen3039.ngn.UserInterface.Components.SComponent;
 import io.github.ieperen3039.ngn.UserInterface.FrameManagers.UIManager;
 
 /**
@@ -15,7 +16,8 @@ public class UISelector implements MouseSelector {
 
     @Override
     public MouseTarget pick(int xSc, int ySc) {
-        if (!gui.covers(xSc, ySc)) return null;
-        return new UITarget(gui.getComponentAt(xSc, ySc));
+        SComponent component = gui.getComponentAt(xSc, ySc);
+        if (component == null) return null;
+        return new UITarget(component);
     }
 }

@@ -131,28 +131,28 @@ public class SimpleUIManager implements UIManager {
 
     @Override
     public void keyTyped(char letter) {
-        if (typeListener == null)
-            return;
+        if (typeListener == null) return;
         typeListener.keyTyped(letter);
     }
 
     @Override
     public void onRelease(int button) {
         dragListener = null;
-        if (releaseListener == null)
-            return;
+        if (releaseListener == null) return;
         releaseListener.onRelease(button);
         releaseListener = null;
     }
 
     public void onMouseMove(int xDelta, int yDelta, float xPos, float yPos) {
-        if (hoveredComponent != null)
+        if (hoveredComponent != null) {
             hoveredComponent.setHovered(false);
+        }
 
         hoveredComponent = getComponentAt((int) xPos, (int) yPos);
 
-        if (hoveredComponent != null)
+        if (hoveredComponent != null) {
             hoveredComponent.setHovered(true);
+        }
 
         if (dragListener != null) {
             dragListener.onMouseDrag(xDelta, yDelta, xPos, yPos);

@@ -16,22 +16,22 @@ public class DefaultMouseTool implements MouseTool {
     }
 
     @Override
-    public boolean onHover(MouseTarget target, int xDelta, int yDelta, float xSc, float ySc) {
+    public HandleResult onHover(MouseTarget target, int xDelta, int yDelta, float xSc, float ySc) {
         root.gui().onMouseMove(xDelta, yDelta, xSc, ySc);
         if (!(target instanceof UITarget)) {
             root.camera().onMouseMove(xDelta, yDelta, xSc, ySc);
         }
-        return true;
+        return HandleResult.STOP;
     }
 
     @Override
-    public boolean onPress(int button, MouseTarget target, int xSc, int ySc) {
+    public HandleResult onPress(int button, MouseTarget target, int xSc, int ySc) {
         // ask the gui even without a UITarget, as an active modal component captures clicks outside itself
         gestureOnGui = root.gui().checkMouseClick(button, xSc, ySc);
         if (!gestureOnGui) {
             root.camera().onClick(button, xSc, ySc);
         }
-        return true;
+        return HandleResult.CAPTURE;
     }
 
     @Override
@@ -44,22 +44,23 @@ public class DefaultMouseTool implements MouseTool {
     }
 
     @Override
-    public void onRelease(int button, MouseTarget target, int xSc, int ySc) {
+    public HandleResult onRelease(int button, MouseTarget target, int xSc, int ySc) {
         if (gestureOnGui) {
             root.gui().onRelease(button);
         } else {
             root.camera().onRelease(button);
         }
+        return HandleResult.STOP;
     }
 
     @Override
-    public boolean onScroll(float value, MouseTarget target, int xSc, int ySc) {
+    public HandleResult onScroll(float value, MouseTarget target, int xSc, int ySc) {
         if (target instanceof UITarget) {
             root.gui().onScroll(value);
         } else {
             root.camera().onScroll(value);
         }
-        return true;
+        return HandleResult.STOP;
     }
 
     @Override

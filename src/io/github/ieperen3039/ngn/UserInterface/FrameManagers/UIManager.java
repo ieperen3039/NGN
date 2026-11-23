@@ -41,12 +41,17 @@ public interface UIManager
 
     boolean checkMouseClick(int button, int xSc, int ySc);
 
+    /**
+     * @param xSc screen x coordinate in pixels from left
+     * @param ySc screen y coordinate in pixels from top
+     * @return the component at the given screen coordinate, or null if no component is covered
+     */
     SComponent getComponentAt(int xSc, int ySc);
 
     /**
      * @param xSc screen x coordinate in pixels from left
      * @param ySc screen y coordinate in pixels from top
-     * @return the SFrame covering the given coordinate
+     * @return true if getComponentAt would not return null
      */
     boolean covers(int xSc, int ySc);
 
