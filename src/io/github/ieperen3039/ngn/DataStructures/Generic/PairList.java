@@ -1,5 +1,6 @@
 package io.github.ieperen3039.ngn.DataStructures.Generic;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -8,7 +9,7 @@ import java.util.function.Consumer;
  * Optimized version of {@code List<Pair<L, R>>} instances. This list does not permit null values
  * @author Geert van Ieperen created on 29-6-2018.
  */
-public class PairList<L, R> extends AbstractList<Pair<L, R>> {
+public class PairList<L, R> extends AbstractList<Pair<L, R>> implements Serializable {
     @SuppressWarnings("rawtypes")
     public static final PairList EMPTY_LIST = new PairList<>(
             Collections.emptyList(), Collections.emptyList()
