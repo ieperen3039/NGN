@@ -86,13 +86,12 @@ public interface Camera extends ToolElement, MouseListener {
 
     default Rayf unproject(int xPix, int yPix, Main.ViewPort window) {
         // window transform
-        float x = (xPix / (window.width() * 0.5f)) - 1;
-        float y = (yPix / (window.height() * -0.5f)) + 1;
+        int y = window.height() - yPix;
 
         Vector3f origin = new Vector3f();
         Vector3f direction = new Vector3f();
         getViewProjection(window).unprojectRay(
-                x, y, new int[]{window.x(), window.y(), window.width(), window.height()}, origin, direction
+                xPix, y, new int[]{window.x(), window.y(), window.width(), window.height()}, origin, direction
         );
         return new Rayf(origin, direction);
     }
